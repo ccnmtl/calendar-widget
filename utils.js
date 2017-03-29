@@ -183,22 +183,35 @@ CTLEventUtils.readURLParams = function(eventsList, queryString, index) {
             case 'q':
                 filteredEvents = CTLEventUtils.searchEvents(
                     filteredEvents, index, splitParam[1]);
+                document.getElementById('q').value = splitParam[1];
                 break;
             case 'loc':
                 filteredEvents = CTLEventUtils.filterEventsByLocation(
                     filteredEvents, splitParam[1]);
+                document.querySelector('#location-dropdown [value="' +
+                    splitParam[1] + '"]').selected = true;
                 break;
             case 'audience':
                 filteredEvents = CTLEventUtils.filterEventsByAudience(
                     filteredEvents, splitParam[1]);
+                document.querySelector('#audience-dropdown [value="' +
+                    splitParam[1] + '"]').selected = true;
                 break;
             case 'start':
                 filteredEvents = CTLEventUtils.filterEventsByDateRange(
                     filteredEvents, new Date(splitParam[1]), null);
+                // re-arrange the date format to match the date picker input
+                // YYYY-MM-DD => DD/MM/YYYY
+                var sDate = splitParam[1].split('-');
+                sDate = sDate[1] + '/' + sDate[2] + '/' + sDate[0];
+                document.getElementsByName('start_date')[0].value = sDate;
                 break;
             case 'end':
                 filteredEvents = CTLEventUtils.filterEventsByDateRange(
                     filteredEvents, null, new Date(splitParam[1]));
+                var eDate = splitParam[1].split('-');
+                eDate = eDate[1] + '/' + eDate[2] + '/' + eDate[0];
+                document.getElementsByName('end_date')[0].value = eDate;
                 break;
         }
     });
