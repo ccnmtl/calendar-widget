@@ -176,6 +176,9 @@ CTLEventUtils.unsetURLParams = function(key) {
  * { key: <key>, value: <value> }
  */
 CTLEventUtils.readURLParams = function(queryString) {
+    if(queryString == '') {
+        return [];
+    }
     var paramsArray = [];
     var params = queryString.split('&');
 
