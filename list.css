@@ -1,35 +1,116 @@
-.event {
-    width: 100%;
-    margin-bottom: 2.5em;
+.event
+{
+	width: 100%;
+	margin-top: 2.5em;
 }
 
-.event .event_specifics {
-     margin-bottom: 1.25em;
-     border-bottom: 1px solid;
+.event *, form *, select, input { font-size: 14px!important; }
+input { border-radius: 5px; }
+
+.event .event_specifics
+{
+	padding-top: 1.25em;
+	border-top: 1px solid #eee;
 }
 
-.event .event_specifics a:hover {
-    cursor: pointer;
+.event .event_specifics a:hover { cursor: pointer; }
+.event .location, .event_properties { margin-top: 1em; }
+.event_properties { }
+.event .location .event_location, .ctl-property-name { font-weight: bold; }
+
+#loader-animation-container
+{
+	position: absolute;
+	height: 200px;
+	background-color: white;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.event .location {
-    font-size: .85em;
+.ball-pulse > div { background-color: #666; }
+
+button#clear-search
+{
+	background-color: #fff;
+	border-radius: 5px;
 }
 
-.event .location .event_location {
-    font-weight: bold;
+.search-wrapper
+{
+	position: relative;
+	background-color: #f3f3f3;
+	margin-top: 1em;
+	padding: .5em;
+	border-radius: 5px;
 }
 
-#loader-animation-container {
-    position: absolute;
-    height: 200px;
-    background-color: white;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#left-area ul, .entry-content ul, .comment-content ul, body.et-pb-preview #main-content .container ul
+{
+	padding: 0px;
+	line-height: 26px;
 }
 
-.ball-pulse > div {
-    background-color: #000000;
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { background-color: #eee!important; }
+
+.ctl-theme .current
+{
+	background-color: #75AADB!important;
+	color: white;
+	border-color: #444;
+	cursor: default;
+	border-radius: 5px;
+}
+
+form, label, input, select
+{
+	display: block;
+	margin-top: 5px;
+	width: 100%;
+}
+
+label input
+{
+	padding: 2px;
+	border: 1px solid #bbb;
+	color: #4e4e4e;
+	background-color: #fff;
+	height: 24px;
+}
+
+.sharedaddy { display: none; }
+.q-no-item { color: red; }
+.pagination-holder:last-child { margin-top: 3em; }
+
+@media (min-width: 981px)
+{
+	/*start - desktop widget layout*/
+	.search-wrapper
+	{
+		position: relative;
+		height: 12em;
+	}
+	
+	#location-dropdown-container { margin-top: .5em; padding-top: .5em; border-top: 1px solid #ccc;}
+	#audience-dropdown-container { padding-bottom: .7em;  border-bottom: 1px solid #ccc;}
+	
+	form #q { width: 85%; }
+	
+	button#clear-search
+	{
+		position: absolute;
+		right: 10px;
+		top: 10px;
+	}
+	
+	label
+	{
+		width: 50%;
+		float: left;
+	}
+	
+	label input { width: 95%; }
+    /*stop - desktop widget layout*/
+
 }
