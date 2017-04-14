@@ -192,6 +192,7 @@
             '<div class="loader-inner ball-pulse"><div></div><div></div><div></div></div>' +
             '</div>' +
             '<div class="search-wrapper">' +
+            
             '<form role="search">' +
             '<input id="q" type="text" required="" class="search-box" ' +
             'placeholder="I\'m searching for...">' +
@@ -203,15 +204,16 @@
 
             '<div id="audience-dropdown-container"></div>' +
 
-            '<label>From: ' +
-            '<input name="start_date" />' +
+            '<label id="from">' +
+            '<input name="start_date" placeholder="To"/>' +
             '</label>' +
 
-            '<label>To: ' +
-            '<input name="end_date" />' +
+            '<label id="to"> ' +
+            '<input name="end_date" placeholder="From" />' +
             '</label>' +
 
             '<div id="search-results"></div>' +
+            
             '</div>' +
             '<div id="calendarList"></div>' +
             '<div class="pagination-holder"></div>';

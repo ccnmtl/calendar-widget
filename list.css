@@ -12,6 +12,10 @@ input { border-radius: 5px; }
 	padding-top: 1.25em;
 	border-top: 1px solid #eee;
 }
+.event .event_specifics h3 a
+{
+	font-size: 1.25em!important;
+}
 
 .event .event_specifics a:hover { cursor: pointer; }
 .event .location, .event_properties { margin-top: 1em; }
@@ -89,28 +93,24 @@ label input
 	.search-wrapper
 	{
 		position: relative;
-		height: 12em;
+		width: 100%;
+		background-color: #fff;
 	}
 	
-	#location-dropdown-container { margin-top: .5em; padding-top: .5em; border-top: 1px solid #ccc;}
-	#audience-dropdown-container { padding-bottom: .7em;  border-bottom: 1px solid #ccc;}
+	form {position: absolute; top: 0%; left: 0%; width: 25%; padding-right: .5em;}
 	
-	form #q { width: 85%; }
-	
+    #location-dropdown-container {position: absolute; top: 0%; left: 25%; width: 25%; padding-right: .5em;}
+
+    #audience-dropdown-container {position: absolute; top: 0%; left: 50%; width: 25%; padding-right: .5em; }
+
+	label#from {position: absolute; top: 0%; left: 75%; width: 12.5%; padding-right: .5em; margin: 0;}
+	label#to {position: absolute; top: 0%; left: 87.5%; width: 12.5%;  margin: 0;}
+
 	button#clear-search
 	{
-		position: absolute;
-		right: 10px;
-		top: 10px;
+	display: none;
 	}
 	
-	label
-	{
-		width: 50%;
-		float: left;
-	}
-	
-	label input { width: 95%; }
     /*stop - desktop widget layout*/
 
 }
