@@ -6,11 +6,27 @@
 
     var ITEMS_ON_PAGE = 6;
 
-    var index = lunr(function() {
-        this.ref('id');
-        this.field('title', {boost: 10});
-        this.field('description', {boost: 5});
-    });
+    var index; 
+
+    var initializeLunrIndex = function(events) {
+        index = lunr(function() {
+            this.ref('id');
+            this.field('title');
+            this.field('description');            
+            var i = 0;
+            var self = this;
+            events.forEach(function(e){
+                // build lunr index
+                self.add({
+                    id: i++,
+                    title: e.title,
+                    description: e.description
+                });
+            });
+        });
+
+        return index;
+    };
 
     var doSearch = function(events) {
         var $el = $('#calendarList');
@@ -66,11 +82,13 @@
         jQuery('#calendarList').append(renderEvents(eArray, pageNum));
     };
 
+
     /**
      * @param events: JSON event object fetched from Bedeworks
      */
     var initializeEventsPage = function(eventsJson) {
-        CTLEventsManager.allEvents = CTLEventsManager.loadEvents(eventsJson, index);
+        CTLEventsManager.allEvents = CTLEventsManager.loadEvents(eventsJson);
+        index = initializeLunrIndex(CTLEventsManager.allEvents);
 
         $('.pagination-holder').pagination({
             items: CTLEventsManager.allEvents.length,
