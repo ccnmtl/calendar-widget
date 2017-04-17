@@ -123,3 +123,162 @@ describe('readURLParams', function() {
             [ ]);
     });
 });
+
+describe('filterOnURLParams', function() {
+    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
+    var events = json.bwEventList.events;
+
+    var index = lunr(function() {
+        this.ref('id');
+        this.field('title', {boost: 10});
+        this.field('description', {boost: 5});
+    });
+
+    var allEvents = CTLEventsManager.loadEvents(events, index);
+
+    it('returns an array of event objects given params', function() {
+        var paramsArray = CTLEventUtils.readURLParams('q=video');
+        var filteredArray = CTLEventUtils.filterOnURLParams(paramsArray,
+            allEvents, index);
+        var searchedArray = CTLEventUtils.searchEvents(allEvents,
+            index, 'video');
+        assert.deepEqual(filteredArray, searchedArray);
+    });
+
+    it('returns a list of all events when given garbage params', function() {
+        var paramsArray = CTLEventUtils.readURLParams('foo=bar');
+        var filteredArray = CTLEventUtils.filterOnURLParams(paramsArray,
+            allEvents, index);
+        assert.deepEqual(filteredArray, allEvents);
+    });
+
+    it('returns list of all events given an empty params array', function() {
+        var paramsArray = CTLEventUtils.readURLParams('');
+        var filteredArray = CTLEventUtils.filterOnURLParams(paramsArray,
+            allEvents, index);
+        assert.deepEqual(filteredArray, allEvents);
+    });
+
+});
+
+describe('populateURLParams', function() {
+    var searchForm = '<div class="search-wrapper">' +
+        '<form role="search">' +
+            '<input id="q">' +
+            '<button class="close-icon" id="clear-search" type="reset">' +
+                'Reset' +
+            '</button>' +
+        '</form>' +
+        '<div id="location-dropdown-container">' +
+            '<select id="location-dropdown">' +
+                '<option value="null">Location: All</option>' +
+                '<option value="Morningside">Morningside</option>' +
+                '<option value="Medical Center">Medical Center</option>' +
+            '</select>' +
+        '</div>' +
+        '<div id="audience-dropdown-container">' +
+            '<select id="audience-dropdown">' +
+                '<option value="null">Audience: All</option>' +
+                '<option value="Faculty">Faculty</option>' +
+                '<option value="Staff">Staff</option>' +
+                '<option value="Postdocs">Postdocs</option>' +
+                '<option value="Student">Student</option>' +
+                '<option value="Alumni">Alumni</option>' +
+                '<option value="Public">Public</option>' +
+            '</select>' +
+        '</div>' +
+        '<label>From: ' +
+            '<input name="start_date" class="hasDatepicker">' +
+        '</label>' +
+        '<label>To: ' +
+            '<input name="end_date" class="hasDatepicker">' +
+        '</label>' +
+        '<div id="search-results"></div>' +
+    '</div>';
+
+    document.body.innerHTML = searchForm;
+    it('populates the query field', function() {
+        document.body.innerHTML = searchForm;
+        var paramsArray = CTLEventUtils.readURLParams('q=test');
+        CTLEventUtils.populateURLParams(paramsArray);
+        assert.equal(document.getElementById('q').value, 'test');
+    });
+    it('populates the location dropdown', function() {
+        document.body.innerHTML = searchForm;
+        var paramsArray = CTLEventUtils.readURLParams('loc=Morningside');
+        CTLEventUtils.populateURLParams(paramsArray);
+        assert.equal(
+            document.querySelector('#location-dropdown [value="Morningside"]')
+            .selected, true);
+
+    });
+    it('populates the audience dropdown', function() {
+        document.body.innerHTML = searchForm;
+        var paramsArray = CTLEventUtils.readURLParams('audience=Faculty');
+        CTLEventUtils.populateURLParams(paramsArray);
+        assert.equal(
+            document.querySelector('#audience-dropdown [value="Faculty"]')
+            .selected, true);
+    });
+    it('populates the start date field', function() {
+        document.body.innerHTML = searchForm;
+        var paramsArray = CTLEventUtils.readURLParams('start=2017-4-18');
+        CTLEventUtils.populateURLParams(paramsArray);
+        assert.equal(document.getElementsByName('start_date')[0].value, 
+                                                '4/18/2017');
+    });
+    it('populates the end date field', function() {
+        document.body.innerHTML = searchForm;
+        var paramsArray = CTLEventUtils.readURLParams('end=2017-4-18');
+        CTLEventUtils.populateURLParams(paramsArray);
+        assert.equal(document.getElementsByName('end_date')[0].value, 
+                                                '4/18/2017');
+    });
+    it('populates all the fields', function() {
+        document.body.innerHTML = searchForm;
+        var paramString = 'q=test&loc=Morningside&audience=Faculty&' + 
+                          'start=2017-4-18&end=2017-4-18';
+        var paramsArray = CTLEventUtils.readURLParams(paramString);
+        CTLEventUtils.populateURLParams(paramsArray);
+        assert.equal(document.getElementById('q').value, 'test');
+        assert.equal(
+            document.querySelector('#location-dropdown [value="Morningside"]')
+            .selected, true);
+        assert.equal(
+            document.querySelector('#audience-dropdown [value="Faculty"]')
+            .selected, true);
+        assert.equal(
+            document.getElementsByName('start_date')[0].value, '4/18/2017');
+        assert.equal(
+            document.getElementsByName('end_date')[0].value, '4/18/2017');
+    });
+    it('populates none of the fields when given an empty array', function() {
+        document.body.innerHTML = searchForm;
+        var paramsArray = CTLEventUtils.readURLParams('');
+        CTLEventUtils.populateURLParams(paramsArray);
+        assert.equal(document.getElementById('q').value, '');
+        assert.equal(
+            document.querySelector('#location-dropdown [value="null"]')
+            .selected, true);
+        assert.equal(
+            document.querySelector('#audience-dropdown [value="null"]')
+            .selected, true);
+        assert.equal(document.getElementsByName('start_date')[0].value, '');
+        assert.equal(document.getElementsByName('end_date')[0].value, '');
+    });
+    it('populates none of the fields when given garbage params', function() {
+        document.body.innerHTML = searchForm;
+        var paramsArray = CTLEventUtils.readURLParams('foo=bar&bar=foo');
+        CTLEventUtils.populateURLParams(paramsArray);
+        assert.equal(document.getElementById('q').value, '');
+        assert.equal(
+            document.querySelector('#location-dropdown [value="null"]')
+            .selected, true);
+        assert.equal(
+            document.querySelector('#audience-dropdown [value="null"]')
+            .selected, true);
+        assert.equal(document.getElementsByName('start_date')[0].value, '');
+        assert.equal(document.getElementsByName('end_date')[0].value, '');
+
+    });
+});
