@@ -211,8 +211,8 @@
             '</div>' +
             '<div class="search-wrapper">' +
             
-            '<form role="search">' +
-            '<input id="q" type="text" required="" class="search-box" ' +
+            '<form class="search-container" role="search">' +
+            '<input id="q" type="search" required="" class="search-box" ' +
             'placeholder="I\'m searching for...">' +
             '<button class="close-icon" id="clear-search" type="reset">' +
             'Reset</button>' +
@@ -258,6 +258,9 @@
         });
 
         $('#clear-search').click(clearSearch);
+        $('form.search-container').submit(function(e) {
+            e.preventDefault();
+        });
         $('#q').keyup(function() {
             $('#calendarList').empty();
 
