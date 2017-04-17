@@ -17,20 +17,12 @@ CTLEventsManager.filteredEvents = [];
  *
  * Returns the array of CTLEvents.
  */
-CTLEventsManager.loadEvents = function(eventsJson, searchIndex) {
-    var i = 0;
+CTLEventsManager.loadEvents = function(eventsJson) {
     var events = [];
 
     eventsJson.forEach(function(eventData) {
         var e = new CTLEvent(eventData);
         events.push(e);
-
-        // build lunr index
-        searchIndex.add({
-            id: i++,
-            title: e.title,
-            description: e.description
-        });
     });
 
     return events;

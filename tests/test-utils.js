@@ -13,13 +13,24 @@ describe('searchEvents', function() {
     var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
 
-    var index = lunr(function() {
+    var allEvents = CTLEventsManager.loadEvents(events);
+    
+    var index; 
+    index = lunr(function() {
         this.ref('id');
-        this.field('title', {boost: 10});
-        this.field('description', {boost: 5});
+        this.field('title');
+        this.field('description');
+        var self = this;
+        var i = 0;
+        allEvents.forEach(function(e) {
+            // build lunr index
+            self.add({
+                id: i++,
+                title: e.title,
+                description: e.description
+            });
+        });
     });
-
-    var allEvents = CTLEventsManager.loadEvents(events, index);
 
     it('filters events accurately', function() {
         assert.deepEqual(CTLEventUtils.searchEvents(allEvents, index, 'test'), []);
