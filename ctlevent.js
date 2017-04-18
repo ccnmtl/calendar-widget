@@ -27,12 +27,6 @@ var CTLEvent = function(event) {
     this.description = event.description;
     this.location = event.location_address;
 
-    this.category = [];
-    this.type = [];
-    this.eventsOpenTo = [];
-    this.groupSpecific = [];
-    this.campusLocation = [];
-
     this.propertyArray = [];
 
     var xprop = event.xproperties;
@@ -60,6 +54,8 @@ CTLEvent.prototype.getDateObject = function() {
  * Adds the given property to this event's propertyArray.
  */
 CTLEvent.prototype.addProperty = function(name, value) {
+    // Replace "Student" with "Graduate Student"
+    value = value.replace(/student/i, "Graduate Student");
     var index = CTLEventUtils.findIndex(this.propertyArray, function(element) {
         return element.name === name;
     });
