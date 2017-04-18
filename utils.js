@@ -176,7 +176,7 @@ CTLEventUtils.unsetURLParams = function(key) {
  * { key: <key>, value: <value> }
  */
 CTLEventUtils.readURLParams = function(queryString) {
-    if(queryString == '') {
+    if (queryString == '') {
         return [];
     }
     var paramsArray = [];
@@ -204,7 +204,7 @@ CTLEventUtils.readURLParams = function(queryString) {
  * @return = An array of filtered event objects.
  */
 CTLEventUtils.filterOnURLParams = function(paramsArray, eventsList, index) {
-    if(eventsList.length == 0) {
+    if (eventsList.length === 0) {
         return [];
     }
 
