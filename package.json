@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "dependencies": {
-    "lunr": "^2.0.1",
+    "lunr": "^2.0.2",
     "npm": "^4.2.0"
   },
   "devDependencies": {
