@@ -205,8 +205,7 @@
     };
 
     $(document).ready(function() {
-        var boilerplate =  '<div class="pagination-holder"></div>' +
-            '<div id=loader-animation-container>' +
+        var boilerplate = '<div id=loader-animation-container>' +
             '<div class="loader-inner ball-pulse"><div></div><div></div><div></div></div>' +
             '</div>' +
             '<div class="search-wrapper">' +
