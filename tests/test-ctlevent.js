@@ -25,7 +25,7 @@ describe('CTLEvent', function() {
             assert.equal(e.location, events[0].location_address);
             assert.deepEqual(e.propertyArray[0].values, ['Education']);
             assert.deepEqual(e.propertyArray[1].values, ['Workshop']);
-            assert.deepEqual(e.propertyArray[2].values, ['Faculty', 'Student']);
+            assert.deepEqual(e.propertyArray[2].values, ['Faculty', 'Graduate Student']);
             assert.deepEqual(e.propertyArray[3].values, ['Graduate Students']);
             assert.deepEqual(e.propertyArray[4].values, ['Medical Center']);
         });
