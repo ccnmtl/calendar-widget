@@ -54,10 +54,19 @@ CTLEvent.prototype.getDateObject = function() {
  * Adds the given property to this event's propertyArray.
  */
 CTLEvent.prototype.addProperty = function(name, value) {
+
+    if (name.match('Category')) {
+        return;
+    }
+    // Replace 'Group-Specific' which is a backend term from Bedeworks to
+    // 'Category'
+    name = name.replace('Group-Specific', 'Category');
+
     // Replace "Student" with "Graduate Student"
     if (name.match('Events open to')) {
         value = value.replace(/student/i, 'Graduate Student');
     }
+
     var index = CTLEventUtils.findIndex(this.propertyArray, function(element) {
         return element.name === name;
     });
