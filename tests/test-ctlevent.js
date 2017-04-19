@@ -27,6 +27,7 @@ describe('CTLEvent', function() {
             assert.deepEqual(e.propertyArray[1].values, ['Faculty', 'Student']);
             assert.deepEqual(e.propertyArray[2].values, ['Graduate Students']);
             assert.deepEqual(e.propertyArray[3].values, ['Medical Center']);
+
         });
     });
     describe('render', function() {
