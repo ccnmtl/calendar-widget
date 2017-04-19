@@ -9,8 +9,11 @@ var propertiesString = function(properties) {
     var propString = '';
     for (var i in properties) {
         propString += '<span class="ctl-property-name">' + properties[i].name + ': </span>';
+        var propLen = properties[i].values.length;
         for (var j in properties[i].values) {
-            propString += '<span class="ctl-property-value">' + properties[i].values[j] + '</span> ';
+            propString += '<span class="ctl-property-value">' + properties[i].values[j]; 
+            j != propLen -1 ? propString += ',': '';
+            propString += '</span> ';
         }
         propString += '</br>';
     }
