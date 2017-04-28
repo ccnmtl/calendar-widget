@@ -28,8 +28,10 @@ var CTLEvent = function(event) {
     this.endTime = event.end_time;
     this.url = event.eventlink;
     this.description = event.description;
-    this.location = event.location_address;
-
+    var locationAndRoom = CTLEventUtils.getRoomNumber(event.location_address);
+    this.location = locationAndRoom[0];
+    this.roomNumber = locationAndRoom[1];
+    
     this.propertyArray = [];
 
     var xprop = event.xproperties;
@@ -103,7 +105,7 @@ CTLEvent.prototype.getAudience = function() {
 };
 
 CTLEvent.prototype.render = function() {
-    return '<div class="event">' +
+    var returnString = '<div class="event">' +
         '<div class="event_specifics">' +
         '<h3><a href="' + this.url +'">' + this.title + '</a></h3>' +
         '<h4>' + this.longDate + ' ' + this.startTime + ' &ndash; '
@@ -111,10 +113,15 @@ CTLEvent.prototype.render = function() {
         '</div>' +
         '<div class="event_description"><p>' + this.description + '</p></div>' +
         '<div class="location"><span class="event_location">' +
-        'Location: </span>' + this.location + '</div>' +
-        '<div class="event_properties">' +
+        'Location: </span>' + this.location + '</br>'; 
+    if (this.roomNumber != '' ) {
+        returnString += '<span class="room_number">Room: ' + this.roomNumber + '</span>';
+    } 
+    returnString += '</div><div class="event_properties">' +
         propertiesString(this.propertyArray) + '</div>' +
         '</div>';
+
+    return returnString;
 };
 
 if (typeof module !== 'undefined') {
