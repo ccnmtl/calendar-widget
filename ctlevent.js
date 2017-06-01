@@ -115,7 +115,7 @@ CTLEvent.prototype.render = function() {
         '<div class="location"><span class="event_location">' +
         'Location: </span>' + this.location + '</br>'; 
     if (this.roomNumber != '' ) {
-        returnString += '<span class="room_number">Room: ' + this.roomNumber + '</span>';
+        returnString += '<span class="room_number">Room: </span>' + this.roomNumber;
     } 
     returnString += '</div><div class="event_properties">' +
         propertiesString(this.propertyArray) + '</div>' +
