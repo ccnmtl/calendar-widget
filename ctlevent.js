@@ -105,22 +105,41 @@ CTLEvent.prototype.getAudience = function() {
 };
 
 CTLEvent.prototype.render = function() {
+    var desc = this.description.trim();
+    var lnBreak = desc.indexOf('.') + 1;
+    var lede = '';
+    var more = '';
+
+    if (lnBreak > 0) {
+        lede = desc.slice(0, lnBreak);
+        more = desc.slice(lnBreak).trim();
+    }
+
     var returnString = '<div class="event">' +
         '<div class="event_specifics">' +
         '<h3><a href="' + this.url +'">' + this.title + '</a></h3>' +
         '<h4>' + this.longDate + ' ' + this.startTime + ' &ndash; '
         + this.endTime + '</h4>' +
         '</div>' +
-        '<div class="event_description"><p>' + this.description + '</p></div>' +
+        '<div class="event_description"><p>' + lede + '</p></div>' +
         '<div class="location"><span class="event_location">' +
         'Location: </span>' + this.location + '</br>'; 
     if (this.roomNumber != '' ) {
-        returnString += '<span class="room_number">Room: ' + this.roomNumber + '</span>';
+        returnString += '<span class="room_number">Room:</span> ' + 
+                         this.roomNumber;
     } 
-    returnString += '</div><div class="event_properties">' +
-        propertiesString(this.propertyArray) + '</div>' +
-        '</div>';
 
+    returnString += '</div><div class="event_properties">' +
+        propertiesString(this.propertyArray) + '</div>'; 
+
+    if (more.length > 0) {
+        returnString += '<div class="more_info">' +
+            '<span id="more_info_trigger">More&hellip; </span>' +
+            '<div class="more_info_container">' + more + '</div>' +
+            '</div>';
+    }
+
+    returnString += '</div>';
     return returnString;
 };
 

@@ -18,9 +18,18 @@ input { border-radius: 5px; }
 }
 
 .event .event_specifics a:hover { cursor: pointer; }
-.event .location, .event_properties { margin-top: 1em; }
+.event .location, .event_properties, .more_info { margin-top: 1em; }
 .event_properties { }
-.event .location .event_location, .ctl-property-name { font-weight: bold; }
+.event .location .event_location, .room_number, .ctl-property-name { font-weight: bold; }
+
+#more_info_trigger
+{
+    font-weight: bold;
+    cursor: pointer;
+    color: red;
+}
+
+.more_info_container { display: none; }
 
 #loader-animation-container
 {

@@ -270,5 +270,13 @@
             }
             return doSearch(CTLEventsManager.allEvents);
         });
+        function moreInfoAccordion(el) {
+            if (el.target.id == 'more_info_trigger') {
+                $(el.target.nextSibling).toggle();
+            }
+            el.stopPropagation();
+        }
+        document.getElementById('calendarList').addEventListener('click', 
+                                                moreInfoAccordion, false);
     });
 })(jQuery);
