@@ -6,13 +6,13 @@
 
     var ITEMS_ON_PAGE = 6;
 
-    var index; 
+    var index;
 
     var initializeLunrIndex = function(events) {
         index = lunr(function() {
             this.ref('id');
             this.field('title');
-            this.field('description');            
+            this.field('description');
             var i = 0;
             var self = this;
             events.forEach(function(e){
@@ -209,7 +209,7 @@
             '<div class="loader-inner ball-pulse"><div></div><div></div><div></div></div>' +
             '</div>' +
             '<div class="search-wrapper">' +
-            
+
             '<form class="search-container" role="search">' +
             '<input id="q" type="search" required="" class="search-box" ' +
             'placeholder="I\'m searching for...">' +
@@ -230,7 +230,7 @@
             '</label>' +
 
             '<div id="search-results"></div>' +
-            
+
             '</div>' +
             '<div id="calendarList"></div>' +
             '<div class="pagination-holder"></div>';
@@ -270,13 +270,11 @@
             }
             return doSearch(CTLEventsManager.allEvents);
         });
-        function moreInfoAccordion(el) {
-            if (el.target.id == 'more_info_trigger') {
-                $(el.target.nextSibling).toggle();
-            }
-            el.stopPropagation();
-        }
-        document.getElementById('calendarList').addEventListener('click', 
-                                                moreInfoAccordion, false);
+
+        $('#calendarList').on('click', '.more_info_trigger', function() {
+            $(this).closest('.more_info')
+                .find('.more_info_container')
+                .toggle();
+        });
     });
 })(jQuery);

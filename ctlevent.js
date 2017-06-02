@@ -134,7 +134,7 @@ CTLEvent.prototype.render = function() {
 
     if (more.length > 0) {
         returnString += '<div class="more_info">' +
-            '<span id="more_info_trigger">More&hellip; </span>' +
+            '<span class="more_info_trigger">More&hellip; </span>' +
             '<div class="more_info_container">' + more + '</div>' +
             '</div>';
     }
