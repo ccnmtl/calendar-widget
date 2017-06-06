@@ -265,3 +265,37 @@ CTLEventUtils.populateURLParams = function(paramsArray) {
         }
     });
 };
+
+/**
+ * This function takes in the location string from Bedewords and returns an
+ * array with the location and room number broken out.
+ *
+ * @locationString = The location string from Bedeworks
+ *
+ * return @returnArray = An array that contains the location and room number
+ *                       returnArray[0] contains the location string
+ *                       returnArray[1] contains the room number
+ */
+CTLEventUtils.getRoomNumber = function(locationString) {
+    var returnArray = ['',''];
+    if (locationString == null) {
+        return ['',''];
+    }
+    // Matches 10027 or 10032
+    var zipCodes = /(\b10027$|\b10032$)/g;
+    // Matches on the string 'Room ***', where *** are any number of digits 
+    var roomString = /room\s*\d*$/gi;
+    if (locationString.match(zipCodes)) {
+        returnArray[0] = locationString;
+    } else if (locationString.match(roomString)) {
+        // If the penultimate word in the string is 'Room' then trim
+        returnArray[1] = locationString.match(/\d*$/g)[0];
+        returnArray[0] = locationString.replace(roomString, '').trim();
+    } else {
+        // Else trim the last number and set it as room
+        returnArray[1] = locationString.match(/\d*$/g)[0];
+        returnArray[0] = locationString.replace(/\d*$/g, '').trim();
+    }
+
+    return returnArray;
+};

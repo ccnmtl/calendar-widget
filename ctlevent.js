@@ -28,8 +28,10 @@ var CTLEvent = function(event) {
     this.endTime = event.end_time;
     this.url = event.eventlink;
     this.description = event.description;
-    this.location = event.location_address;
-
+    var locationAndRoom = CTLEventUtils.getRoomNumber(event.location_address);
+    this.location = locationAndRoom[0];
+    this.roomNumber = locationAndRoom[1];
+    
     this.propertyArray = [];
 
     var xprop = event.xproperties;
@@ -103,18 +105,42 @@ CTLEvent.prototype.getAudience = function() {
 };
 
 CTLEvent.prototype.render = function() {
-    return '<div class="event">' +
+    var desc = this.description.trim();
+    var lnBreak = desc.indexOf('.') + 1;
+    var lede = '';
+    var more = '';
+
+    if (lnBreak > 0) {
+        lede = desc.slice(0, lnBreak);
+        more = desc.slice(lnBreak).trim();
+    }
+
+    var returnString = '<div class="event">' +
         '<div class="event_specifics">' +
         '<h3><a href="' + this.url +'">' + this.title + '</a></h3>' +
         '<h4>' + this.longDate + ' ' + this.startTime + ' &ndash; '
         + this.endTime + '</h4>' +
         '</div>' +
-        '<div class="event_description"><p>' + this.description + '</p></div>' +
+        '<div class="event_description"><p>' + lede + '</p></div>' +
         '<div class="location"><span class="event_location">' +
-        'Location: </span>' + this.location + '</div>' +
-        '<div class="event_properties">' +
-        propertiesString(this.propertyArray) + '</div>' +
-        '</div>';
+        'Location: </span>' + this.location + '</br>'; 
+    if (this.roomNumber != '' ) {
+        returnString += '<span class="room_number">Room:</span> ' + 
+                         this.roomNumber;
+    } 
+
+    returnString += '</div><div class="event_properties">' +
+        propertiesString(this.propertyArray) + '</div>'; 
+
+    if (more.length > 0) {
+        returnString += '<div class="more_info">' +
+            '<span class="more_info_trigger">More&hellip; </span>' +
+            '<div class="more_info_container">' + more + '</div>' +
+            '</div>';
+    }
+
+    returnString += '</div>';
+    return returnString;
 };
 
 if (typeof module !== 'undefined') {

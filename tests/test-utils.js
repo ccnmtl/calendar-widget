@@ -282,3 +282,30 @@ describe('populateURLParams', function() {
 
     });
 });
+
+describe('room number string', function() {
+    it('checks for null location string', function() {
+        var loc = null;
+        var strings = CTLEventUtils.getRoomNumber(loc);
+        assert.equal(strings[0], '');
+        assert.equal(strings[1], '');
+    });
+    it('leaves the string alone if there is no room number given', function() {
+        var loc = 'Butler Library, 535 W. 114 St., New York, NY 10027';
+        var strings = CTLEventUtils.getRoomNumber(loc);
+        assert.equal(strings[0], 'Butler Library, 535 W. 114 St., New York, NY 10027');
+        assert.equal(strings[1], '');
+    });
+    it('acurately trims the string if the penultimate word is Room', function() {
+        var loc = 'Butler Library, 535 W. 114 St., New York, NY 10027 Room 212';
+        var strings = CTLEventUtils.getRoomNumber(loc);
+        assert.equal(strings[0], 'Butler Library, 535 W. 114 St., New York, NY 10027');
+        assert.equal(strings[1], '212');
+    });
+    it('If the string ends in a number not a zipcode, its handled as a room number', function() {
+        var loc = 'Butler Library, 535 W. 114 St., New York, NY 10027 212';
+        var strings = CTLEventUtils.getRoomNumber(loc);
+        assert.equal(strings[0], 'Butler Library, 535 W. 114 St., New York, NY 10027');
+        assert.equal(strings[1], '212');
+    });
+});
