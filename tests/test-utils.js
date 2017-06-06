@@ -171,14 +171,14 @@ describe('populateURLParams', function() {
         '</form>' +
         '<div id="location-dropdown-container">' +
             '<select id="location-dropdown">' +
-                '<option value="null">Location: All</option>' +
+                '<option value="null">All</option>' +
                 '<option value="Morningside">Morningside</option>' +
                 '<option value="Medical Center">Medical Center</option>' +
             '</select>' +
         '</div>' +
         '<div id="audience-dropdown-container">' +
             '<select id="audience-dropdown">' +
-                '<option value="null">Audience: All</option>' +
+                '<option value="null">All</option>' +
                 '<option value="Faculty">Faculty</option>' +
                 '<option value="Staff">Staff</option>' +
                 '<option value="Postdocs">Postdocs</option>' +

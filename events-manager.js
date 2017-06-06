@@ -31,7 +31,7 @@ CTLEventsManager.loadEvents = function(eventsJson) {
 CTLEventsManager.renderLocationDropdown = function() {
     var $container = jQuery(
         '<select id="location-dropdown">' +
-            '<option value="null">Location: All</option>' +
+            '<option value="null">All</option>' +
             '</select>');
 
     var locations = [];
@@ -53,7 +53,7 @@ CTLEventsManager.renderLocationDropdown = function() {
 CTLEventsManager.renderAudienceDropdown = function() {
     var $container = jQuery(
         '<select id="audience-dropdown">' +
-            '<option value="null">Audience: All</option>' +
+            '<option value="null">All</option>' +
             '</select>');
 
     var allAudiences = [];
