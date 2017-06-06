@@ -33,7 +33,6 @@ input { border-radius: 5px; }
 .more_info_trigger {
     font-weight: bold;
     cursor: pointer;
-    color: red;
 }
 
 .more_info_container { display: none; }
