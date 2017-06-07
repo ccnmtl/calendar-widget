@@ -67,11 +67,6 @@ CTLEvent.prototype.addProperty = function(name, value) {
     // 'Category'
     name = name.replace('Group-Specific', 'Category');
 
-    // Replace "Student" with "Graduate Student"
-    if (name.match('Events open to')) {
-        value = value.replace(/student/i, 'Graduate Student');
-    }
-
     var index = CTLEventUtils.findIndex(this.propertyArray, function(element) {
         return element.name === name;
     });
