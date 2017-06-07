@@ -28,7 +28,7 @@ input { border-radius: 5px; }
 .event .event_specifics a:hover { cursor: pointer; }
 .event .location, .event_properties, .more_info { margin-top: 1em; }
 .event_properties { }
-.event .location .event_location, .room_number, .ctl-property-name { font-weight: bold; }
+.ctl-property-name { font-weight: bold; }
 
 .more_info_trigger {
     font-weight: bold;

@@ -122,14 +122,13 @@ CTLEvent.prototype.render = function() {
         + this.endTime + '</h4>' +
         '</div>' +
         '<div class="event_description"><p>' + lede + '</p></div>' +
-        '<div class="location"><span class="event_location">' +
-        'Location: </span>' + this.location + '</br>'; 
+        '<div class="location">'; 
     if (this.roomNumber != '' ) {
-        returnString += '<span class="room_number">Room:</span> ' + 
-                         this.roomNumber;
+        returnString += 'Room ' + this.roomNumber + ', ';
     } 
 
-    returnString += '</div><div class="event_properties">' +
+    returnString += this.location + '</br>' +  
+        '</div><div class="event_properties">' +
         propertiesString(this.propertyArray) + '</div>'; 
 
     if (more.length > 0) {
