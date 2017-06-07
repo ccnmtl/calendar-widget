@@ -4,7 +4,7 @@
 
 (function($) {
 
-    var ITEMS_ON_PAGE = 6;
+    var ITEMS_ON_PAGE = 10;
 
     var index;
 
