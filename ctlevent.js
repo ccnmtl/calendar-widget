@@ -8,14 +8,18 @@ if (typeof require === 'function') {
 var propertiesString = function(properties) {
     var propString = '';
     for (var i in properties) {
-        propString += '<span class="ctl-property-name">' + properties[i].name + ': </span>';
-        var propLen = properties[i].values.length;
-        for (var j in properties[i].values) {
-            propString += '<span class="ctl-property-value">' + properties[i].values[j]; 
-            j != propLen -1 ? propString += ',': '';
-            propString += '</span> ';
+        // For now, this will only print 'Events open to' as 'Audience'.
+        // All other tags are being skipped for the moment
+        if (properties[i].name == 'Events open to') {
+            propString += '<span class="ctl-property-name">Audience: </span>';
+            var propLen = properties[i].values.length;
+            for (var j in properties[i].values) {
+                propString += '<span class="ctl-property-value">' + properties[i].values[j]; 
+                j != propLen -1 ? propString += ',': '';
+                propString += '</span> ';
+            }
+            propString += '</br>';
         }
-        propString += '</br>';
     }
     return propString;
 };
