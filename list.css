@@ -35,6 +35,10 @@ input { border-radius: 5px; }
     cursor: pointer;
 }
 
+.more_info_trigger:hover {
+    text-decoration: underline;
+}
+
 .more_info_container { display: none; }
 
 #loader-animation-container
