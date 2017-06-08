@@ -8,14 +8,18 @@ if (typeof require === 'function') {
 var propertiesString = function(properties) {
     var propString = '';
     for (var i in properties) {
-        propString += '<span class="ctl-property-name">' + properties[i].name + ': </span>';
-        var propLen = properties[i].values.length;
-        for (var j in properties[i].values) {
-            propString += '<span class="ctl-property-value">' + properties[i].values[j]; 
-            j != propLen -1 ? propString += ',': '';
-            propString += '</span> ';
+        // For now, this will only print 'Events open to' as 'Audience'.
+        // All other tags are being skipped for the moment
+        if (properties[i].name == 'Events open to') {
+            propString += '<span class="ctl-property-name">Audience: </span>';
+            var propLen = properties[i].values.length;
+            for (var j in properties[i].values) {
+                propString += '<span class="ctl-property-value">' + properties[i].values[j]; 
+                j != propLen -1 ? propString += ',': '';
+                propString += '</span> ';
+            }
+            propString += '</br>';
         }
-        propString += '</br>';
     }
     return propString;
 };
@@ -67,11 +71,6 @@ CTLEvent.prototype.addProperty = function(name, value) {
     // 'Category'
     name = name.replace('Group-Specific', 'Category');
 
-    // Replace "Student" with "Graduate Student"
-    if (name.match('Events open to')) {
-        value = value.replace(/student/i, 'Graduate Student');
-    }
-
     var index = CTLEventUtils.findIndex(this.propertyArray, function(element) {
         return element.name === name;
     });
@@ -121,23 +120,20 @@ CTLEvent.prototype.render = function() {
         '<h4>' + this.longDate + ' ' + this.startTime + ' &ndash; '
         + this.endTime + '</h4>' +
         '</div>' +
-        '<div class="event_description"><p>' + lede + '</p></div>' +
-        '<div class="location"><span class="event_location">' +
-        'Location: </span>' + this.location + '</br>'; 
+        '<div class="event_description"><p>' + lede; 
+    if (more.length > 0) {
+        returnString += '<span class="more_info_trigger"> More&hellip; </span></br>' +
+            '<span class="more_info_container">' + more + '</span>'; 
+    }
+
+    returnString += '</p></div><div class="location">'; 
     if (this.roomNumber != '' ) {
-        returnString += '<span class="room_number">Room:</span> ' + 
-                         this.roomNumber;
+        returnString += 'Room ' + this.roomNumber + ', ';
     } 
 
-    returnString += '</div><div class="event_properties">' +
+    returnString += this.location + '</br>' +  
+        '</div><div class="event_properties">' +
         propertiesString(this.propertyArray) + '</div>'; 
-
-    if (more.length > 0) {
-        returnString += '<div class="more_info">' +
-            '<span class="more_info_trigger">More&hellip; </span>' +
-            '<div class="more_info_container">' + more + '</div>' +
-            '</div>';
-    }
 
     returnString += '</div>';
     return returnString;

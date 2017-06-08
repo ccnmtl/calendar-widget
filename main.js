@@ -4,7 +4,7 @@
 
 (function($) {
 
-    var ITEMS_ON_PAGE = 6;
+    var ITEMS_ON_PAGE = 10;
 
     var index;
 
@@ -327,9 +327,14 @@
         });
 
         $('#calendarList').on('click', '.more_info_trigger', function() {
-            $(this).closest('.more_info')
+            $(this).closest('.event_description')
                 .find('.more_info_container')
                 .toggle();
+            if (this.innerHTML.match(/More/ig)) {
+                this.innerHTML = ' Less';
+            } else if (this.innerHTML.match(/Less/ig)) {
+                this.innerHTML = ' More&hellip;';
+            }
         });
     });
 })(jQuery);
