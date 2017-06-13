@@ -209,7 +209,7 @@ describe('populateURLParams', function() {
         CTLEventUtils.populateURLParams(paramsArray);
         assert.equal(
             document.querySelector('#location-dropdown [value="Morningside"]')
-            .selected, true);
+                .selected, true);
 
     });
     it('populates the audience dropdown', function() {
@@ -218,21 +218,21 @@ describe('populateURLParams', function() {
         CTLEventUtils.populateURLParams(paramsArray);
         assert.equal(
             document.querySelector('#audience-dropdown [value="Faculty"]')
-            .selected, true);
+                .selected, true);
     });
     it('populates the start date field', function() {
         document.body.innerHTML = searchForm;
         var paramsArray = CTLEventUtils.readURLParams('start=2017-4-18');
         CTLEventUtils.populateURLParams(paramsArray);
         assert.equal(document.getElementsByName('start_date')[0].value, 
-                                                '4/18/2017');
+            '4/18/2017');
     });
     it('populates the end date field', function() {
         document.body.innerHTML = searchForm;
         var paramsArray = CTLEventUtils.readURLParams('end=2017-4-18');
         CTLEventUtils.populateURLParams(paramsArray);
         assert.equal(document.getElementsByName('end_date')[0].value, 
-                                                '4/18/2017');
+            '4/18/2017');
     });
     it('populates all the fields', function() {
         document.body.innerHTML = searchForm;
@@ -243,10 +243,10 @@ describe('populateURLParams', function() {
         assert.equal(document.getElementById('q').value, 'test');
         assert.equal(
             document.querySelector('#location-dropdown [value="Morningside"]')
-            .selected, true);
+                .selected, true);
         assert.equal(
             document.querySelector('#audience-dropdown [value="Faculty"]')
-            .selected, true);
+                .selected, true);
         assert.equal(
             document.getElementsByName('start_date')[0].value, '4/18/2017');
         assert.equal(
@@ -259,10 +259,10 @@ describe('populateURLParams', function() {
         assert.equal(document.getElementById('q').value, '');
         assert.equal(
             document.querySelector('#location-dropdown [value="null"]')
-            .selected, true);
+                .selected, true);
         assert.equal(
             document.querySelector('#audience-dropdown [value="null"]')
-            .selected, true);
+                .selected, true);
         assert.equal(document.getElementsByName('start_date')[0].value, '');
         assert.equal(document.getElementsByName('end_date')[0].value, '');
     });
@@ -273,10 +273,10 @@ describe('populateURLParams', function() {
         assert.equal(document.getElementById('q').value, '');
         assert.equal(
             document.querySelector('#location-dropdown [value="null"]')
-            .selected, true);
+                .selected, true);
         assert.equal(
             document.querySelector('#audience-dropdown [value="null"]')
-            .selected, true);
+                .selected, true);
         assert.equal(document.getElementsByName('start_date')[0].value, '');
         assert.equal(document.getElementsByName('end_date')[0].value, '');
 
