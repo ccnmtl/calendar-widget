@@ -35,6 +35,8 @@ var CTLEvent = function(event) {
     var locationAndRoom = CTLEventUtils.getRoomNumber(event.location_address);
     this.location = locationAndRoom[0];
     this.roomNumber = locationAndRoom[1];
+    this.registration = false;
+    this.registrationLink = '';
     
     this.propertyArray = [];
 
@@ -51,6 +53,14 @@ var CTLEvent = function(event) {
             propList = aliasString.split('/').slice(-2);
 
             this.addProperty(propList[0], propList[1]);
+        }
+
+        if (xprop[i]['X-BEDEWORK-UNI-ONLY-REG']) {
+            this.registration = true;
+            this.registrationLink = 'https://cas.columbia.edu/cas/login?service=';
+            this.registrationLink += this.url.replace('http', 'https');
+            this.registrationLink += '%26setappvar=cas(true)';
+            this.registrationLink = this.registrationLink.replace(/&/g, '%26');
         }
     }
 };
@@ -131,8 +141,14 @@ CTLEvent.prototype.render = function() {
         returnString += 'Room ' + this.roomNumber + ', ';
     } 
 
-    returnString += this.location + '</br>' +  
-        '</div><div class="event_properties">' +
+    returnString += this.location + '</br></div>';
+
+    if (this.registration) {
+        returnString += '<a target="_blank"  href="' + this.registrationLink + '">' + 
+                        '<button>Register With UNI</button></a>';
+    }
+
+    returnString += '<div class="event_properties">' +
         propertiesString(this.propertyArray) + '</div>'; 
 
     returnString += '</div>';
