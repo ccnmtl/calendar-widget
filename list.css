@@ -39,7 +39,10 @@ input { border-radius: 5px; }
     text-decoration: underline;
 }
 
-.more_info_container { display: none; }
+.more_info_container {
+    display: none;
+    white-space: pre-wrap;
+}
 
 #loader-animation-container
 {
