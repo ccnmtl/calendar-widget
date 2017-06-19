@@ -309,3 +309,31 @@ describe('room number string', function() {
         assert.equal(strings[1], '212');
     });
 });
+
+describe('get event by ID', function() {
+    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
+    var events = json.bwEventList.events;
+    var allEvents = CTLEventsManager.loadEvents(events);
+
+    it('checks that an event is found by ID, and that only a single event is returned', function() {
+        for (var i = 0; i < events.length; i++) {
+            var eventID = events[i].guid;
+            var currentEventObject = CTLEventUtils.getEventByID(allEvents, eventID);
+            assert.equal(currentEventObject.length, 1);
+            assert.equal(currentEventObject[0].id, eventID);
+        }
+    });
+
+    it('handles a null list', function() {
+        var eventList = CTLEventUtils.getEventByID(null, events[0].guid);
+        assert.equal(eventList.length, 0);
+    });
+    it('handles a null eventID', function() {
+        var eventList = CTLEventUtils.getEventByID(allEvents, null);
+        assert.equal(eventList.length, 0);
+    });
+    it('handles an eventID that isn\'t found', function() {
+        var eventList = CTLEventUtils.getEventByID(allEvents, 'GUID-1234');
+        assert.equal(eventList.length, 0);
+    });
+});
