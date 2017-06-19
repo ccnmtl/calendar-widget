@@ -18,7 +18,7 @@ var propertiesString = function(properties) {
                 j != propLen -1 ? propString += ',': '';
                 propString += '</span> ';
             }
-            propString += '</br>';
+            propString += '<br>';
         }
     }
     return propString;
@@ -132,7 +132,7 @@ CTLEvent.prototype.render = function() {
         '</div>' +
         '<div class="event_description"><p>' + lede; 
     if (more.length > 0) {
-        returnString += '</br><span class="more_info_trigger">More&hellip;</span></br>' +
+        returnString += '<br><span class="more_info_trigger">More&hellip;</span><br>' +
             '<span class="more_info_container">' + more + '</span>'; 
     }
 
@@ -141,7 +141,7 @@ CTLEvent.prototype.render = function() {
         returnString += 'Room ' + this.roomNumber + ', ';
     } 
 
-    returnString += this.location + '</br></div>';
+    returnString += this.location + '<br></div>';
 
     if (this.registration) {
         returnString += '<a target="_blank"  href="' + this.registrationLink + '">' + 
