@@ -176,7 +176,7 @@ CTLEventUtils.unsetURLParams = function(key) {
  * { key: <key>, value: <value> }
  */
 CTLEventUtils.readURLParams = function(queryString) {
-    if (queryString == '') {
+    if (!queryString) {
         return [];
     }
     var paramsArray = [];
@@ -191,6 +191,23 @@ CTLEventUtils.readURLParams = function(queryString) {
     });
 
     return paramsArray;
+};
+
+/**
+ * @param eventsList = A list of events to select from
+ *
+ * @param eventID = the guid from Bedeworks that identifies the event
+ *
+ * @return = An array containing the single event that matches the ID
+ */
+CTLEventUtils.getEventByID = function(eventsList, eventID) {
+    if (!eventsList || !eventID) {return [];}
+    for(var i = 0; i < eventsList.length; i++) {
+        if (eventsList[i].id === eventID) {
+            return [eventsList[i]];
+        }
+    }
+    return [];
 };
 
 /**
@@ -229,6 +246,9 @@ CTLEventUtils.filterOnURLParams = function(paramsArray, eventsList, index) {
             case 'end':
                 eventsList = CTLEventUtils.filterEventsByDateRange(
                     eventsList, null, new Date(el.value));
+                break;
+            case 'eventID':
+                eventsList = CTLEventUtils.getEventByID(eventsList, el.value);
                 break;
         }
     });
@@ -278,7 +298,7 @@ CTLEventUtils.populateURLParams = function(paramsArray) {
  */
 CTLEventUtils.getRoomNumber = function(locationString) {
     var returnArray = ['',''];
-    if (locationString == null) {
+    if (!locationString) {
         return ['',''];
     }
     // Matches 10027 or 10032
