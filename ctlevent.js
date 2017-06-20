@@ -130,26 +130,27 @@ CTLEvent.prototype.render = function() {
         '<h4>' + this.longDate + ' ' + this.startTime + ' &ndash; '
         + this.endTime + '</h4>' +
         '</div>' +
-        '<div class="event_description"><p>' + lede; 
+        '<div class="event_description"><p>' + lede + '</p>';
     if (more.length > 0) {
-        returnString += '<br><span class="more_info_trigger">More&hellip;</span><br>' +
-            '<span class="more_info_container">' + more + '</span>'; 
+        returnString += '<div class="more_info_trigger">More&hellip;</div>' +
+            '<p class="more_info_container">' + more + '</p>';
     }
 
-    returnString += '</p></div><div class="location">'; 
+    returnString += '</div><div class="location">';
     if (this.roomNumber != '' ) {
         returnString += 'Room ' + this.roomNumber + ', ';
     } 
 
-    returnString += this.location + '<br></div>';
+    returnString += this.location + '</div>';
 
     if (this.registration) {
-        returnString += '<a target="_blank"  href="' + this.registrationLink + '">' + 
-                        '<button>Register With UNI</button></a>';
+        returnString += '<div class="event_registration">' +
+                        '<a target="_blank"  href="' + this.registrationLink + '">' +
+                        '<button>Register With UNI</button></a></div>';
     }
 
     returnString += '<div class="event_properties">' +
-        propertiesString(this.propertyArray) + '</div>'; 
+        propertiesString(this.propertyArray) + '</div>';
 
     returnString += '</div>';
     return returnString;
