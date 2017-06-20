@@ -201,7 +201,7 @@ CTLEventUtils.readURLParams = function(queryString) {
  * @return = An array containing the single event that matches the ID
  */
 CTLEventUtils.getEventByID = function(eventsList, eventID) {
-    if (eventsList == null || eventID == null) {return [];}
+    if (!eventsList || !eventID) {return [];}
     for(var i = 0; i < eventsList.length; i++) {
         if (eventsList[i].id == eventID) {
             return [eventsList[i]];
