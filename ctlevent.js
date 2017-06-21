@@ -29,6 +29,8 @@ var CTLEvent = function(event) {
     this.title = event.summary;
     this.longDate = event.start_longdate;
     this.startTime = event.start_time;
+    // not ok to use the string constructor, refactor
+    this.startDate = new Date(this.longDate + ' ' + this.startTime);
     this.endTime = event.end_time;
     this.url = event.eventlink;
     this.description = event.description;

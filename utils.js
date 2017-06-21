@@ -319,3 +319,16 @@ CTLEventUtils.getRoomNumber = function(locationString) {
 
     return returnArray;
 };
+
+CTLEventUtils.sortEventsByDate = function(events) {
+    function compareDates(a, b) {
+        if (a.startDate < b.startDate) {
+            return -1;
+        } else if (a.startDate > b.startDate) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+    return events.sort(compareDates);
+};

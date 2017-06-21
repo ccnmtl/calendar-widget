@@ -337,3 +337,16 @@ describe('get event by ID', function() {
         assert.equal(eventList.length, 0);
     });
 });
+
+describe('sort events by date and time', function() {
+    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
+    var events = json.bwEventList.events;
+    var allEvents = CTLEventsManager.loadEvents(events);
+
+    it('checks that an array of event objects is sorted by date', function() {
+        var sortedEvents = CTLEventUtils.sortEventsByDate(allEvents);
+        for (var i = 0; i < (sortedEvents.length - 1); i++) {
+            assert(sortedEvents[i].startDate <= sortedEvents[i + 1].startDate);
+        }
+    });
+});
