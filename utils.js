@@ -347,11 +347,11 @@ CTLEventUtils.strToDate = function(dateString) {
     var hours = Number(dateString.substr(9, 2));
     var min = Number(dateString.substr(11, 2));
 
-    var date = new Date(year, month, date, hours, min);
+    var dateObject = new Date(year, month, date, hours, min);
     // rely on the Date constructor to test for validity 
-    if (date instanceof Date) {
-        return date;
+    if (dateObject instanceof Date) {
+        return dateObject;
     } else {
         return null;
     }
-}
+};
