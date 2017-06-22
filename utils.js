@@ -332,3 +332,26 @@ CTLEventUtils.sortEventsByDate = function(events) {
     }
     return events.sort(compareDates);
 };
+
+CTLEventUtils.strToDate = function(dateString) {
+    if (!dateString) {return null;}
+    // the dateString should be in this format:
+    // YYYYMMDDTHHMMSS
+    // where T is the literal letter 'T'
+    // and all others are ints
+    if (dateString.length != 15) {return null;}
+
+    var year = Number(dateString.substr(0, 4));
+    var month = Number(dateString.substr(4, 2)) - 1;
+    var date = Number(dateString.substr(6, 2));
+    var hours = Number(dateString.substr(9, 2));
+    var min = Number(dateString.substr(11, 2));
+
+    var date = new Date(year, month, date, hours, min);
+    // rely on the Date constructor to test for validity 
+    if (date instanceof Date) {
+        return date;
+    } else {
+        return null;
+    }
+}

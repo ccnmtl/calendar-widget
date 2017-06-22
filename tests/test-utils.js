@@ -350,3 +350,18 @@ describe('sort events by date and time', function() {
         }
     });
 });
+
+describe('take a string and convert it to a date object', function() {
+    it('handles a null', function() {
+        var sampleDate = CTLEventUtils.strToDate(null);
+        assert.equal(sampleDate, null);
+    });
+    it('handles a malformed string', function() {
+        var sampleDate = CTLEventUtils.strToDate('FOOBAR');
+        assert.equal(sampleDate, null);
+    });
+    it('returns a date object when given a string in the correct format', function() {
+        var sampleDate = CTLEventUtils.strToDate('20170622T131500');
+        assert(sampleDate instanceof Date);
+    });
+});
