@@ -363,5 +363,10 @@ describe('take a string and convert it to a date object', function() {
     it('returns a date object when given a string in the correct format', function() {
         var sampleDate = CTLEventUtils.strToDate('20170622T131500');
         assert(sampleDate instanceof Date);
+        assert.equal(sampleDate.getFullYear(), 2017);
+        assert.equal(sampleDate.getMonth(), 5);
+        assert.equal(sampleDate.getDate(), 22);
+        assert.equal(sampleDate.getHours(), 13);
+        assert.equal(sampleDate.getMinutes(), 15);
     });
 });
