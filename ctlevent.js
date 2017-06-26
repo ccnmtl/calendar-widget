@@ -32,6 +32,7 @@ var CTLEvent = function(event) {
     this.startDate = CTLEventUtils.strToDate(event.start_datetime);
     this.endTime = event.end_time;
     this.url = event.eventlink;
+    this.status = event.status;
     this.description = event.description;
     var locationAndRoom = CTLEventUtils.getRoomNumber(event.location_address);
     this.location = locationAndRoom[0];
@@ -126,27 +127,29 @@ CTLEvent.prototype.render = function() {
     }
 
     var returnString = '<div class="event">' +
-        '<div class="event_specifics">' +
-        '<h3><a href="' + this.url +'">' + this.title + '</a></h3>' +
-        '<h4>' + this.longDate + ' ' + this.startTime + ' &ndash; '
+        '<div class="event_specifics">';
+    // check the event status
+    if (this.status == 'CANCELLED') {
+        returnString += '<span class="cancelled">' + this.status + ': ';
+    }
+    returnString += '<a href="' + this.url +'">' + this.title + '</a>';
+    if (this.status == 'CANCELLED') {returnString += '</span>';}
+
+    returnString += '</h3><h4>' + this.longDate + ' ' + this.startTime + ' &ndash; '
         + this.endTime + '</h4>' +
         '</div>' +
         '<div class="event_description"><p>' + lede;
     if (more.length > 0) {
         returnString += '<span class="more_info_trigger"> More&hellip;</span>';
     }
-
     returnString += '</p>';
-
     if (more.length > 0) {
         returnString += '<p class="more_info_container">' + more + '</p>';
     }
-
     returnString += '</div><div class="location">';
     if (this.roomNumber != '' ) {
         returnString += 'Room ' + this.roomNumber + ', ';
     } 
-
     returnString += this.location + '</div>';
 
     if (this.registration) {

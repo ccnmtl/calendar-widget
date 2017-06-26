@@ -26,9 +26,11 @@ input { border-radius: 5px; }
 
 .event .event_specifics h3 a { font-size: 1.25em!important; }
 .event .event_specifics a:hover { cursor: pointer; }
-.event .location, .event_properties, .more_info { margin-top: 1em; }
+.event .location, .event_properties, .more_info, .event_registration { margin-top: 1em; }
 .event_properties { }
 .ctl-property-name { font-weight: bold; }
+
+.cancelled { color: red; }
 
 .more_info_trigger {
     font-weight: bold;
@@ -45,6 +47,10 @@ input { border-radius: 5px; }
 }
 
 div.event_registration button {
+	background-color: #75AADB;
+    border: 1px solid #75AADB;
+    border-radius: 3px;
+    padding: 6px;
     cursor: pointer;
 }
 
