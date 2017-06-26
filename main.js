@@ -77,6 +77,8 @@
      * Clear the events from the DOM and re-render them.
      */
     var refreshEvents = function(eArray, pageNum) {
+        // Sort by date first to ensure the correct order
+        eArray = CTLEventUtils.sortEventsByDate(eArray);
         $('.pagination-holder').pagination('updateItems', eArray.length);
         jQuery('.ctl-events').remove();
         jQuery('#calendarList').append(renderEvents(eArray, pageNum));

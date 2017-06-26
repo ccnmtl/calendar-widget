@@ -29,6 +29,7 @@ var CTLEvent = function(event) {
     this.title = event.summary;
     this.longDate = event.start_longdate;
     this.startTime = event.start_time;
+    this.startDate = CTLEventUtils.strToDate(event.start_datetime);
     this.endTime = event.end_time;
     this.url = event.eventlink;
     this.description = event.description;
