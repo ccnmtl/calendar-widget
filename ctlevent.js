@@ -131,10 +131,15 @@ CTLEvent.prototype.render = function() {
         '<h4>' + this.longDate + ' ' + this.startTime + ' &ndash; '
         + this.endTime + '</h4>' +
         '</div>' +
-        '<div class="event_description"><p>' + lede + '</p>';
+        '<div class="event_description"><p>' + lede;
     if (more.length > 0) {
-        returnString += '<div class="more_info_trigger">More&hellip;</div>' +
-            '<p class="more_info_container">' + more + '</p>';
+        returnString += '<span class="more_info_trigger"> More&hellip;</span>';
+    }
+
+    returnString += '</p>';
+
+    if (more.length > 0) {
+        returnString += '<p class="more_info_container">' + more + '</p>';
     }
 
     returnString += '</div><div class="location">';
