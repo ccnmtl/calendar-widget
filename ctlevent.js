@@ -127,7 +127,7 @@ CTLEvent.prototype.render = function() {
     }
 
     var returnString = '<div class="event">' +
-        '<div class="event_specifics">';
+        '<div class="event_specifics"><h3>';
     // check the event status
     if (this.status == 'CANCELLED') {
         returnString += '<span class="cancelled">' + this.status + ': ';
