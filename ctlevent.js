@@ -27,17 +27,34 @@ var propertiesString = function(properties) {
 var CTLEvent = function(event) {
     this.id = event.guid;
     this.title = event.summary;
-    this.longDate = event.start.longdate;
-    this.startTime = event.start.time;
-    this.startDate = CTLEventUtils.strToDate(event.start.datetime);
-    this.endDate = CTLEventUtils.str.ToDate(event.end.datetime);
-    this.endTime = event.end.time;
+
+    // check for specific properties in event object before assigning values
+    this.longDate = '';
+    this.startTime = '';
+    this.startDate = '';
+    if ('start' in event) {
+        this.longDate = event.start.longdate;
+        this.startTime = event.start.time;
+        this.startDate = CTLEventUtils.strToDate(event.start.datetime);
+    }
+    this.endTime = '';
+    this.endDate = '';
+    if ('end' in event) {
+        this.endTime = event.end.time;
+        this.endDate = CTLEventUtils.strToDate(event.end.datetime);
+    }
+    this.locationAndRoom = '';
+    this.location = '';
+    this.roomNumber = '';
+    if ('location' in event) {
+        this.locationAndRoom = CTLEventUtils.getRoomNumber(event.location.address);
+        this.location = this.locationAndRoom[0];
+        this.roomNumber = this.locationAndRoom[1];
+    }
+
     this.url = event.eventlink;
     this.status = event.status;
     this.description = event.description;
-    var locationAndRoom = CTLEventUtils.getRoomNumber(event.location_address);
-    this.location = locationAndRoom[0];
-    this.roomNumber = locationAndRoom[1];
     this.registration = false;
     this.registrationLink = '';
     
@@ -51,13 +68,14 @@ var CTLEvent = function(event) {
         var aliasString;
         var propList;
 
+        // Loop through properties and assign
         if (xprop[i]['X-BEDEWORK-ALIAS']) {
             aliasString = xprop[i]['X-BEDEWORK-ALIAS'].values.text;
             propList = aliasString.split('/').slice(-2);
 
             this.addProperty(propList[0], propList[1]);
         }
-
+        // construct url for CAS login to register
         if (xprop[i]['X-BEDEWORK-UNI-ONLY-REG']) {
             this.registration = true;
             this.registrationLink = 'https://cas.columbia.edu/cas/login?service=';
@@ -66,10 +84,6 @@ var CTLEvent = function(event) {
             this.registrationLink = this.registrationLink.replace(/&/g, '%26');
         }
     }
-};
-
-CTLEvent.prototype.getDateObject = function() {
-    return new Date(this.longDate);
 };
 
 /**
