@@ -3,6 +3,7 @@
 
 var assert = require('assert');
 var CTLEvent = require('../ctlevent.js').CTLEvent;
+var CTLEventUtils = require('../utils.js').CTLEventUtils;
 var fs = require('fs');
 
 describe('CTLEvent', function() {
@@ -17,16 +18,18 @@ describe('CTLEvent', function() {
             var e = new CTLEvent(events[0]);
             assert.equal(e.id, events[0].guid);
             assert.equal(e.title, events[0].summary);
-            assert.equal(e.longDate, events[0].start_longdate);
-            assert.equal(e.startTime, events[0].start_time);
-            assert.equal(e.endTime, events[0].end_time);
+            assert.equal(e.longDate, events[0].start.longdate);
+            assert.equal(e.startTime, events[0].start.time);
+            assert.equal(e.endTime, events[0].end.time);
             assert.equal(e.url, events[0].eventlink);
             assert.equal(e.description, events[0].description);
-            assert.equal(e.location, events[0].location_address);
+            // is this a valid test?
+            assert.equal(e.location, CTLEventUtils.getRoomNumber(events[0].location.address)[0]);
+            assert.equal(e.roomNumber, CTLEventUtils.getRoomNumber(events[0].location.address)[1]);
             assert.deepEqual(e.propertyArray[0].values, ['Workshop']);
-            assert.deepEqual(e.propertyArray[1].values, ['Faculty', 'Student']);
-            assert.deepEqual(e.propertyArray[2].values, ['Graduate Students']);
-            assert.deepEqual(e.propertyArray[3].values, ['Medical Center']);
+            assert.deepEqual(e.propertyArray[1].values, ['Staff', 'Faculty']);
+            assert.deepEqual(e.propertyArray[2].values, ['CourseWorks']);
+            assert.deepEqual(e.propertyArray[3].values, ['Morningside']);
             if (e.registration) {
                 assert.notEqual(e.registrationLink, '');
             } else {

@@ -34,7 +34,7 @@ describe('searchEvents', function() {
 
     it('filters events accurately', function() {
         assert.deepEqual(CTLEventUtils.searchEvents(allEvents, index, 'test'), []);
-        assert.equal(CTLEventUtils.searchEvents(allEvents, index, 'Media').length, 3);
+        assert.equal(CTLEventUtils.searchEvents(allEvents, index, 'Canvas').length, 11);
     });
 });
 

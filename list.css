@@ -133,4 +133,8 @@ button#clear-search { display: none; }
 		float: left;
 		padding-right: .5em;
 	}
+
+    .ctl-events {
+        padding: 0em 8em;
+    }
 }

@@ -295,17 +295,8 @@
         jQuery('#calendar-wrapper').append(boilerplate);
 
         jQuery.ajax({
-            url: 'https://cdn.cul.columbia.edu/ldpd-toolkit/api/events-bw-prox-v2.json.php',
+            url: 'https://calendar.ctl.columbia.edu/calendar.json',
             type: 'GET',
-            data: {
-                // This is part of a call to a php proxy used by CUL
-                burl: 'https://events.columbia.edu/feeder/main/eventsFeed.do',
-                f: 'y',
-                sort: 'dtstart.utc:asc',
-                fexpr: '(categories.href="/public/.bedework/categories/org/centertla")',
-                skinName: 'list-json',
-                count: 200
-            },
             dataType: 'json',
             success: function(data) {
                 $('#loader-animation-container').fadeOut('slow');
