@@ -13,9 +13,10 @@ describe('searchEvents', function() {
     var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
 
-    var allEvents = CTLEventsManager.loadEvents(events);
-    
-    var index; 
+    var pastDate = new Date(1999, 11, 31, 23, 59);
+    var allEvents = CTLEventsManager.loadEvents(events, pastDate);
+
+    var index;
     index = lunr(function() {
         this.ref('id');
         this.field('title');
@@ -134,7 +135,8 @@ describe('filterOnURLParams', function() {
         this.field('description', {boost: 5});
     });
 
-    var allEvents = CTLEventsManager.loadEvents(events, index);
+    var pastDate = new Date(1999, 11, 31, 23, 59);
+    var allEvents = CTLEventsManager.loadEvents(events, pastDate);
 
     it('returns an array of event objects given params', function() {
         var paramsArray = CTLEventUtils.readURLParams('q=video');
@@ -224,19 +226,19 @@ describe('populateURLParams', function() {
         document.body.innerHTML = searchForm;
         var paramsArray = CTLEventUtils.readURLParams('start=2017-4-18');
         CTLEventUtils.populateURLParams(paramsArray);
-        assert.equal(document.getElementsByName('start_date')[0].value, 
+        assert.equal(document.getElementsByName('start_date')[0].value,
             '4/18/2017');
     });
     it('populates the end date field', function() {
         document.body.innerHTML = searchForm;
         var paramsArray = CTLEventUtils.readURLParams('end=2017-4-18');
         CTLEventUtils.populateURLParams(paramsArray);
-        assert.equal(document.getElementsByName('end_date')[0].value, 
+        assert.equal(document.getElementsByName('end_date')[0].value,
             '4/18/2017');
     });
     it('populates all the fields', function() {
         document.body.innerHTML = searchForm;
-        var paramString = 'q=test&loc=Morningside&audience=Faculty&' + 
+        var paramString = 'q=test&loc=Morningside&audience=Faculty&' +
                           'start=2017-4-18&end=2017-4-18';
         var paramsArray = CTLEventUtils.readURLParams(paramString);
         CTLEventUtils.populateURLParams(paramsArray);
@@ -313,7 +315,8 @@ describe('room number string', function() {
 describe('get event by ID', function() {
     var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
-    var allEvents = CTLEventsManager.loadEvents(events);
+    var pastDate = new Date(1999, 11, 31, 23, 59);
+    var allEvents = CTLEventsManager.loadEvents(events, pastDate);
 
     it('checks that an event is found by ID, and that only a single event is returned', function() {
         for (var i = 0; i < events.length; i++) {
@@ -341,7 +344,8 @@ describe('get event by ID', function() {
 describe('sort events by date and time', function() {
     var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
-    var allEvents = CTLEventsManager.loadEvents(events);
+    var pastDate = new Date(1999, 11, 31, 23, 59);
+    var allEvents = CTLEventsManager.loadEvents(events, pastDate);
 
     it('checks that an array of event objects is sorted by date', function() {
         var sortedEvents = CTLEventUtils.sortEventsByDate(allEvents);
@@ -368,5 +372,22 @@ describe('take a string and convert it to a date object', function() {
         assert.equal(sampleDate.getDate(), 22);
         assert.equal(sampleDate.getHours(), 13);
         assert.equal(sampleDate.getMinutes(), 15);
+    });
+});
+
+describe('it filters out events older than a given date', function() {
+    it('returns all events when filtered on a date before any in the test set', function() {
+        var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
+        var events = json.bwEventList.events;
+        var pastDate = new Date(1999, 11, 31, 23, 59);
+        var allEvents = CTLEventsManager.loadEvents(events, pastDate);
+        assert.equal(allEvents.length, 15);
+    });
+    it('returns no events when filtered on a date far far in the future', function() {
+        var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
+        var events = json.bwEventList.events;
+        var futureDate = new Date(2999, 11, 31, 23, 59);
+        var allEvents = CTLEventsManager.loadEvents(events, futureDate);
+        assert.equal(allEvents.length, 0);
     });
 });
