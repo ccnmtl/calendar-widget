@@ -30,6 +30,7 @@
     };
 
     $(document).ready(function() {
+        $('head').append('<style type="text/css"> .event{margin-top: 2em;} .event:first-child {margin-top: 0em;}');
         jQuery.ajax({
             url: 'https://calendar.ctl.columbia.edu/calendar.json',
             type: 'GET',
