@@ -14,7 +14,7 @@ var propertiesString = function(properties) {
             propString += '<span class="ctl-property-name">Audience: </span>';
             var propLen = properties[i].values.length;
             for (var j in properties[i].values) {
-                propString += '<span class="ctl-property-value">' + properties[i].values[j]; 
+                propString += '<span class="ctl-property-value">' + properties[i].values[j];
                 j != propLen -1 ? propString += ',': '';
                 propString += '</span> ';
             }
@@ -57,7 +57,7 @@ var CTLEvent = function(event) {
     this.description = event.description;
     this.registration = false;
     this.registrationLink = '';
-    
+
     this.propertyArray = [];
 
     var xprop = event.xproperties;
@@ -164,7 +164,7 @@ CTLEvent.prototype.render = function() {
     returnString += '</div><div class="location">';
     if (this.roomNumber != '' ) {
         returnString += 'Room ' + this.roomNumber + ', ';
-    } 
+    }
     returnString += this.location + '</div>';
 
     if (this.registration) {
@@ -177,6 +177,23 @@ CTLEvent.prototype.render = function() {
         propertiesString(this.propertyArray) + '</div>';
 
     returnString += '</div>';
+    return returnString;
+};
+
+CTLEvent.prototype.renderHomepageEvent = function() {
+    var returnString = '<div class="event">' +
+        '<div class="event_specifics"><h3>';
+    // check the event status
+    if (this.status == 'CANCELLED') {
+        returnString += '<span class="cancelled">' + this.status + ': ';
+    }
+    returnString += '<a href="' + this.url +'">' + this.title + '</a>';
+    if (this.status == 'CANCELLED') {returnString += '</span>';}
+
+    returnString += '</h3><h4>' + this.longDate + ' ' + this.startTime + ' &ndash; '
+        + this.endTime + '</h4>' +
+        '</div>';
+
     return returnString;
 };
 
