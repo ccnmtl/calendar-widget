@@ -18,17 +18,17 @@ CTLEventsManager.filteredEvents = [];
  * @param eventsJson = the JSON object in the format provided by
  *                     Bedeworks
  *
- * @param filterAfterDate = a Date object to filter events by. This will
+ * @param startDate = a Date object to filter events by. This will
  *                          filter out events prior to the Date given.
  *
  * @return Returns the array of CTLEvents.
  */
-CTLEventsManager.loadEvents = function(eventsJson, filterAfterDate) {
+CTLEventsManager.loadEvents = function(eventsJson, startDate) {
     var events = [];
 
     eventsJson.forEach(function(eventData) {
         var e = new CTLEvent(eventData);
-        if (filterAfterDate <= e.startDate) {
+        if (startDate <= e.startDate) {
             events.push(e);
         }
     });
