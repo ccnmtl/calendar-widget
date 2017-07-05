@@ -24,8 +24,9 @@
      * @param events: JSON event object fetched from Bedeworks
      */
     var initializeEventsHomepage = function(eventsJson) {
-        var allEvents = CTLEventsManager.loadEvents(eventsJson);
-        jQuery('#homepage-calendar-listing').append(renderEvents(allEvents, ITEMS_TO_DISPLAY));
+        var today = new Date();
+        var allHomepageEvents = CTLEventsManager.loadEvents(eventsJson, today);
+        jQuery('#homepage-calendar-listing').append(renderEvents(allHomepageEvents, ITEMS_TO_DISPLAY));
     };
 
     $(document).ready(function() {

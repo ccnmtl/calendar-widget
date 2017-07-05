@@ -182,7 +182,7 @@ CTLEvent.prototype.render = function() {
 
 CTLEvent.prototype.renderHomepageEvent = function() {
     var returnString = '<div class="event">' +
-        '<div class="event_specifics"><h3>';
+        '<div class="event_specifics"><h4>';
     // check the event status
     if (this.status == 'CANCELLED') {
         returnString += '<span class="cancelled">' + this.status + ': ';
@@ -190,8 +190,8 @@ CTLEvent.prototype.renderHomepageEvent = function() {
     returnString += '<a href="' + this.url +'">' + this.title + '</a>';
     if (this.status == 'CANCELLED') {returnString += '</span>';}
 
-    returnString += '</h3><h4>' + this.longDate + ' ' + this.startTime + ' &ndash; '
-        + this.endTime + '</h4>' +
+    returnString += '</h4><h5>' + this.longDate + ' ' + this.startTime + ' &ndash; '
+        + this.endTime + '</h5>' +
         '</div>';
 
     return returnString;
