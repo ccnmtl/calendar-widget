@@ -262,6 +262,7 @@ CTLEventUtils.filterOnURLParams = function(paramsArray, eventsList, index) {
  */
 CTLEventUtils.populateURLParams = function(paramsArray) {
     paramsArray.forEach(function(el) {
+        el.value = decodeURIComponent(el.value);
         switch(el.key) {
             case 'q':
                 document.getElementById('q').value = el.value;
@@ -303,7 +304,7 @@ CTLEventUtils.getRoomNumber = function(locationString) {
     }
     // Matches 10027 or 10032
     var zipCodes = /(\b10027$|\b10032$)/g;
-    // Matches on the string 'Room ***', where *** are any number of digits 
+    // Matches on the string 'Room ***', where *** are any number of digits
     var roomString = /room\s*\d*$/gi;
     if (locationString.match(zipCodes)) {
         returnArray[0] = locationString;
@@ -348,7 +349,7 @@ CTLEventUtils.strToDate = function(dateString) {
     var min = Number(dateString.substr(11, 2));
 
     var dateObject = new Date(year, month, date, hours, min);
-    // rely on the Date constructor to test for validity 
+    // rely on the Date constructor to test for validity
     if (dateObject instanceof Date) {
         return dateObject;
     } else {
