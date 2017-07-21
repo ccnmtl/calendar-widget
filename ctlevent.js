@@ -56,7 +56,6 @@ var CTLEvent = function(event) {
     this.status = event.status;
     this.description = event.description;
     this.registration = false;
-    this.registrationLink = '';
 
     this.propertyArray = [];
 
@@ -75,13 +74,9 @@ var CTLEvent = function(event) {
 
             this.addProperty(propList[0], propList[1]);
         }
-        // construct url for CAS login to register
-        if (xprop[i]['X-BEDEWORK-UNI-ONLY-REG']) {
+
+        if (xprop[i]['X-BEDEWORK-REGISTRATION-START']) {
             this.registration = true;
-            this.registrationLink = 'https://cas.columbia.edu/cas/login?service=';
-            this.registrationLink += this.url.replace('http', 'https');
-            this.registrationLink += '%26setappvar=cas(true)';
-            this.registrationLink = this.registrationLink.replace(/&/g, '%26');
         }
     }
 };
@@ -169,8 +164,8 @@ CTLEvent.prototype.render = function() {
 
     if (this.registration) {
         returnString += '<div class="event_registration">' +
-                        '<a target="_blank"  href="' + this.registrationLink + '">' +
-                        '<button>Register With UNI</button></a></div>';
+                        '<a target="_blank"  href="' + this.url + '">' +
+                        '<button>Register on CU Events</button></a></div>';
     }
 
     returnString += '<div class="event_properties">' +
