@@ -23,18 +23,13 @@ describe('CTLEvent', function() {
             assert.equal(e.endTime, events[0].end.time);
             assert.equal(e.url, events[0].eventlink);
             assert.equal(e.description, events[0].description);
-            // is this a valid test?
             assert.equal(e.location, CTLEventUtils.getRoomNumber(events[0].location.address)[0]);
             assert.equal(e.roomNumber, CTLEventUtils.getRoomNumber(events[0].location.address)[1]);
             assert.deepEqual(e.propertyArray[0].values, ['Workshop']);
             assert.deepEqual(e.propertyArray[1].values, ['Staff', 'Faculty']);
             assert.deepEqual(e.propertyArray[2].values, ['CourseWorks']);
             assert.deepEqual(e.propertyArray[3].values, ['Morningside']);
-            if (e.registration) {
-                assert.notEqual(e.registrationLink, '');
-            } else {
-                assert.equal(e.registrationLink, '');
-            }
+            assert(e.registration);
         });
     });
     describe('render', function() {
