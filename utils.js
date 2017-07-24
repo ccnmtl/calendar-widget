@@ -84,14 +84,14 @@ CTLEventUtils.filterEventsByDateRange = function(allEvents, startDate, endDate) 
     allEvents.forEach(function(e) {
         if (startDate && endDate) {
             if (
-                e.startDate() >= startDate &&
-                    e.startDate() <= endDate
+                e.startDate >= startDate &&
+                    e.startDate <= endDate
             ) {
                 events.push(e);
             }
-        } else if (startDate && e.startDate() >= startDate) {
+        } else if (startDate && e.startDate >= startDate) {
             events.push(e);
-        } else if (endDate && e.startDate() <= endDate) {
+        } else if (endDate && e.startDate <= endDate) {
             events.push(e);
         }
     });
