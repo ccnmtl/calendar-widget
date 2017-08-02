@@ -356,3 +356,7 @@ CTLEventUtils.strToDate = function(dateString) {
         return null;
     }
 };
+
+CTLEventUtils.validateFilterValues = function() {
+    return false;
+}
