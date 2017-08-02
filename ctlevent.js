@@ -29,18 +29,13 @@ var CTLEvent = function(event) {
     this.title = event.summary;
 
     // check for specific properties in event object before assigning values
-    this.longDate = '';
-    this.startTime = '';
+    this.formattedDate = event.formattedDate;
     this.startDate = '';
     if ('start' in event) {
-        this.longDate = event.start.longdate;
-        this.startTime = event.start.time;
         this.startDate = CTLEventUtils.strToDate(event.start.datetime);
     }
-    this.endTime = '';
     this.endDate = '';
     if ('end' in event) {
-        this.endTime = event.end.time;
         this.endDate = CTLEventUtils.strToDate(event.end.datetime);
     }
     this.locationAndRoom = '';
@@ -145,8 +140,7 @@ CTLEvent.prototype.render = function() {
     returnString += '<a href="' + this.url +'">' + this.title + '</a>';
     if (this.status == 'CANCELLED') {returnString += '</span>';}
 
-    returnString += '</h3><h4>' + this.longDate + ' ' + this.startTime + ' &ndash; '
-        + this.endTime + '</h4>' +
+    returnString += '</h3><h4>' + this.formattedDate + '</h4>' +
         '</div>' +
         '<div class="event_description"><p>' + lede;
     if (more.length > 0) {
@@ -185,8 +179,7 @@ CTLEvent.prototype.renderHomepageEvent = function() {
     returnString += '<a href="' + this.url +'">' + this.title + '</a>';
     if (this.status == 'CANCELLED') {returnString += '</span>';}
 
-    returnString += '</h4><h5>' + this.longDate + ' ' + this.startTime + ' &ndash; '
-        + this.endTime + '</h5>' +
+    returnString += '</h4><h5>' + this.formattedDate + '</h5>' +
         '</div>';
 
     return returnString;
