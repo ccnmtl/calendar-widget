@@ -29,7 +29,6 @@ var CTLEvent = function(event) {
     this.title = event.summary;
 
     // check for specific properties in event object before assigning values
-    this.formattedDate = event.formattedDate;
     this.startDate = '';
     if ('start' in event) {
         this.startDate = CTLEventUtils.strToDate(event.start.datetime);
@@ -125,6 +124,8 @@ CTLEvent.prototype.render = function() {
     var lnBreak = desc.indexOf('.') + 1;
     var lede = '';
     var more = '';
+    var options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+    var timeOptions = {hour: '2-digit', minute: '2-digit'};
 
     if (lnBreak > 0) {
         lede = desc.slice(0, lnBreak);
@@ -140,7 +141,10 @@ CTLEvent.prototype.render = function() {
     returnString += '<a href="' + this.url +'">' + this.title + '</a>';
     if (this.status == 'CANCELLED') {returnString += '</span>';}
 
-    returnString += '</h3><h4>' + this.formattedDate + '</h4>' +
+    returnString += '</h3><h4>' + this.startDate.toLocaleString('en-US', options) + '<br/>' +
+        this.startDate.toLocaleTimeString('en-US', timeOptions) + '&ndash;' +
+        this.endDate.toLocaleTimeString('en-US', timeOptions) +
+        '</h4>' +
         '</div>' +
         '<div class="event_description"><p>' + lede;
     if (more.length > 0) {
@@ -170,6 +174,9 @@ CTLEvent.prototype.render = function() {
 };
 
 CTLEvent.prototype.renderHomepageEvent = function() {
+    var options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+    var timeOptions = {hour: '2-digit', minute: '2-digit'};
+
     var returnString = '<div class="event">' +
         '<div class="event_specifics"><h4>';
     // check the event status
@@ -179,8 +186,10 @@ CTLEvent.prototype.renderHomepageEvent = function() {
     returnString += '<a href="' + this.url +'">' + this.title + '</a>';
     if (this.status == 'CANCELLED') {returnString += '</span>';}
 
-    returnString += '</h4><h5>' + this.formattedDate + '</h5>' +
-        '</div>';
+    returnString += '</h4><h5>' + this.startDate.toLocaleString('en-US', options) + '<br/>' +
+        this.startDate.toLocaleTimeString('en-US', timeOptions) + '&ndash;' +
+        this.endDate.toLocaleTimeString('en-US', timeOptions) +
+        '</h5></div>';
 
     return returnString;
 };
