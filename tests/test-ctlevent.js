@@ -18,7 +18,8 @@ describe('CTLEvent', function() {
             var e = new CTLEvent(events[0]);
             assert.equal(e.id, events[0].guid);
             assert.equal(e.title, events[0].summary);
-            assert.equal(e.formattedDate, events[0].formattedDate);
+            assert.deepEqual(e.startDate, CTLEventUtils.strToDate(events[0].start.datetime));
+            assert.deepEqual(e.endDate, CTLEventUtils.strToDate(events[0].end.datetime));
             assert.equal(e.url, events[0].eventlink);
             assert.equal(e.description, events[0].description);
             assert.equal(e.location, CTLEventUtils.getRoomNumber(events[0].location.address)[0]);
