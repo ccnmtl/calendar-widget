@@ -450,135 +450,28 @@ describe('it filters out events older than a given date', function() {
 });
 
 describe('validate filter values', function() {
-    var searchForm = '<div class="search-wrapper">' +
-        '<form role="search">' +
-            '<input id="q">' +
-            '<button class="close-icon" id="clear-search" type="reset">' +
-                'Reset' +
-            '</button>' +
-        '</form>' +
-        '<div id="location-dropdown-container">' +
-            '<select id="location-dropdown">' +
-                '<option value="null">All</option>' +
-                '<option value="Morningside">Morningside</option>' +
-                '<option value="Medical Center">Medical Center</option>' +
-            '</select>' +
-        '</div>' +
-        '<div id="audience-dropdown-container">' +
-            '<select id="audience-dropdown">' +
-                '<option value="null">All</option>' +
-                '<option value="Faculty">Faculty</option>' +
-                '<option value="Staff">Staff</option>' +
-                '<option value="Postdocs">Postdocs</option>' +
-                '<option value="Student">Student</option>' +
-                '<option value="Alumni">Alumni</option>' +
-                '<option value="Public">Public</option>' +
-            '</select>' +
-        '</div>' +
-        '<label>From: ' +
-            '<input name="start_date" class="hasDatepicker">' +
-        '</label>' +
-        '<label>To: ' +
-            '<input name="end_date" class="hasDatepicker">' +
-        '</label>' +
-        '<div id="search-results"></div>' +
-    '</div>';
-
     var today = new Date();
+    var yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    var tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
 
     it('returns false if the start date is before today', function() {
-        // set up the form values first
-        document.body.innerHTML = searchForm;
-        var yesterday = new Date();
-        yesterday.setDate(today.getDate() - 1);
-        document.querySelector("input[name='start_date']").value = yesterday.toLocaleDateString('en-US');
-        assert(!CTLEventUtils.validateFilterValues());
-    });
-    it('returns false if the start date is before today and other options are selected', function() {
-        // set up the form values first
-        document.body.innerHTML = searchForm;
-        var yesterday = new Date();
-        yesterday.setDate(today.getDate() - 1);
-        document.querySelector("input[name='start_date']").value = yesterday.toLocaleDateString('en-US');
-        // select some other options here
-        document.getElementById('location-dropdown').value = "Morningside"
-        document.getElementById('audience-dropdown').value = "Faculty"
-        assert(!CTLEventUtils.validateFilterValues());
+        assert(!CTLEventUtils.validateFilterValues(yesterday, today));
     });
     it('returns true if the start date is today', function() {
-        // set up the form values
-        document.body.innerHTML = searchForm;
-        document.querySelector("input[name='start_date']").value = today.toLocaleDateString('en-US');
-        assert(CTLEventUtils.validateFilterValues());
-    });
-    it('returns true if the start date is today and other options are selected', function() {
-        // set up the form values
-        document.body.innerHTML = searchForm;
-        document.querySelector("input[name='start_date']").value = today.toLocaleDateString('en-US');
-        // select some other options here
-        document.getElementById('location-dropdown').value = "Morningside"
-        document.getElementById('audience-dropdown').value = "Faculty"
-        assert(CTLEventUtils.validateFilterValues());
+        assert(CTLEventUtils.validateFilterValues(today, null));
     });
     it('returns true if the start date is after today', function() {
-        // set up the form values
-        document.body.innerHTML = searchForm;
-        var tomorrow = new Date();
-        tomorrow.setDate(today.getDate() + 1);
-        document.querySelector("input[name='start_date']").value = tomorrow.toLocaleDateString('en-US');
-        assert(CTLEventUtils.validateFilterValues());
-    });
-    it('returns true if the start date is after today and other options are selected', function() {
-        // set up the form values
-        document.body.innerHTML = searchForm;
-        var tomorrow = new Date();
-        tomorrow.setDate(today.getDate() + 1);
-        document.querySelector("input[name='start_date']").value = tomorrow.toLocaleDateString('en-US');
-        // select some other options here
-        document.getElementById('location-dropdown').value = "Morningside"
-        document.getElementById('audience-dropdown').value = "Faculty"
-        assert(CTLEventUtils.validateFilterValues());
+        assert(CTLEventUtils.validateFilterValues(tomorrow, null));
     });
     it('returns false if the start date is after the end date', function() {
-        // set up the form values
-        document.body.innerHTML = searchForm;
-        var tomorrow = new Date();
-        tomorrow.setDate(today.getDate() + 1);
-        document.querySelector("input[name='start_date']").value = tomorrow.toLocaleDateString('en-US');
-        document.querySelector("input[name='end_date']").value = today.toLocaleDateString('en-US');
-        assert(!CTLEventUtils.validateFilterValues());
-    });
-    it('returns false if the start date is after the end date and other options are selected', function() {
-        // set up the form values
-        document.body.innerHTML = searchForm;
-        var tomorrow = new Date();
-        tomorrow.setDate(today.getDate() + 1);
-        document.querySelector("input[name='start_date']").value = tomorrow.toLocaleDateString('en-US');
-        document.querySelector("input[name='end_date']").value = today.toLocaleDateString('en-US');
-        // select some other options here
-        document.getElementById('location-dropdown').value = "Morningside"
-        document.getElementById('audience-dropdown').value = "Faculty"
-        assert(!CTLEventUtils.validateFilterValues());
+        assert(!CTLEventUtils.validateFilterValues(tomorrow, today));
     });
     it('returns true if the start date is before the end date', function() {
-        // set up the form values
-        document.body.innerHTML = searchForm;
-        var tomorrow = new Date();
-        tomorrow.setDate(today.getDate() + 1);
-        document.querySelector("input[name='start_date']").value = today.toLocaleDateString('en-US');
-        document.querySelector("input[name='end_date']").value = tomorrow.toLocaleDateString('en-US');
-        assert(CTLEventUtils.validateFilterValues());
+        assert(CTLEventUtils.validateFilterValues(today, tomorrow));
     });
-    it('returns true if the start date is before the end date and other options are selected', function() {
-        // set up the form values
-        document.body.innerHTML = searchForm;
-        var tomorrow = new Date();
-        tomorrow.setDate(today.getDate() + 1);
-        document.querySelector("input[name='start_date']").value = today.toLocaleDateString('en-US');
-        document.querySelector("input[name='end_date']").value = tomorrow.toLocaleDateString('en-US');
-        // select some other options here
-        document.getElementById('location-dropdown').value = "Morningside"
-        document.getElementById('audience-dropdown').value = "Faculty"
-        assert(CTLEventUtils.validateFilterValues());
+    it('returns true if only and end date in the future is passed', function() {
+        assert(CTLEventUtils.validateFilterValues(null, tomorrow));
     });
 });

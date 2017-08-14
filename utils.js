@@ -78,6 +78,9 @@ CTLEventUtils.filterEventsByDateRange = function(allEvents, startDate, endDate) 
     if (!startDate && !endDate) {
         return allEvents;
     }
+    if (!CTLEventUtils.validateFilterValues(startDate, endDate)) {
+        //console.log('Date range fails to validate.');
+    }
 
     var events = [];
 
@@ -113,9 +116,6 @@ CTLEventUtils.findIndex = function(array, testFunc) {
     return -1;
 };
 
-if (typeof module !== 'undefined') {
-    module.exports = { CTLEventUtils: CTLEventUtils };
-}
 
 /**
  * Updates the query string of the URL
@@ -357,6 +357,48 @@ CTLEventUtils.strToDate = function(dateString) {
     }
 };
 
-CTLEventUtils.validateFilterValues = function() {
-    return false;
+/**
+ * This function validates the values input into the search filters
+ * It does:
+ * - checks that the start date is greater than or equal to today's date
+ * - checks that the end date is greater than or equal to today's date
+ * - checks that the end date is greater than or equal to the start date
+ *
+ *   What does it do for null dates?
+ */
+CTLEventUtils.validateFilterValues = function(startDate, endDate) {
+    // First divide each date's milliseconds since 1970 to calculate the number
+    // of days since that time. This will provide a consistant way to compare
+    // Date objects based on thier dates.
+
+    // Milliseconds per day
+    var day = 86400000;
+
+    if (startDate) {
+        startDate = Math.floor(startDate.getTime() / day);
+    }
+    if (endDate) {
+        endDate = Math.floor(endDate.getTime() / day);
+    }
+    var today = Math.floor(new Date().getTime() / day);
+
+    // Now check for various conditions, first by making sure that
+    // the date objects exist before comparing
+    if (startDate && startDate < today) {
+        return false;
+    }
+    if (endDate && endDate < today) {
+        return false;
+    }
+    if (startDate && endDate) {
+        if (endDate < startDate) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+if (typeof module !== 'undefined') {
+    module.exports = { CTLEventUtils: CTLEventUtils };
 }
