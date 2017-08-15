@@ -432,6 +432,43 @@ describe('', function() {
     });
 });
 
+// This test is for CTLEventUtils.filterEventsByDateRange
+describe('filter events by date range works as expected', function() {
+    // Set up the all events array
+    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
+    var events = json.bwEventList.events;
+    var pastDate = new Date(1999, 11, 31, 23, 59);
+    var allEvents = CTLEventsManager.loadEvents(events, pastDate);
+    it('returns an expected number of events when given a valid range', function() {
+        var futureDate = new Date(2999, 11, 31, 23, 59);
+        var events = CTLEventUtils.filterEventsByDateRange(allEvents, pastDate, futureDate);
+        assert.equal(events.length, allEvents.length);
+    });
+    it('returns an expected number of events when the start ' +
+        'date and end date are the same day', function() {
+        // The first event in the data set takes place on June 27, 2017. There
+        // is only one event.
+        var testDate = new Date(2017, 5, 27, 0, 0);
+        var events = CTLEventUtils.filterEventsByDateRange(allEvents, testDate, testDate);
+        assert.equal(events.length, 1);
+    });
+    it('returns no events when given an end date before the start date', function() {
+        var today = new Date();
+        var events = CTLEventUtils.filterEventsByDateRange(allEvents, today, pastDate);
+        assert.equal(events.length, 0);
+    });
+    it('returns no events when given a valid date range outside the' +
+        'dataset of events given', function() {
+        // Date one year prior to the first date in the test dataset
+        var testDate = new Date(2016, 5, 27, 0, 0);
+        var events = CTLEventUtils.filterEventsByDateRange(allEvents, pastDate, testDate);
+        assert.equal(events.length, 0);
+    });
+});
+
+// This tests the loadEvents function. This function doesn't load events prior to a date given.
+// This is done to ensure that, if the proxy were out of date, it wouldn't list stale events.
+// This functionality isn't meant to filter events for the user.
 describe('it filters out events older than a given date', function() {
     it('returns all events when filtered on a date before any in the test set', function() {
         var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));

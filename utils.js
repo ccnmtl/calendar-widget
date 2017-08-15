@@ -78,8 +78,16 @@ CTLEventUtils.filterEventsByDateRange = function(allEvents, startDate, endDate) 
     if (!startDate && !endDate) {
         return allEvents;
     }
+    // validate function stub
     if (!CTLEventUtils.validateFilterValues(startDate, endDate)) {
         //console.log('Date range fails to validate.');
+    }
+
+    // Set the time of the end date to 23:59 to accomodate events that take
+    // place on that day.
+    if (endDate) {
+        endDate = new Date(endDate);
+        endDate.setHours(23, 59);
     }
 
     var events = [];
