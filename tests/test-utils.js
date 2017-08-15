@@ -375,6 +375,63 @@ describe('take a string and convert it to a date object', function() {
     });
 });
 
+// This test checks CTLEventUtils.filterEventsByLocation
+describe('', function() {
+    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
+    var events = json.bwEventList.events;
+    var pastDate = new Date(1999, 11, 31, 23, 59);
+    var allEvents = CTLEventsManager.loadEvents(events, pastDate);
+    it('Returns all events when passed in a null location', function() {
+        var testEvents = CTLEventUtils.filterEventsByLocation(allEvents, null);
+        assert.equal(testEvents.length, 15);
+    });
+    it('Returns no events when given a non-existant location', function() {
+        var testEvents = CTLEventUtils.filterEventsByLocation(allEvents, 'foo');
+        assert.equal(testEvents.length, 0);
+    });
+    it('Returns the correct number of events for Morningside', function() {
+        // There are 14 events at Morningside
+        var testEvents = CTLEventUtils.filterEventsByLocation(allEvents, 'Morningside');
+        assert.equal(testEvents.length, 14);
+    });
+    it('Returns the correct number of events for Medical Center', function() {
+        // There is 1 event at the Medical Center
+        var testEvents = CTLEventUtils.filterEventsByLocation(allEvents, 'Medical Center');
+        assert.equal(testEvents.length, 1);
+    });
+});
+
+// This test checks CTLEventUtils.filterEventsByAudience
+describe('', function() {
+    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
+    var events = json.bwEventList.events;
+    var pastDate = new Date(1999, 11, 31, 23, 59);
+    var allEvents = CTLEventsManager.loadEvents(events, pastDate);
+    it('Returns all events when passed in a null audience', function() {
+        var testEvents = CTLEventUtils.filterEventsByAudience(allEvents, null);
+        assert.equal(testEvents.length, 15);
+    });
+    it('Returns no events when given a non-existant audience name', function() {
+        var testEvents = CTLEventUtils.filterEventsByAudience(allEvents, 'foo');
+        assert.equal(testEvents.length, 0);
+    });
+    it('Returns the correct number of events for Faculty', function() {
+        //there are 13
+        var testEvents = CTLEventUtils.filterEventsByAudience(allEvents, 'Faculty');
+        assert.equal(testEvents.length, 13);
+    });
+    it('Returns the correct number of events for Graduate Student', function(){
+        //there are 2
+        var testEvents = CTLEventUtils.filterEventsByAudience(allEvents, 'Graduate Students');
+        assert.equal(testEvents.length, 2);
+    });
+    it('Returns the correct number of events for Staff', function() {
+        //there are 11
+        var testEvents = CTLEventUtils.filterEventsByAudience(allEvents, 'Staff');
+        assert.equal(testEvents.length, 11);
+    });
+});
+
 describe('it filters out events older than a given date', function() {
     it('returns all events when filtered on a date before any in the test set', function() {
         var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
