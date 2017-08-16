@@ -78,16 +78,17 @@ CTLEventUtils.filterEventsByDateRange = function(allEvents, startDate, endDate) 
     if (!startDate && !endDate) {
         return allEvents;
     }
-    // validate function stub
-    if (!CTLEventUtils.validateFilterValues(startDate, endDate)) {
-        //console.log('Date range fails to validate.');
-    }
 
     // Set the time of the end date to 23:59 to accomodate events that take
     // place on that day.
     if (endDate) {
         endDate = new Date(endDate);
         endDate.setHours(23, 59);
+    }
+
+    // validate function stub
+    if (!CTLEventUtils.validateFilterValues(startDate, endDate)) {
+        //console.log('Date range fails to validate.');
     }
 
     var events = [];
@@ -372,30 +373,46 @@ CTLEventUtils.strToDate = function(dateString) {
  * - checks that the end date is greater than or equal to today's date
  * - checks that the end date is greater than or equal to the start date
  *
- *   What does it do for null dates?
+ * @param startDate A Date object for the start of the date range
+ *
+ * @param endDate A Date object for the end of the date range
  */
 CTLEventUtils.validateFilterValues = function(startDate, endDate) {
-    // First divide each date's milliseconds since 1970 to calculate the number
-    // of days since that time. This will provide a consistant way to compare
-    // Date objects based on thier dates.
-
-    // Milliseconds per day
-    var day = 86400000;
-
+    // First instantiate copies of startDate and endDate which have thier
+    // time standardized. These objects *should* have these times already
+    // set, but this ensures that they do.
+    //
+    // startDate has its hours set to the start of the day
+    // endDate has its hours set to the end of the day
     if (startDate) {
-        startDate = Math.floor(startDate.getTime() / day);
+        startDate = new Date(startDate);
+        startDate.setHours(0, 0, 0, 0);
     }
     if (endDate) {
-        endDate = Math.floor(endDate.getTime() / day);
+        endDate = new Date(endDate);
+        endDate.setHours(23, 59, 0, 0);
     }
-    var today = Math.floor(new Date().getTime() / day);
+
+    // Comparing Date objects by day depends on the context of what it's
+    // being compared to.
+    //
+    // In this case there are two date objects:
+    //   - todayStartOfDay: represents midnight of today. This is to be used
+    //     when checking if an event occurs on that day or later.
+    //   - todayEndOfDay: represents 23:59 of today. This is to be used when
+    //     checking if an event occurs on that date or earlier.
+    var todayStartOfDay = new Date();
+    todayStartOfDay.setHours(0, 0, 0, 0);
+
+    var todayEndOfDay = new Date();
+    todayEndOfDay.setHours(23, 59, 0, 0);
 
     // Now check for various conditions, first by making sure that
     // the date objects exist before comparing
-    if (startDate && startDate < today) {
+    if (startDate && startDate < todayStartOfDay) {
         return false;
     }
-    if (endDate && endDate < today) {
+    if (endDate && endDate <= todayEndOfDay) {
         return false;
     }
     if (startDate && endDate) {

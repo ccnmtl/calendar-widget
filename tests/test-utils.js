@@ -402,7 +402,7 @@ describe('', function() {
 });
 
 // This test checks CTLEventUtils.filterEventsByAudience
-describe('', function() {
+describe('filter events by audience works as expected', function() {
     var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
     var pastDate = new Date(1999, 11, 31, 23, 59);
