@@ -152,6 +152,7 @@
             // splits the format: MM/DD/YYYY
             date = date.split('/');
             var startDate = date ? new Date(date[2], date[0] - 1, date[1]) : null;
+            // get the end date so it can be filtered together
             var endDate = $('input[name="end_date"]')[0].value;
             if (endDate) {
                 endDate = new Date(endDate);
@@ -179,6 +180,7 @@
             // splits the format: MM/DD/YYYY
             date = date.split('/');
             var endDate = date ? new Date(date[2], date[0] - 1, date[1]) : null;
+            // get the start date so it can be filtered together
             var startDate = $('input[name="start_date"]')[0].value;
             if (startDate) {
                 startDate = new Date(startDate);
