@@ -2,6 +2,15 @@
 
 var CTLEventUtils = {};
 
+function InvalidDateRangeError(message) {
+    this.name = 'InvalidDateRangeError';
+    this.message = message || 'An invalid date range was provided';
+    this.stack = (new Error()).stack;
+}
+
+InvalidDateRangeError.prototype = Object.create(Error.prototype);
+InvalidDateRangeError.prototype.constructor = InvalidDateRangeError;
+
 /**
  * Takes a Date object and returns a string in yyyy-mm-dd format.
  */
@@ -84,11 +93,6 @@ CTLEventUtils.filterEventsByDateRange = function(allEvents, startDate, endDate) 
     if (endDate) {
         endDate = new Date(endDate);
         endDate.setHours(23, 59);
-    }
-
-    // validate function stub
-    if (!CTLEventUtils.validateFilterValues(startDate, endDate)) {
-        //console.log('Date range fails to validate.');
     }
 
     var events = [];
@@ -410,18 +414,83 @@ CTLEventUtils.validateFilterValues = function(startDate, endDate) {
     // Now check for various conditions, first by making sure that
     // the date objects exist before comparing
     if (startDate && startDate < todayStartOfDay) {
-        return false;
+        throw new InvalidDateRangeError('The start date entered is prior to today');
     }
     if (endDate && endDate <= todayEndOfDay) {
-        return false;
+        throw new InvalidDateRangeError('The end date entered is prior to today');
     }
     if (startDate && endDate) {
         if (endDate < startDate) {
-            return false;
+            throw new InvalidDateRangeError('The end date entered is prior to the start date');
         }
     }
 
     return true;
+};
+
+/**
+ * Clear alerts set on page
+ */
+CTLEventUtils.clearAlerts = function() {
+    // If the div exists, clear it
+    var alertDiv = document.getElementById('search-results-alerts');
+    if (alertDiv) {
+        alertDiv.innerHTML = '';
+    }
+};
+
+/**
+ * Sets an alert message
+ */
+CTLEventUtils.setAlert = function(alertText) {
+    // If the div exists, append the alert text to it
+    var alertDiv = document.getElementById('search-results-alerts');
+    if (alertDiv) {
+        // create an alert div and append it to the alert div
+        var alertMessage = document.createElement('div');
+        alertMessage.innerHTML = alertText;
+        alertMessage.className = 'search-alert';
+
+        alertDiv.appendChild(alertMessage);
+    }
+};
+
+/**
+ * This is general function for filtering events. It validates the parameters, handles error
+ * messages, and
+ */
+CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, startDate, endDate) {
+    // This function orders the filters from general to specific
+    // - Date
+    // - Location
+    // - Audience
+    // - Text search
+
+    // first clear alerts
+    CTLEventUtils.clearAlerts();
+
+    var eventsList = [];
+    // then validate inputs and set alerts as needed
+    try {
+        CTLEventUtils.validateFilterValues();
+    } catch (e) {
+        // set an alert if the resulting array doesn't pass validation
+        if (e instanceof InvalidDateRangeError) {
+            CTLEventUtils.setAlert(InvalidDateRangeError.message);
+        }
+    }
+    // then call the filters in the order above
+    eventsList = CTLEventUtils.filterEventsByDateRange(allEvents, startDate, endDate);
+    eventsList = CTLEventUtils.filterEventsByLocation(eventsList, loc);
+    eventsList = CTLEventUtils.filterEventsByAudience(eventsList, audience);
+    eventsList = CTLEventUtils.searchEvents(eventsList, lunrIndex, q);
+
+    if (eventsList.length == 0) {
+        // then set an alert for no results
+        CTLEventUtils.setAlert('No events match these filters');
+    }
+
+    return eventsList;
 };
 
 if (typeof module !== 'undefined') {

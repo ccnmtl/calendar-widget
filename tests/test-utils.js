@@ -494,7 +494,8 @@ describe('validate filter values', function() {
     tomorrow.setDate(today.getDate() + 1);
 
     it('returns false if the start date is before today', function() {
-        assert(!CTLEventUtils.validateFilterValues(yesterday, today));
+        assert.throws(function() {CTLEventUtils.validateFilterValues(yesterday, today);},
+            'The start date entered is prior to today');
     });
     it('returns true if the start date is today', function() {
         assert(CTLEventUtils.validateFilterValues(today, null));
@@ -503,12 +504,70 @@ describe('validate filter values', function() {
         assert(CTLEventUtils.validateFilterValues(tomorrow, null));
     });
     it('returns false if the start date is after the end date', function() {
-        assert(!CTLEventUtils.validateFilterValues(tomorrow, today));
+        assert.throws(function () {CTLEventUtils.validateFilterValues(tomorrow, today);},
+            'The end date entered is prior to the start date');
     });
     it('returns true if the start date is before the end date', function() {
         assert(CTLEventUtils.validateFilterValues(today, tomorrow));
     });
     it('returns true if only and end date in the future is passed', function() {
         assert(CTLEventUtils.validateFilterValues(null, tomorrow));
+    });
+});
+
+describe('test the filterEvents function', function() {
+    // because this function calls utility functions that are already tested
+    // what needs to be tested for?
+    //
+    // It needs to return an array of events sorted in date order, or an empty array
+
+    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
+    var events = json.bwEventList.events;
+    var pastDate = new Date(1999, 11, 31, 23, 59);
+    var allEvents = CTLEventsManager.loadEvents(events, pastDate);
+
+    document.body.innerHTML = '<div id="search-results-alerts"></div>';
+
+    var lunrIndex = lunr(function() {
+        this.ref('id');
+        this.field('title');
+        this.field('description');
+        var self = this;
+        var i = 0;
+        allEvents.forEach(function(e) {
+            // build lunr index
+            self.add({
+                id: i++,
+                title: e.title,
+                description: e.description
+            });
+        });
+    });
+
+    var startDate = new Date(2017, 0, 1, 0, 0);
+    var endDate = new Date(2018, 0, 1, 0, 0);
+
+    it('returns a sorted array of all events', function() {
+        var q = '';
+        var loc = '';
+        var audience = '';
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+
+        for (var i = 0; i == events.length -1; i++) {
+            assert(events[i] < events[i + 1]);
+        }
+    });
+
+    it('returns an array of length 0', function() {
+        var q = 'foo';
+        var loc = '';
+        var audience = '';
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+
+        assert(events.length == 0);
     });
 });

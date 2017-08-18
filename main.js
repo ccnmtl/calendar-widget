@@ -287,6 +287,8 @@
 
             '<div style="clear: both;"></div>' +
 
+            '<div id="search-results-alerts"></div>' +
+
             '<div id="search-results"></div>' +
 
 
