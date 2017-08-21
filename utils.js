@@ -469,7 +469,7 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     // first clear alerts
     CTLEventUtils.clearAlerts();
 
-    var eventsList = [];
+    var eventsList = allEvents;
     // then validate inputs and set alerts as needed
     try {
         CTLEventUtils.validateFilterValues();
@@ -480,10 +480,18 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
         }
     }
     // then call the filters in the order above
-    eventsList = CTLEventUtils.filterEventsByDateRange(allEvents, startDate, endDate);
-    eventsList = CTLEventUtils.filterEventsByLocation(eventsList, loc);
-    eventsList = CTLEventUtils.filterEventsByAudience(eventsList, audience);
-    eventsList = CTLEventUtils.searchEvents(eventsList, lunrIndex, q);
+    if (startDate || endDate) {
+        eventsList = CTLEventUtils.filterEventsByDateRange(eventsList, startDate, endDate);
+    }
+    if (loc) {
+        eventsList = CTLEventUtils.filterEventsByLocation(eventsList, loc);
+    }
+    if (audience) {
+        eventsList = CTLEventUtils.filterEventsByAudience(eventsList, audience);
+    }
+    if (q) {
+        eventsList = CTLEventUtils.searchEvents(eventsList, lunrIndex, q);
+    }
 
     if (eventsList.length == 0) {
         // then set an alert for no results

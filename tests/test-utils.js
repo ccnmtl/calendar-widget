@@ -567,7 +567,83 @@ describe('test the filterEvents function', function() {
 
         var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
             loc, audience, startDate, endDate);
-
         assert(events.length == 0);
+    });
+
+    it('searching for just "Canvas" returns 11 items', function() {
+        var q = 'Canvas';
+        var loc = null;
+        var audience = null;
+        var startDate = null;
+        var endDate= null;
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 11);
+    });
+
+    it('returns an empty array when given all null values', function() {
+        var events = CTLEventUtils.filterEvents(allEvents);
+        assert(events.length == 15);
+    });
+
+    it('returns the correct number of events when given only a start date', function() {
+        // There's only one event in June, on June 27th
+        // Filtering from July one should return 14 events
+        var q = null;
+        var loc = null;
+        var audience = null;
+        var startDate = new Date(2017, 6, 1, 0, 0);
+        var endDate = null;
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 14);
+    });
+    it('returns the correct number of events when given only a end date', function() {
+        var q = null;
+        var loc = null;
+        var audience = null;
+        var endDate = null;
+        var endDate = new Date(2017, 6, 1, 0, 0);
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 1);
+    });
+    it('searching for just "Canvas" returns 11 items', function() {
+        var q = 'Canvas';
+        var loc = null;
+        var audience = null;
+        var startDate = null;
+        var endDate = null;
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 11);
+    });
+    it('returns the correct number of events when given only a location', function() {
+        // try 'Morningside' there are 14 events at MS
+        var q = null;
+        var loc = 'Morningside';
+        var audience = null;
+        var startdate = null;
+        var enddate = null;
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 14);
+    });
+    it('returns the correct number of events when given only a audience', function() {
+        // pass in 'Faculty' and you'll get 13 events back
+        var q = null;
+        var loc = null;
+        var audience = 'Faculty';
+        var startdate = null;
+        var enddate = null;
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 13);
     });
 });
