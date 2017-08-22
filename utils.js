@@ -479,54 +479,63 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     var _endDate = null;
     var _eventID = null;
 
-    // then get all the url params and save them somewhere
+    // Then get all the url params and save them somewhere
     var urlParams = CTLEventUtils.readURLParams();
-    // update this saved list of url params with any parameters passed in
-    // You need to union the set of params from the URL and the set passed in
-    // Create an empty data structure, copy in the URL params, then copy in passed in params
-    // these will overwrite the URL params
-    // this function is only updating existing params
+
+    // Assign any URL params first
     urlParams.forEach(function(el) {
         switch(el.key) {
             case 'q':
                 _q = el.value;
+                CTLEventUtils.updateURL('q', _q);
                 break;
             case 'loc':
                 _loc = el.value;
+                CTLEventUtils.updateURL('loc', _loc);
                 break;
             case 'audience':
                 _audience = el.value;
+                CTLEventUtils.updateURL('audience', _audience);
                 break;
             case 'start':
-                _start = new Date(el.value);
+                _startDate = new Date(el.value);
+                CTLEventUtils.updateURL('startDate', _startDate);
                 break;
             case 'end':
-                _end = new Date(el.value);
+                _endDate = new Date(el.value);
+                CTLEventUtils.updateURL('endDate', _endDate);
                 break;
             case 'eventID':
                 _eventID = eventID;
+                CTLEventUtils.updateURL('eventID', _eventID);
                 break;
         }
     });
 
-    // Assign only if the param has a value
+    // Then assign passed in params, if they exist
     if (q) {
         _q = q;
+        CTLEventUtils.updateURL('q', _q);
     }
     if (loc) {
         _loc = loc;
+        CTLEventUtils.updateURL('loc', _loc);
     }
     if (audience) {
         _audience = audience;
+        CTLEventUtils.updateURL('audience', _audience);
     }
     if (startDate) {
         _startDate = startDate;
+        CTLEventUtils.updateURL('start', _startDate);
     }
     if (endDate) {
         _endDate = endDate;
+        CTLEventUtils.updateURL('end', _endDate);
     }
     if (eventID) {
         _eventID = eventID;
+        CTLEventUtils.updateURL('eventID', _eventID);
     }
 
     // Assign allEvents first so that if all the params are null, all events are returned.
@@ -541,6 +550,7 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
             CTLEventUtils.setAlert(InvalidDateRangeError.message);
         }
     }
+
     // first check that the parameters exist, then call the filters
     if (_startDate || _endDate) {
         eventsList = CTLEventUtils.filterEventsByDateRange(eventsList, _startDate, _endDate);

@@ -38,7 +38,7 @@
         $el.append($('<h2>Results for: "' + q + '"</h2>'));
 
         CTLEventsManager.filteredEvents = CTLEventUtils.filterEvents(events, index, q, null, null, null, null);
-        CTLEventUtils.updateURL('q', q);
+        //CTLEventUtils.updateURL('q', q);
 
         if (CTLEventsManager.filteredEvents.length > 0) {
             refreshEvents(CTLEventsManager.filteredEvents, 1);
@@ -111,13 +111,7 @@
 
             CTLEventsManager.filteredEvents =
                 CTLEventUtils.filterEvents(
-                    CTLEventsManager.filteredEvents, index, null, loc, null, null, null);
-
-            if (loc && loc !== 'null') {
-                CTLEventUtils.updateURL('loc', loc);
-            } else {
-                CTLEventUtils.unsetURLParams('loc');
-            }
+                    CTLEventsManager.allEvents, index, null, loc, null, null, null);
 
             refreshEvents(CTLEventsManager.filteredEvents, 1);
         });
@@ -130,13 +124,7 @@
 
             CTLEventsManager.filteredEvents =
                 CTLEventUtils.filterEvents(
-                    CTLEventsManager.filteredEvents, index, null, null, audience, null, null);
-
-            if (audience && audience !== 'null') {
-                CTLEventUtils.updateURL('audience', audience);
-            } else {
-                CTLEventUtils.unsetURLParams('audience');
-            }
+                    CTLEventsManager.allEvents, index, null, null, audience, null, null);
 
             refreshEvents(CTLEventsManager.filteredEvents, 1);
         });
@@ -156,15 +144,9 @@
 
             CTLEventsManager.filteredEvents =
                 CTLEventUtils.filterEvents(
-                    CTLEventsManager.filteredEvents, index, null, null, null,
+                    CTLEventsManager.allEvents, index, null, null, null,
                     startDate, endDate);
 
-            if (startDate) {
-                CTLEventUtils.updateURL(
-                    'start', CTLEventUtils.formatShortDate(startDate));
-            } else {
-                CTLEventUtils.unsetURLParams('start');
-            }
             refreshEvents(CTLEventsManager.filteredEvents, 1);
         });
         $startInput.datepicker();
@@ -184,15 +166,9 @@
 
             CTLEventsManager.filteredEvents =
                 CTLEventUtils.filterEvents(
-                    CTLEventsManager.filteredEvents, index, null, null, null,
+                    CTLEventsManager.allEvents, index, null, null, null,
                     startDate, endDate);
 
-            if (endDate) {
-                CTLEventUtils.updateURL(
-                    'end', CTLEventUtils.formatShortDate(endDate));
-            } else {
-                CTLEventUtils.unsetURLParams('end');
-            }
             refreshEvents(CTLEventsManager.filteredEvents, 1);
         });
         $endInput.datepicker();
