@@ -468,8 +468,9 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     // - Audience
     // - Text search
 
-    // first clear alerts
+    // Clear alerts and URL params
     CTLEventUtils.clearAlerts();
+    CTLEventUtils.clearURLParams();
 
     // Then initialize local vars for each param:
     var _q = null;
@@ -517,7 +518,7 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
         _q = q;
         CTLEventUtils.updateURL('q', _q);
     }
-    if (loc) {
+    if (loc != null) {
         _loc = loc;
         CTLEventUtils.updateURL('loc', _loc);
     }
@@ -527,11 +528,11 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     }
     if (startDate) {
         _startDate = startDate;
-        CTLEventUtils.updateURL('start', _startDate);
+        CTLEventUtils.updateURL('start', CTLEventUtils.formatShortDate(_startDate));
     }
     if (endDate) {
         _endDate = endDate;
-        CTLEventUtils.updateURL('end', _endDate);
+        CTLEventUtils.updateURL('end', CTLEventUtils.formatShortDate(_endDate));
     }
     if (eventID) {
         _eventID = eventID;

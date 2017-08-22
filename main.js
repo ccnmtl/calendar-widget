@@ -108,7 +108,10 @@
         $el.append(CTLEventsManager.renderLocationDropdown());
         $el.find('select#location-dropdown').on('change', function(e) {
             var loc = e.target.value;
-
+            // If 'all' is selected e.target.value returns 'null' as a string
+            if (loc == 'null') {
+                loc = null;
+            }
             CTLEventsManager.filteredEvents =
                 CTLEventUtils.filterEvents(
                     CTLEventsManager.allEvents, index, null, loc, null, null, null);
@@ -121,7 +124,10 @@
         $el.append(CTLEventsManager.renderAudienceDropdown());
         $el.find('select#audience-dropdown').on('change', function(e) {
             var audience = e.target.value;
-
+            // If 'all' is selected e.target.value returns 'null' as a string
+            if (audience == 'null') {
+                audience = null;
+            }
             CTLEventsManager.filteredEvents =
                 CTLEventUtils.filterEvents(
                     CTLEventsManager.allEvents, index, null, null, audience, null, null);
@@ -135,7 +141,12 @@
             var date = e.target.value;
             // splits the format: MM/DD/YYYY
             date = date.split('/');
-            var startDate = date ? new Date(date[2], date[0] - 1, date[1]) : null;
+            var startDate = null;
+            // if the date is not an empty string, construct a new Date
+            // object to pass in the filter function
+            if (date != '') {
+                startDate = new Date(date[2], date[0] - 1, date[1]);
+            }
             // get the end date so it can be filtered together
             var endDate = $('input[name="end_date"]')[0].value;
             if (endDate) {
@@ -157,7 +168,12 @@
             var date = e.target.value;
             // splits the format: MM/DD/YYYY
             date = date.split('/');
-            var endDate = date ? new Date(date[2], date[0] - 1, date[1]) : null;
+            // if the date is not an empty string, construct a new Date
+            // object to pass in the filter function
+            var endDate = null;
+            if (date != '') {
+                endDate = new Date(date[2], date[0] - 1, date[1]);
+            }
             // get the start date so it can be filtered together
             var startDate = $('input[name="start_date"]')[0].value;
             if (startDate) {
