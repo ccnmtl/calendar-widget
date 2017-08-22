@@ -459,7 +459,9 @@ CTLEventUtils.setAlert = function(alertText) {
  * This is general function for filtering events. It validates the parameters, handles error
  * messages, and
  */
-CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, startDate, endDate) {
+CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, startDate, endDate, eventID) {
+    // Perhaps this function can use keyword arguments in a single object rather than 7 params
+    //
     // This function orders the filters from general to specific
     // - Date
     // - Location
@@ -469,28 +471,91 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     // first clear alerts
     CTLEventUtils.clearAlerts();
 
+    // Then initialize local vars for each param:
+    var _q = null;
+    var _loc = null;
+    var _audience = null;
+    var _startDate = null;
+    var _endDate = null;
+    var _eventID = null;
+
+    // then get all the url params and save them somewhere
+    var urlParams = CTLEventUtils.readURLParams();
+    // update this saved list of url params with any parameters passed in
+    // You need to union the set of params from the URL and the set passed in
+    // Create an empty data structure, copy in the URL params, then copy in passed in params
+    // these will overwrite the URL params
+    // this function is only updating existing params
+    urlParams.forEach(function(el) {
+        switch(el.key) {
+            case 'q':
+                _q = el.value;
+                break;
+            case 'loc':
+                _loc = el.value;
+                break;
+            case 'audience':
+                _audience = el.value;
+                break;
+            case 'start':
+                _start = new Date(el.value);
+                break;
+            case 'end':
+                _end = new Date(el.value);
+                break;
+            case 'eventID':
+                _eventID = eventID;
+                break;
+        }
+    });
+
+    // Assign only if the param has a value
+    if (q) {
+        _q = q;
+    }
+    if (loc) {
+        _loc = loc;
+    }
+    if (audience) {
+        _audience = audience;
+    }
+    if (startDate) {
+        _startDate = startDate;
+    }
+    if (endDate) {
+        _endDate = endDate;
+    }
+    if (eventID) {
+        _eventID = eventID;
+    }
+
+    // Assign allEvents first so that if all the params are null, all events are returned.
+    // This is filtering, not querying.
     var eventsList = allEvents;
     // then validate inputs and set alerts as needed
     try {
-        CTLEventUtils.validateFilterValues();
+        CTLEventUtils.validateFilterValues(_startDate, _endDate);
     } catch (e) {
         // set an alert if the resulting array doesn't pass validation
         if (e instanceof InvalidDateRangeError) {
             CTLEventUtils.setAlert(InvalidDateRangeError.message);
         }
     }
-    // then call the filters in the order above
-    if (startDate || endDate) {
-        eventsList = CTLEventUtils.filterEventsByDateRange(eventsList, startDate, endDate);
+    // first check that the parameters exist, then call the filters
+    if (_startDate || _endDate) {
+        eventsList = CTLEventUtils.filterEventsByDateRange(eventsList, _startDate, _endDate);
     }
-    if (loc) {
-        eventsList = CTLEventUtils.filterEventsByLocation(eventsList, loc);
+    if (_loc) {
+        eventsList = CTLEventUtils.filterEventsByLocation(eventsList, _loc);
     }
-    if (audience) {
-        eventsList = CTLEventUtils.filterEventsByAudience(eventsList, audience);
+    if (_audience) {
+        eventsList = CTLEventUtils.filterEventsByAudience(eventsList, _audience);
     }
-    if (q) {
-        eventsList = CTLEventUtils.searchEvents(eventsList, lunrIndex, q);
+    if (_q) {
+        eventsList = CTLEventUtils.searchEvents(eventsList, lunrIndex, _q);
+    }
+    if (_eventID) {
+        eventsList = CTLEventUtils.getEventByID(eventsList, _eventID);
     }
 
     if (eventsList.length == 0) {

@@ -37,14 +37,10 @@
         $el.append('<div class="arrow"></div>');
         $el.append($('<h2>Results for: "' + q + '"</h2>'));
 
-        CTLEventsManager.filteredEvents = CTLEventUtils.searchEvents(
-            events, index, q);
+        CTLEventsManager.filteredEvents = CTLEventUtils.filterEvents(events, index, q, null, null, null, null);
         CTLEventUtils.updateURL('q', q);
 
-        if (CTLEventsManager.filteredEvents.length === 0) {
-            $el.append('<div class="q-no-item">Unfortunately, there are ' +
-                    'no results matching what you\'re looking for.</div>');
-        } else {
+        if (CTLEventsManager.filteredEvents.length > 0) {
             refreshEvents(CTLEventsManager.filteredEvents, 1);
         }
         return false;
@@ -114,8 +110,8 @@
             var loc = e.target.value;
 
             CTLEventsManager.filteredEvents =
-                CTLEventUtils.filterEventsByLocation(
-                    CTLEventsManager.allEvents, loc);
+                CTLEventUtils.filterEvents(
+                    CTLEventsManager.filteredEvents, index, null, loc, null, null, null);
 
             if (loc && loc !== 'null') {
                 CTLEventUtils.updateURL('loc', loc);
@@ -133,8 +129,8 @@
             var audience = e.target.value;
 
             CTLEventsManager.filteredEvents =
-                CTLEventUtils.filterEventsByAudience(
-                    CTLEventsManager.allEvents, audience);
+                CTLEventUtils.filterEvents(
+                    CTLEventsManager.filteredEvents, index, null, null, audience, null, null);
 
             if (audience && audience !== 'null') {
                 CTLEventUtils.updateURL('audience', audience);
@@ -159,8 +155,8 @@
             }
 
             CTLEventsManager.filteredEvents =
-                CTLEventUtils.filterEventsByDateRange(
-                    CTLEventsManager.allEvents,
+                CTLEventUtils.filterEvents(
+                    CTLEventsManager.filteredEvents, index, null, null, null,
                     startDate, endDate);
 
             if (startDate) {
@@ -187,8 +183,8 @@
             }
 
             CTLEventsManager.filteredEvents =
-                CTLEventUtils.filterEventsByDateRange(
-                    CTLEventsManager.allEvents,
+                CTLEventUtils.filterEvents(
+                    CTLEventsManager.filteredEvents, index, null, null, null,
                     startDate, endDate);
 
             if (endDate) {
