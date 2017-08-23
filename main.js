@@ -28,24 +28,6 @@
         return index;
     };
 
-    var doSearch = function(events) {
-        var $el = $('#calendarList');
-        var q = $('#q').val();
-
-        $el.empty();
-        $el.show();
-        $el.append('<div class="arrow"></div>');
-        $el.append($('<h2>Results for: "' + q + '"</h2>'));
-
-        CTLEventsManager.filteredEvents = CTLEventUtils.filterEvents(events, index, q, null, null, null, null);
-        //CTLEventUtils.updateURL('q', q);
-
-        if (CTLEventsManager.filteredEvents.length > 0) {
-            refreshEvents(CTLEventsManager.filteredEvents, 1);
-        }
-        return false;
-    };
-
     var clearSearch = function() {
         $('#calendarList').empty();
         $('#calendarList').hide();
@@ -95,7 +77,7 @@
             useAnchors: false,
             cssStyle: 'ctl-theme',
             onPageClick: function(pageNumber) {
-                if (CTLEventsManager.filteredEvents.length > 0 || $('#q').val().length > 1) {
+                if (CTLEventsManager.filteredEvents.length > 0 || $('#q').val().length > 0) {
                     refreshEvents(CTLEventsManager.filteredEvents, pageNumber);
                 } else {
                     refreshEvents(CTLEventsManager.allEvents, pageNumber);
@@ -103,98 +85,80 @@
             }
         });
 
-        // Initialize the location dropdown
+        // Initialize the dropdowns and input fields
         var $el = $('#location-dropdown-container');
         $el.append(CTLEventsManager.renderLocationDropdown());
-        $el.find('select#location-dropdown').on('change', function(e) {
-            var loc = e.target.value;
-            // If 'all' is selected e.target.value returns 'null' as a string
-            if (loc == 'null') {
-                loc = null;
-            }
-            CTLEventsManager.filteredEvents =
-                CTLEventUtils.filterEvents(
-                    CTLEventsManager.allEvents, index, null, loc, null, null, null);
 
-            refreshEvents(CTLEventsManager.filteredEvents, 1);
-        });
-
-        // Initialize the audience dropdown
         $el = $('#audience-dropdown-container');
         $el.append(CTLEventsManager.renderAudienceDropdown());
-        $el.find('select#audience-dropdown').on('change', function(e) {
-            var audience = e.target.value;
-            // If 'all' is selected e.target.value returns 'null' as a string
-            if (audience == 'null') {
-                audience = null;
-            }
-            CTLEventsManager.filteredEvents =
-                CTLEventUtils.filterEvents(
-                    CTLEventsManager.allEvents, index, null, null, audience, null, null);
 
-            refreshEvents(CTLEventsManager.filteredEvents, 1);
-        });
-
-        // Initialize the start date field
         var $startInput = $('input[name="start_date"]');
-        $startInput.on('change', function(e) {
-            var date = e.target.value;
-            // splits the format: MM/DD/YYYY
-            date = date.split('/');
-            var startDate = null;
-            // if the date is not an empty string, construct a new Date
-            // object to pass in the filter function
-            if (date != '') {
-                startDate = new Date(date[2], date[0] - 1, date[1]);
-            }
-            // get the end date so it can be filtered together
-            var endDate = $('input[name="end_date"]')[0].value;
-            if (endDate) {
-                endDate = new Date(endDate);
-            }
-
-            CTLEventsManager.filteredEvents =
-                CTLEventUtils.filterEvents(
-                    CTLEventsManager.allEvents, index, null, null, null,
-                    startDate, endDate);
-
-            refreshEvents(CTLEventsManager.filteredEvents, 1);
-        });
         $startInput.datepicker();
 
-        // Initialize the end date field
         var $endInput = $('input[name="end_date"]');
-        $endInput.on('change', function(e) {
-            var date = e.target.value;
-            // splits the format: MM/DD/YYYY
-            date = date.split('/');
-            // if the date is not an empty string, construct a new Date
-            // object to pass in the filter function
-            var endDate = null;
-            if (date != '') {
-                endDate = new Date(date[2], date[0] - 1, date[1]);
-            }
-            // get the start date so it can be filtered together
-            var startDate = $('input[name="start_date"]')[0].value;
-            if (startDate) {
-                startDate = new Date(startDate);
-            }
-
-            CTLEventsManager.filteredEvents =
-                CTLEventUtils.filterEvents(
-                    CTLEventsManager.allEvents, index, null, null, null,
-                    startDate, endDate);
-
-            refreshEvents(CTLEventsManager.filteredEvents, 1);
-        });
         $endInput.datepicker();
 
-        var queryString = window.location.search.replace(/^\?/, '');
-        var paramsArray = CTLEventUtils.readURLParams(queryString);
-        CTLEventUtils.populateURLParams(paramsArray);
-        var filteredEvents = CTLEventUtils.filterOnURLParams(paramsArray, CTLEventsManager.allEvents, index);
+        // Setup event handler
+        var $searchWrapper = $('#search-wrapper');
+        $searchWrapper.on('change keyup', filterEventHandler);
+
+        // Call the filter to get all events on load
+        var filteredEvents = CTLEventUtils.filterEvents(
+            CTLEventsManager.allEvents,
+            index,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
 
         refreshEvents(filteredEvents, 1);
+    };
+
+    var filterEventHandler = function() {
+        // Clear the events
+        $('#calendarList').empty();
+        // Then get the vars ready
+        var $searchWrapper = $('#search-wrapper');
+        var q = null;
+        var loc = null;
+        var audience = null;
+        var startDate = null;
+        var endDate = null;
+        var eventID = null;
+
+        var $el = $('#calendarList');
+        q = $('#q').val();
+
+        // Clear the events box and add results box when there's text to search
+        $el.empty();
+        $el.show();
+        $el.append('<div class="arrow"></div>');
+        if (q.length > 0) {
+            $el.append($('<h2>Results for: "' + q + '"</h2>'));
+        }
+
+        loc = $searchWrapper.find('select#location-dropdown')[0].value;
+        if (loc == 'null') {
+            loc = 'all';
+        }
+
+        audience = $searchWrapper.find('select#audience-dropdown')[0].value;
+        if (audience == 'null') {
+            audience = 'all';
+        }
+
+        startDate = $('input[name="start_date"]').datepicker('getDate');
+        endDate = $('input[name="end_date"]').datepicker('getDate');
+
+        // filter events and refresh events
+        CTLEventsManager.filteredEvents =
+            CTLEventUtils.filterEvents(
+                CTLEventsManager.allEvents, index, q, loc, audience,
+                startDate, endDate);
+
+        refreshEvents(CTLEventsManager.filteredEvents, 1);
     };
 
     $(document).ready(function() {
@@ -206,7 +170,7 @@
 
             '</div>' +
 
-            '<div class="search-wrapper">' +
+            '<div id="search-wrapper">' +
 
             '<div class="search-row" id="search-term">' +
 
@@ -300,16 +264,6 @@
         $('#clear-search').click(clearSearch);
         $('form.search-container').submit(function(e) {
             e.preventDefault();
-        });
-        $('#q').keyup(function() {
-            $('#calendarList').empty();
-
-            if ($(this).val().length < 2) {
-                refreshEvents(CTLEventsManager.allEvents, 1);
-                CTLEventUtils.unsetURLParams('q');
-                return;
-            }
-            return doSearch(CTLEventsManager.allEvents);
         });
 
         $('#calendarList').on('click', '.more_info_trigger', function() {

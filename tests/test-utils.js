@@ -125,44 +125,6 @@ describe('readURLParams', function() {
     });
 });
 
-describe('filterOnURLParams', function() {
-    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
-    var events = json.bwEventList.events;
-
-    var index = lunr(function() {
-        this.ref('id');
-        this.field('title', {boost: 10});
-        this.field('description', {boost: 5});
-    });
-
-    var pastDate = new Date(1999, 11, 31, 23, 59);
-    var allEvents = CTLEventsManager.loadEvents(events, pastDate);
-
-    it('returns an array of event objects given params', function() {
-        var paramsArray = CTLEventUtils.readURLParams('q=video');
-        var filteredArray = CTLEventUtils.filterOnURLParams(paramsArray,
-            allEvents, index);
-        var searchedArray = CTLEventUtils.searchEvents(allEvents,
-            index, 'video');
-        assert.deepEqual(filteredArray, searchedArray);
-    });
-
-    it('returns a list of all events when given garbage params', function() {
-        var paramsArray = CTLEventUtils.readURLParams('foo=bar');
-        var filteredArray = CTLEventUtils.filterOnURLParams(paramsArray,
-            allEvents, index);
-        assert.deepEqual(filteredArray, allEvents);
-    });
-
-    it('returns list of all events given an empty params array', function() {
-        var paramsArray = CTLEventUtils.readURLParams('');
-        var filteredArray = CTLEventUtils.filterOnURLParams(paramsArray,
-            allEvents, index);
-        assert.deepEqual(filteredArray, allEvents);
-    });
-
-});
-
 describe('populateURLParams', function() {
     var searchForm = '<div class="search-wrapper">' +
         '<form role="search">' +
@@ -544,13 +506,14 @@ describe('test the filterEvents function', function() {
         });
     });
 
-    var startDate = new Date(2017, 0, 1, 0, 0);
-    var endDate = new Date(2018, 0, 1, 0, 0);
 
     it('returns a sorted array of all events', function() {
+        CTLEventUtils.clearURLParams();
         var q = '';
         var loc = '';
         var audience = '';
+        var startDate = new Date(2017, 0, 1, 0, 0);
+        var endDate = new Date(2018, 0, 1, 0, 0);
 
         var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
             loc, audience, startDate, endDate);
@@ -559,11 +522,13 @@ describe('test the filterEvents function', function() {
             assert(events[i] < events[i + 1]);
         }
     });
-
     it('returns an array of length 0', function() {
+        CTLEventUtils.clearURLParams();
         var q = 'foo';
         var loc = '';
         var audience = '';
+        var startDate = new Date(2017, 0, 1, 0, 0);
+        var endDate = new Date(2018, 0, 1, 0, 0);
 
         var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
             loc, audience, startDate, endDate);
@@ -571,6 +536,7 @@ describe('test the filterEvents function', function() {
     });
 
     it('searching for just "Canvas" returns 11 items', function() {
+        CTLEventUtils.clearURLParams();
         var q = 'Canvas';
         var loc = null;
         var audience = null;
@@ -582,14 +548,16 @@ describe('test the filterEvents function', function() {
         assert(events.length == 11);
     });
 
-    it('returns an empty array when given all null values', function() {
-        var events = CTLEventUtils.filterEvents(allEvents);
+    it('returns all events when given all null values', function() {
+        CTLEventUtils.clearURLParams();
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex);
         assert(events.length == 15);
     });
 
     it('returns the correct number of events when given only a start date', function() {
         // There's only one event in June, on June 27th
         // Filtering from July one should return 14 events
+        CTLEventUtils.clearURLParams();
         var q = null;
         var loc = null;
         var audience = null;
@@ -600,35 +568,26 @@ describe('test the filterEvents function', function() {
             loc, audience, startDate, endDate);
         assert(events.length == 14);
     });
-    it('returns the correct number of events when given only a end date', function() {
+    it('returns the correct number of events when given only an end date', function() {
+        CTLEventUtils.clearURLParams();
         var q = null;
         var loc = null;
         var audience = null;
-        var endDate = null;
+        var startDate = null;
         var endDate = new Date(2017, 6, 1, 0, 0);
 
         var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
             loc, audience, startDate, endDate);
         assert(events.length == 1);
     });
-    it('searching for just "Canvas" returns 11 items', function() {
-        var q = 'Canvas';
-        var loc = null;
-        var audience = null;
-        var startDate = null;
-        var endDate = null;
-
-        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
-            loc, audience, startDate, endDate);
-        assert(events.length == 11);
-    });
     it('returns the correct number of events when given only a location', function() {
         // try 'Morningside' there are 14 events at MS
+        CTLEventUtils.clearURLParams();
         var q = null;
         var loc = 'Morningside';
         var audience = null;
-        var startdate = null;
-        var enddate = null;
+        var startDate = null;
+        var endDate = null;
 
         var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
             loc, audience, startDate, endDate);
@@ -636,11 +595,12 @@ describe('test the filterEvents function', function() {
     });
     it('returns the correct number of events when given only a audience', function() {
         // pass in 'Faculty' and you'll get 13 events back
+        CTLEventUtils.clearURLParams();
         var q = null;
         var loc = null;
         var audience = 'Faculty';
-        var startdate = null;
-        var enddate = null;
+        var startDate = null;
+        var endDate = null;
 
         var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
             loc, audience, startDate, endDate);

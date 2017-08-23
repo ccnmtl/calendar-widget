@@ -34,7 +34,9 @@ CTLEventUtils.searchEvents = function(allEvents, index, q) {
     var searchResults = [];
     for (var r in results) {
         var e = allEvents[results[r].ref];
-        searchResults.push(e);
+        if (e) {
+            searchResults.push(e);
+        }
     }
 
     return searchResults;
@@ -198,8 +200,8 @@ CTLEventUtils.readURLParams = function(queryString) {
     params.forEach(function(el) {
         var splitParam = el.split('=');
         paramsArray.push({
-            key: splitParam[0],
-            value: splitParam[1],
+            key: decodeURI(splitParam[0]),
+            value: decodeURI(splitParam[1]),
         });
     });
 
@@ -221,51 +223,6 @@ CTLEventUtils.getEventByID = function(eventsList, eventID) {
         }
     }
     return [];
-};
-
-/**
- * @param paramsArray = The array of objects that are composed of the URL
- * parameter pairs.
- *
- * @param eventsList = An array of event objects to be filtered.
- *
- * @param index = The Lunr JS index object.
- *
- * @return = An array of filtered event objects.
- */
-CTLEventUtils.filterOnURLParams = function(paramsArray, eventsList, index) {
-    if (eventsList.length === 0) {
-        return [];
-    }
-
-    paramsArray.forEach(function(el) {
-        switch(el.key) {
-            case 'q':
-                eventsList = CTLEventUtils.searchEvents(
-                    eventsList, index, el.value);
-                break;
-            case 'loc':
-                eventsList = CTLEventUtils.filterEventsByLocation(
-                    eventsList, el.value);
-                break;
-            case 'audience':
-                eventsList = CTLEventUtils.filterEventsByAudience(
-                    eventsList, el.value);
-                break;
-            case 'start':
-                eventsList = CTLEventUtils.filterEventsByDateRange(
-                    eventsList, new Date(el.value), null);
-                break;
-            case 'end':
-                eventsList = CTLEventUtils.filterEventsByDateRange(
-                    eventsList, null, new Date(el.value));
-                break;
-            case 'eventID':
-                eventsList = CTLEventUtils.getEventByID(eventsList, el.value);
-                break;
-        }
-    });
-    return eventsList;
 };
 
 /**
@@ -372,10 +329,10 @@ CTLEventUtils.strToDate = function(dateString) {
 
 /**
  * This function validates the values input into the search filters
- * It does:
- * - checks that the start date is greater than or equal to today's date
- * - checks that the end date is greater than or equal to today's date
- * - checks that the end date is greater than or equal to the start date
+ * It checks:
+ * - that the start date is greater than or equal to today's date
+ * - that the end date is greater than or equal to today's date
+ * - that the end date is greater than or equal to the start date
  *
  * @param startDate A Date object for the start of the date range
  *
@@ -458,6 +415,15 @@ CTLEventUtils.setAlert = function(alertText) {
 /**
  * This is general function for filtering events. It validates the parameters, handles error
  * messages, and
+ *
+ * This function takes in all the search params and filters.
+ *
+ * First it considers the params in the URL and assigns those to variables.
+ * Then it considers the variables passed in, which supercede the url params.
+ *
+ * It then validates the values, and sets error messages as needed.
+ *
+ * If it passes validate, it returns an array of event objects to be rendered on the page.
  */
 CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, startDate, endDate, eventID) {
     // Perhaps this function can use keyword arguments in a single object rather than 7 params
@@ -468,9 +434,14 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     // - Audience
     // - Text search
 
+    // Then get all the url params and save them somewhere
+    var queryString = window.location.search.replace(/^\?/, '');
+    var urlParams = CTLEventUtils.readURLParams(queryString);
+    // Then clear them
+    CTLEventUtils.clearURLParams();
+
     // Clear alerts and URL params
     CTLEventUtils.clearAlerts();
-    CTLEventUtils.clearURLParams();
 
     // Then initialize local vars for each param:
     var _q = null;
@@ -480,63 +451,57 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     var _endDate = null;
     var _eventID = null;
 
-    // Then get all the url params and save them somewhere
-    var urlParams = CTLEventUtils.readURLParams();
-
     // Assign any URL params first
     urlParams.forEach(function(el) {
         switch(el.key) {
             case 'q':
                 _q = el.value;
-                CTLEventUtils.updateURL('q', _q);
                 break;
             case 'loc':
                 _loc = el.value;
-                CTLEventUtils.updateURL('loc', _loc);
                 break;
             case 'audience':
                 _audience = el.value;
-                CTLEventUtils.updateURL('audience', _audience);
                 break;
             case 'start':
                 _startDate = new Date(el.value);
-                CTLEventUtils.updateURL('startDate', _startDate);
                 break;
             case 'end':
                 _endDate = new Date(el.value);
-                CTLEventUtils.updateURL('endDate', _endDate);
                 break;
             case 'eventID':
                 _eventID = eventID;
-                CTLEventUtils.updateURL('eventID', _eventID);
                 break;
         }
     });
 
     // Then assign passed in params, if they exist
-    if (q) {
+    if (q == '') {
+        // clear this param snd set _q to null
+        _q = null;
+    } else {
         _q = q;
-        CTLEventUtils.updateURL('q', _q);
     }
-    if (loc != null) {
+    if (loc == 'all') {
+        // clear this param and set _loc to null
+        _loc = null;
+    } else if (loc) {
         _loc = loc;
-        CTLEventUtils.updateURL('loc', _loc);
     }
-    if (audience) {
+    if (audience == 'all') {
+        // clear this param and set _audience to null
+        _audience = null;
+    } else if (audience) {
         _audience = audience;
-        CTLEventUtils.updateURL('audience', _audience);
     }
     if (startDate) {
         _startDate = startDate;
-        CTLEventUtils.updateURL('start', CTLEventUtils.formatShortDate(_startDate));
     }
     if (endDate) {
         _endDate = endDate;
-        CTLEventUtils.updateURL('end', CTLEventUtils.formatShortDate(_endDate));
     }
     if (eventID) {
         _eventID = eventID;
-        CTLEventUtils.updateURL('eventID', _eventID);
     }
 
     // Assign allEvents first so that if all the params are null, all events are returned.
@@ -555,23 +520,38 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     // first check that the parameters exist, then call the filters
     if (_startDate || _endDate) {
         eventsList = CTLEventUtils.filterEventsByDateRange(eventsList, _startDate, _endDate);
+        if (_startDate) {
+            CTLEventUtils.updateURL('start', CTLEventUtils.formatShortDate(_startDate));
+        }
+        if (_endDate) {
+            CTLEventUtils.updateURL('end', CTLEventUtils.formatShortDate(_endDate));
+        }
     }
     if (_loc) {
         eventsList = CTLEventUtils.filterEventsByLocation(eventsList, _loc);
+        CTLEventUtils.updateURL('loc', _loc);
     }
     if (_audience) {
         eventsList = CTLEventUtils.filterEventsByAudience(eventsList, _audience);
+        CTLEventUtils.updateURL('audience', _audience);
     }
     if (_q) {
         eventsList = CTLEventUtils.searchEvents(eventsList, lunrIndex, _q);
+        CTLEventUtils.updateURL('q', _q);
     }
     if (_eventID) {
         eventsList = CTLEventUtils.getEventByID(eventsList, _eventID);
+        CTLEventUtils.updateURL('eventID', _eventID);
     }
 
     if (eventsList.length == 0) {
         // then set an alert for no results
         CTLEventUtils.setAlert('No events match these filters');
+    }
+
+    // If params were read in from the url, populate the fields
+    if (!q && !loc && !audience && !startDate && !endDate && !eventID) {
+        CTLEventUtils.populateURLParams(urlParams);
     }
 
     return eventsList;
