@@ -105,13 +105,8 @@
         // Call the filter to get all events on load
         var filteredEvents = CTLEventUtils.filterEvents(
             CTLEventsManager.allEvents,
-            index,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null);
+            index
+        );
 
         refreshEvents(filteredEvents, 1);
     };
@@ -126,7 +121,6 @@
         var audience = null;
         var startDate = null;
         var endDate = null;
-        var eventID = null;
 
         var $el = $('#calendarList');
         q = $('#q').val();
@@ -140,15 +134,7 @@
         }
 
         loc = $searchWrapper.find('select#location-dropdown')[0].value;
-        if (loc == 'null') {
-            loc = 'all';
-        }
-
         audience = $searchWrapper.find('select#audience-dropdown')[0].value;
-        if (audience == 'null') {
-            audience = 'all';
-        }
-
         startDate = $('input[name="start_date"]').datepicker('getDate');
         endDate = $('input[name="end_date"]').datepicker('getDate');
 

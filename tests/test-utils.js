@@ -508,7 +508,6 @@ describe('test the filterEvents function', function() {
 
 
     it('returns a sorted array of all events', function() {
-        CTLEventUtils.clearURLParams();
         var q = '';
         var loc = '';
         var audience = '';
@@ -523,7 +522,6 @@ describe('test the filterEvents function', function() {
         }
     });
     it('returns an array of length 0', function() {
-        CTLEventUtils.clearURLParams();
         var q = 'foo';
         var loc = '';
         var audience = '';
@@ -536,7 +534,6 @@ describe('test the filterEvents function', function() {
     });
 
     it('searching for just "Canvas" returns 11 items', function() {
-        CTLEventUtils.clearURLParams();
         var q = 'Canvas';
         var loc = null;
         var audience = null;
@@ -548,7 +545,14 @@ describe('test the filterEvents function', function() {
         assert(events.length == 11);
     });
 
-    it('returns all events when given all null values', function() {
+    it('passing in just "Canvas" as a URL param returns 11 items', function() {
+        CTLEventUtils.clearURLParams();
+        CTLEventUtils.updateURL('q', 'Canvas');
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex);
+        assert(events.length == 11);
+    });
+
+    it('returns all events when given undefined search parameters', function() {
         CTLEventUtils.clearURLParams();
         var events = CTLEventUtils.filterEvents(allEvents, lunrIndex);
         assert(events.length == 15);
@@ -557,7 +561,6 @@ describe('test the filterEvents function', function() {
     it('returns the correct number of events when given only a start date', function() {
         // There's only one event in June, on June 27th
         // Filtering from July one should return 14 events
-        CTLEventUtils.clearURLParams();
         var q = null;
         var loc = null;
         var audience = null;
@@ -568,8 +571,15 @@ describe('test the filterEvents function', function() {
             loc, audience, startDate, endDate);
         assert(events.length == 14);
     });
-    it('returns the correct number of events when given only an end date', function() {
+
+    it('passing in start date as a URL param returns the correct number of events', function() {
         CTLEventUtils.clearURLParams();
+        CTLEventUtils.updateURL('start', '2017-7-1');
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex);
+        assert(events.length == 14);
+    });
+
+    it('returns the correct number of events when given only an end date', function() {
         var q = null;
         var loc = null;
         var audience = null;
@@ -580,9 +590,16 @@ describe('test the filterEvents function', function() {
             loc, audience, startDate, endDate);
         assert(events.length == 1);
     });
+
+    it('passing in an end date as a URL param returns the correct number of events', function() {
+        CTLEventUtils.clearURLParams();
+        CTLEventUtils.updateURL('end', '2017-7-1');
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex);
+        assert(events.length == 1);
+    });
+
     it('returns the correct number of events when given only a location', function() {
         // try 'Morningside' there are 14 events at MS
-        CTLEventUtils.clearURLParams();
         var q = null;
         var loc = 'Morningside';
         var audience = null;
@@ -593,9 +610,16 @@ describe('test the filterEvents function', function() {
             loc, audience, startDate, endDate);
         assert(events.length == 14);
     });
+
+    it('passing in a location as a URL param returns the correct number of events', function() {
+        CTLEventUtils.clearURLParams();
+        CTLEventUtils.updateURL('loc', 'Morningside');
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex);
+        assert(events.length == 14);
+    });
+
     it('returns the correct number of events when given only a audience', function() {
         // pass in 'Faculty' and you'll get 13 events back
-        CTLEventUtils.clearURLParams();
         var q = null;
         var loc = null;
         var audience = 'Faculty';
@@ -605,5 +629,38 @@ describe('test the filterEvents function', function() {
         var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
             loc, audience, startDate, endDate);
         assert(events.length == 13);
+    });
+
+    it('passing in an audience as a URL param returns the correct number of events', function() {
+        CTLEventUtils.clearURLParams();
+        CTLEventUtils.updateURL('audience', 'Faculty');
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex);
+        assert(events.length == 13);
+    });
+
+    it('passing in multiple values returns the correct event', function() {
+        var q = 'Canvas';
+        var loc = 'Morningside';
+        var audience = 'Faculty';
+        var startDate = new Date(2017, 5, 26, 0, 0);
+        var endDate = new Date(2017, 6, 1, 0, 0);
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 1);
+        assert(events[0].id == 'CAL-00bbdcc7-5cc9b360-015c-cbf3a776-00005b65events%40columbia.edu');
+    });
+
+    it('passing in multiple values as URL params returns the correct event', function() {
+        CTLEventUtils.clearURLParams();
+        CTLEventUtils.updateURL('q', 'Canvas');
+        CTLEventUtils.updateURL('loc', 'Morningside');
+        CTLEventUtils.updateURL('audience', 'Faculty');
+        CTLEventUtils.updateURL('start', '2017-6-26');
+        CTLEventUtils.updateURL('end', '2017-7-1');
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex);
+        assert(events.length == 1);
+        assert(events[0].id == 'CAL-00bbdcc7-5cc9b360-015c-cbf3a776-00005b65events%40columbia.edu');
     });
 });

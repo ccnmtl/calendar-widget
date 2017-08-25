@@ -29,8 +29,11 @@ CTLEventUtils.formatShortDate = function(d) {
  * @return = an array of events that match the query
  */
 CTLEventUtils.searchEvents = function(allEvents, index, q) {
-    var results = index.search(q);
+    if (q == null || q == '') {
+        return allEvents;
+    }
 
+    var results = index.search(q);
     var searchResults = [];
     for (var r in results) {
         var e = allEvents[results[r].ref];
@@ -63,6 +66,7 @@ CTLEventUtils.filterEventsByLocation = function(allEvents, loc) {
 };
 
 CTLEventUtils.filterEventsByAudience = function(allEvents, audience) {
+    // clear this param and set _loc to null
     if (audience === null || audience === 'null') {
         return allEvents;
     }
@@ -451,57 +455,37 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     var _endDate = null;
     var _eventID = null;
 
-    // Assign any URL params first
-    urlParams.forEach(function(el) {
-        switch(el.key) {
-            case 'q':
-                _q = el.value;
-                break;
-            case 'loc':
-                _loc = el.value;
-                break;
-            case 'audience':
-                _audience = el.value;
-                break;
-            case 'start':
-                _startDate = new Date(el.value);
-                break;
-            case 'end':
-                _endDate = new Date(el.value);
-                break;
-            case 'eventID':
-                _eventID = eventID;
-                break;
-        }
-    });
-
-    // Then assign passed in params, if they exist
-    if (q == '') {
-        // clear this param snd set _q to null
-        _q = null;
+    // If there are parameters passed in, assign from the function call,
+    // Else get them from the URL params
+    if (arguments.length > 2) {
+        _q = q || null;
+        _loc = loc || null;
+        _audience = audience || null;
+        _startDate = startDate || null;
+        _endDate = endDate || null;
     } else {
-        _q = q;
-    }
-    if (loc == 'all') {
-        // clear this param and set _loc to null
-        _loc = null;
-    } else if (loc) {
-        _loc = loc;
-    }
-    if (audience == 'all') {
-        // clear this param and set _audience to null
-        _audience = null;
-    } else if (audience) {
-        _audience = audience;
-    }
-    if (startDate) {
-        _startDate = startDate;
-    }
-    if (endDate) {
-        _endDate = endDate;
-    }
-    if (eventID) {
-        _eventID = eventID;
+        urlParams.forEach(function(el) {
+            switch(el.key) {
+                case 'q':
+                    _q = el.value;
+                    break;
+                case 'loc':
+                    _loc = el.value;
+                    break;
+                case 'audience':
+                    _audience = el.value;
+                    break;
+                case 'start':
+                    _startDate = new Date(el.value);
+                    break;
+                case 'end':
+                    _endDate = new Date(el.value);
+                    break;
+                case 'eventID':
+                    _eventID = eventID;
+                    break;
+            }
+        });
     }
 
     // Assign allEvents first so that if all the params are null, all events are returned.
@@ -550,7 +534,7 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     }
 
     // If params were read in from the url, populate the fields
-    if (!q && !loc && !audience && !startDate && !endDate && !eventID) {
+    if (arguments.length === 2) {
         CTLEventUtils.populateURLParams(urlParams);
     }
 
