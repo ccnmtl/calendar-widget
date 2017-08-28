@@ -247,6 +247,12 @@ describe('populateURLParams', function() {
     });
 });
 
+describe('getURLParam', function() {
+    it('passes', function() {
+        assert(true);
+    });
+});
+
 describe('room number string', function() {
     it('checks for null location string', function() {
         var loc = null;

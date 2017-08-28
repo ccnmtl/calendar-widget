@@ -262,6 +262,32 @@ CTLEventUtils.populateURLParams = function(paramsArray) {
 };
 
 /**
+ * This function returns the value from a paramsArray when given a key.
+ * If no value exists it returns null. If the value is a start or end
+ * date, it returns a date object.
+ *
+ * @param paramsArray = An object that contains key value representation
+ *                      of URL params. Call readURLParams to get these values.
+ *
+ * @param param = The key that you wish to fetch from the params array
+ *
+ * @return = The value associated with the key, if it exists
+ */
+CTLEventUtils.getURLParam = function(paramsArray, param) {
+    var value = null;
+    for (var i = 0; i < paramsArray.length; i++) {
+        if (paramsArray[i].key == param) {
+            value = paramsArray[i].value;
+            // if the param is supposed to be a date, instantiate a Date object
+            if (param == 'start' || param == 'end') {
+                value = new Date(value);
+            }
+        }
+    }
+    return value;
+};
+
+/**
  * This function takes in the location string from Bedewords and returns an
  * array with the location and room number broken out.
  *
@@ -464,28 +490,12 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
         _startDate = startDate || null;
         _endDate = endDate || null;
     } else {
-        urlParams.forEach(function(el) {
-            switch(el.key) {
-                case 'q':
-                    _q = el.value;
-                    break;
-                case 'loc':
-                    _loc = el.value;
-                    break;
-                case 'audience':
-                    _audience = el.value;
-                    break;
-                case 'start':
-                    _startDate = new Date(el.value);
-                    break;
-                case 'end':
-                    _endDate = new Date(el.value);
-                    break;
-                case 'eventID':
-                    _eventID = eventID;
-                    break;
-            }
-        });
+        _q = CTLEventUtils.getURLParam(urlParams, 'q');
+        _loc = CTLEventUtils.getURLParam(urlParams, 'loc');
+        _audience = CTLEventUtils.getURLParam(urlParams, 'audience');
+        _startDate = CTLEventUtils.getURLParam(urlParams, 'start');
+        _endDate = CTLEventUtils.getURLParam(urlParams, 'end');
+        _eventID = CTLEventUtils.getURLParam(urlParams, 'eventID');
     }
 
     // Assign allEvents first so that if all the params are null, all events are returned.
@@ -497,7 +507,7 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     } catch (e) {
         // set an alert if the resulting array doesn't pass validation
         if (e instanceof InvalidDateRangeError) {
-            CTLEventUtils.setAlert(InvalidDateRangeError.message);
+            CTLEventUtils.setAlert(e.message);
         }
     }
 
