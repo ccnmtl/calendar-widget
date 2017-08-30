@@ -423,6 +423,7 @@ CTLEventUtils.clearAlerts = function() {
     var alertDiv = document.getElementById('search-results-alerts');
     if (alertDiv) {
         alertDiv.innerHTML = '';
+        $(alertDiv).hide();
     }
 };
 
@@ -433,6 +434,7 @@ CTLEventUtils.setAlert = function(alertText) {
     // If the div exists, append the alert text to it
     var alertDiv = document.getElementById('search-results-alerts');
     if (alertDiv) {
+        $(alertDiv).show();
         // create an alert div and append it to the alert div
         var alertMessage = document.createElement('div');
         alertMessage.innerHTML = alertText;
