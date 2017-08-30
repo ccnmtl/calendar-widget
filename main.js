@@ -102,10 +102,20 @@
         var $searchWrapper = $('#search-wrapper');
         $searchWrapper.on('change keyup', filterEventHandler);
 
-        // Call the filter to get all events on load
+        // Get all the url params and save them somewhere
+        var queryString = window.location.search.replace(/^\?/, '');
+        var urlParams = CTLEventUtils.readURLParams(queryString);
+
+        // Call the filter with the URL params
         var filteredEvents = CTLEventUtils.filterEvents(
             CTLEventsManager.allEvents,
-            index
+            index,
+            CTLEventUtils.getURLParam(urlParams, 'q'),
+            CTLEventUtils.getURLParam(urlParams, 'loc'),
+            CTLEventUtils.getURLParam(urlParams, 'audience'),
+            CTLEventUtils.getURLParam(urlParams, 'start'),
+            CTLEventUtils.getURLParam(urlParams, 'end'),
+            CTLEventUtils.getURLParam(urlParams, 'eventID')
         );
 
         refreshEvents(filteredEvents, 1);

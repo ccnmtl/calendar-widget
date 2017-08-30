@@ -1,4 +1,5 @@
 /* eslint-env node */
+/* global $:true */
 
 var CTLEventUtils = {};
 
@@ -400,10 +401,10 @@ CTLEventUtils.validateFilterValues = function(startDate, endDate) {
 
     // Now check for various conditions, first by making sure that
     // the date objects exist before comparing
-    if (startDate && startDate < todayStartOfDay) {
+    if (startDate && (startDate < todayStartOfDay)) {
         throw new InvalidDateRangeError('The start date entered is prior to today');
     }
-    if (endDate && endDate <= todayEndOfDay) {
+    if (endDate && (endDate <= todayEndOfDay)) {
         throw new InvalidDateRangeError('The end date entered is prior to today');
     }
     if (startDate && endDate) {
@@ -423,7 +424,7 @@ CTLEventUtils.clearAlerts = function() {
     var alertDiv = document.getElementById('search-results-alerts');
     if (alertDiv) {
         alertDiv.innerHTML = '';
-        alertDiv.style.display = 'none';
+        $(alertDiv).hide();
     }
 };
 
@@ -434,7 +435,7 @@ CTLEventUtils.setAlert = function(alertText) {
     // If the div exists, append the alert text to it
     var alertDiv = document.getElementById('search-results-alerts');
     if (alertDiv) {
-        alertDiv.style.display = 'block';
+        $(alertDiv).show();
         // create an alert div and append it to the alert div
         var alertMessage = document.createElement('div');
         alertMessage.innerHTML = alertText;
@@ -460,7 +461,7 @@ CTLEventUtils.setAlert = function(alertText) {
  * Note: this function is intended to accomodate fitering by eventID. This was left out of the
  * signature for now, but will need to be put back to accomodate this in the future.
  */
-CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, startDate, endDate) {
+CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, startDate, endDate, eventID) {
     // Perhaps this function can use keyword arguments in a single object rather than 7 params
     //
     // This function orders the filters from general to specific
@@ -469,46 +470,18 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     // - Audience
     // - Text search
 
-    // Then get all the url params and save them somewhere
-    var queryString = window.location.search.replace(/^\?/, '');
-    var urlParams = CTLEventUtils.readURLParams(queryString);
-    // Then clear them
+    // Clear the URL params
     CTLEventUtils.clearURLParams();
 
     // Clear alerts and URL params
     CTLEventUtils.clearAlerts();
-
-    // Then initialize local vars for each param:
-    var _q = null;
-    var _loc = null;
-    var _audience = null;
-    var _startDate = null;
-    var _endDate = null;
-    var _eventID = null;
-
-    // If there are parameters passed in, assign from the function call,
-    // Else get them from the URL params
-    if (arguments.length > 2) {
-        _q = q || null;
-        _loc = loc || null;
-        _audience = audience || null;
-        _startDate = startDate || null;
-        _endDate = endDate || null;
-    } else {
-        _q = CTLEventUtils.getURLParam(urlParams, 'q');
-        _loc = CTLEventUtils.getURLParam(urlParams, 'loc');
-        _audience = CTLEventUtils.getURLParam(urlParams, 'audience');
-        _startDate = CTLEventUtils.getURLParam(urlParams, 'start');
-        _endDate = CTLEventUtils.getURLParam(urlParams, 'end');
-        _eventID = CTLEventUtils.getURLParam(urlParams, 'eventID');
-    }
 
     // Assign allEvents first so that if all the params are null, all events are returned.
     // This is filtering, not querying.
     var eventsList = allEvents;
     // then validate inputs and set alerts as needed
     try {
-        CTLEventUtils.validateFilterValues(_startDate, _endDate);
+        CTLEventUtils.validateFilterValues(startDate, endDate);
     } catch (e) {
         // set an alert if the resulting array doesn't pass validation
         if (e instanceof InvalidDateRangeError) {
@@ -517,40 +490,35 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     }
 
     // first check that the parameters exist, then call the filters
-    if (_startDate || _endDate) {
-        eventsList = CTLEventUtils.filterEventsByDateRange(eventsList, _startDate, _endDate);
-        if (_startDate) {
-            CTLEventUtils.updateURL('start', CTLEventUtils.formatShortDate(_startDate));
+    if (startDate || endDate) {
+        eventsList = CTLEventUtils.filterEventsByDateRange(eventsList, startDate, endDate);
+        if (startDate) {
+            CTLEventUtils.updateURL('start', CTLEventUtils.formatShortDate(startDate));
         }
-        if (_endDate) {
-            CTLEventUtils.updateURL('end', CTLEventUtils.formatShortDate(_endDate));
+        if (endDate) {
+            CTLEventUtils.updateURL('end', CTLEventUtils.formatShortDate(endDate));
         }
     }
-    if (_loc) {
-        eventsList = CTLEventUtils.filterEventsByLocation(eventsList, _loc);
-        CTLEventUtils.updateURL('loc', _loc);
+    if (loc) {
+        eventsList = CTLEventUtils.filterEventsByLocation(eventsList, loc);
+        CTLEventUtils.updateURL('loc', loc);
     }
-    if (_audience) {
-        eventsList = CTLEventUtils.filterEventsByAudience(eventsList, _audience);
-        CTLEventUtils.updateURL('audience', _audience);
+    if (audience) {
+        eventsList = CTLEventUtils.filterEventsByAudience(eventsList, audience);
+        CTLEventUtils.updateURL('audience', audience);
     }
-    if (_q) {
-        eventsList = CTLEventUtils.searchEvents(eventsList, lunrIndex, _q);
-        CTLEventUtils.updateURL('q', _q);
+    if (q) {
+        eventsList = CTLEventUtils.searchEvents(eventsList, lunrIndex, q);
+        CTLEventUtils.updateURL('q', q);
     }
-    if (_eventID) {
-        eventsList = CTLEventUtils.getEventByID(eventsList, _eventID);
-        CTLEventUtils.updateURL('eventID', _eventID);
+    if (eventID) {
+        eventsList = CTLEventUtils.getEventByID(eventsList, eventID);
+        CTLEventUtils.updateURL('eventID', eventID);
     }
 
     if (eventsList.length == 0) {
         // then set an alert for no results
         CTLEventUtils.setAlert('No events match these filters');
-    }
-
-    // If params were read in from the url, populate the fields
-    if (arguments.length === 2) {
-        CTLEventUtils.populateURLParams(urlParams);
     }
 
     return eventsList;
