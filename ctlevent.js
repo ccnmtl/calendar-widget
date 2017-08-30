@@ -160,7 +160,7 @@ CTLEvent.prototype.render = function() {
     }
     returnString += this.location + '</div>';
 
-    if (this.registration) {
+    if (this.registration && this.status == 'CONFIRMED') {
         returnString += '<div class="event_registration">' +
                         '<a target="_blank"  href="' + this.url + '">' +
                         '<button>Register on CU Events</button></a></div>';
