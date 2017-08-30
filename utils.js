@@ -423,7 +423,7 @@ CTLEventUtils.clearAlerts = function() {
     var alertDiv = document.getElementById('search-results-alerts');
     if (alertDiv) {
         alertDiv.innerHTML = '';
-        $(alertDiv).hide();
+        alertDiv.style.display = 'none';
     }
 };
 
@@ -434,7 +434,7 @@ CTLEventUtils.setAlert = function(alertText) {
     // If the div exists, append the alert text to it
     var alertDiv = document.getElementById('search-results-alerts');
     if (alertDiv) {
-        $(alertDiv).show();
+        alertDiv.style.display = 'block';
         // create an alert div and append it to the alert div
         var alertMessage = document.createElement('div');
         alertMessage.innerHTML = alertText;
@@ -456,8 +456,11 @@ CTLEventUtils.setAlert = function(alertText) {
  * It then validates the values, and sets error messages as needed.
  *
  * If it passes validate, it returns an array of event objects to be rendered on the page.
+ *
+ * Note: this function is intended to accomodate fitering by eventID. This was left out of the
+ * signature for now, but will need to be put back to accomodate this in the future.
  */
-CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, startDate, endDate, eventID) {
+CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, startDate, endDate) {
     // Perhaps this function can use keyword arguments in a single object rather than 7 params
     //
     // This function orders the filters from general to specific
