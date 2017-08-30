@@ -129,9 +129,6 @@
         $el.empty();
         $el.show();
         $el.append('<div class="arrow"></div>');
-        if (q.length > 0) {
-            $el.append($('<h2>Results for: "' + q + '"</h2>'));
-        }
 
         loc = $searchWrapper.find('select#location-dropdown')[0].value;
         audience = $searchWrapper.find('select#audience-dropdown')[0].value;
@@ -143,6 +140,12 @@
             CTLEventUtils.filterEvents(
                 CTLEventsManager.allEvents, index, q, loc, audience,
                 startDate, endDate);
+
+        // if there are results and there exists a text query, display the
+        // searched text
+        if (CTLEventsManager.filteredEvents.length > 0 && q.length > 0) {
+            $el.append($('<h2>Results for: "' + q + '"</h2>'));
+        }
 
         refreshEvents(CTLEventsManager.filteredEvents, 1);
     };
