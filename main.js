@@ -118,6 +118,9 @@
             CTLEventUtils.getURLParam(urlParams, 'eventID')
         );
 
+        // Repopulate the url params, the filter function unsets these
+        CTLEventUtils.populateURLParams(urlParams);
+
         refreshEvents(filteredEvents, 1);
     };
 

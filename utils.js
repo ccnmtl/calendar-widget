@@ -282,6 +282,7 @@ CTLEventUtils.getURLParam = function(paramsArray, param) {
             if (param == 'start' || param == 'end') {
                 value = new Date(value);
             }
+            return value;
         }
     }
     return value;
