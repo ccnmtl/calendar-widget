@@ -129,24 +129,19 @@
         $('#calendarList').empty();
         // Then get the vars ready
         var $searchWrapper = $('#search-wrapper');
-        var q = null;
-        var loc = null;
-        var audience = null;
-        var startDate = null;
-        var endDate = null;
 
         var $el = $('#calendarList');
-        q = $('#q').val();
+        var q = $('#q').val();
 
         // Clear the events box and add results box when there's text to search
         $el.empty();
         $el.show();
         $el.append('<div class="arrow"></div>');
 
-        loc = $searchWrapper.find('select#location-dropdown')[0].value;
-        audience = $searchWrapper.find('select#audience-dropdown')[0].value;
-        startDate = $('input[name="start_date"]').datepicker('getDate');
-        endDate = $('input[name="end_date"]').datepicker('getDate');
+        var loc = $searchWrapper.find('select#location-dropdown')[0].value;
+        var audience = $searchWrapper.find('select#audience-dropdown')[0].value;
+        var startDate = $('input[name="start_date"]').datepicker('getDate');
+        var endDate = $('input[name="end_date"]').datepicker('getDate');
 
         // filter events and refresh events
         CTLEventsManager.filteredEvents =

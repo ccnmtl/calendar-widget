@@ -30,7 +30,7 @@ CTLEventUtils.formatShortDate = function(d) {
  * @return = an array of events that match the query
  */
 CTLEventUtils.searchEvents = function(allEvents, index, q) {
-    if (q == null || q == '') {
+    if (!q) {
         return allEvents;
     }
 
@@ -51,7 +51,7 @@ CTLEventUtils.searchEvents = function(allEvents, index, q) {
  * events that are in the location.
  */
 CTLEventUtils.filterEventsByLocation = function(allEvents, loc) {
-    if (loc === null || loc === 'null') {
+    if (!loc) {
         return allEvents;
     }
 
@@ -67,7 +67,7 @@ CTLEventUtils.filterEventsByLocation = function(allEvents, loc) {
 };
 
 CTLEventUtils.filterEventsByAudience = function(allEvents, audience) {
-    if (audience === null || audience === 'null') {
+    if (!audience) {
         return allEvents;
     }
 
