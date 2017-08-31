@@ -67,7 +67,6 @@ CTLEventUtils.filterEventsByLocation = function(allEvents, loc) {
 };
 
 CTLEventUtils.filterEventsByAudience = function(allEvents, audience) {
-    // clear this param and set _loc to null
     if (audience === null || audience === 'null') {
         return allEvents;
     }
@@ -88,14 +87,14 @@ CTLEventUtils.filterEventsByAudience = function(allEvents, audience) {
  * @param startDate = a date object representing the start date
  * @param endDate = another date object
  *
- * @return an array of event indicies for the filtered date range.
+ * @return an array of event indices for the filtered date range.
  */
 CTLEventUtils.filterEventsByDateRange = function(allEvents, startDate, endDate) {
     if (!startDate && !endDate) {
         return allEvents;
     }
 
-    // Set the time of the end date to 23:59 to accomodate events that take
+    // Set the time of the end date to 23:59 to accommodate events that take
     // place on that day.
     if (endDate) {
         endDate = new Date(endDate);
@@ -289,7 +288,7 @@ CTLEventUtils.getURLParam = function(paramsArray, param) {
 };
 
 /**
- * This function takes in the location string from Bedewords and returns an
+ * This function takes in the location string from Bedeworks and returns an
  * array with the location and room number broken out.
  *
  * @locationString = The location string from Bedeworks
@@ -370,7 +369,7 @@ CTLEventUtils.strToDate = function(dateString) {
  * @param endDate A Date object for the end of the date range
  */
 CTLEventUtils.validateFilterValues = function(startDate, endDate) {
-    // First instantiate copies of startDate and endDate which have thier
+    // First instantiate copies of startDate and endDate which have their
     // time standardized. These objects *should* have these times already
     // set, but this ensures that they do.
     //
@@ -452,14 +451,14 @@ CTLEventUtils.setAlert = function(alertText) {
  * This function takes in all the search params and filters.
  *
  * First it considers the params in the URL and assigns those to variables.
- * Then it considers the variables passed in, which supercede the url params.
+ * Then it considers the variables passed in, which supersede the url params.
  *
  * It then validates the values, and sets error messages as needed.
  *
  * If it passes validate, it returns an array of event objects to be rendered on the page.
  *
- * Note: this function is intended to accomodate fitering by eventID. This was left out of the
- * signature for now, but will need to be put back to accomodate this in the future.
+ * Note: this function is intended to accommodate filtering by eventID. This was left out of the
+ * signature for now, but will need to be put back to accommodate this in the future.
  */
 CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, startDate, endDate, eventID) {
     // Perhaps this function can use keyword arguments in a single object rather than 7 params
