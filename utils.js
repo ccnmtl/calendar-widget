@@ -1,6 +1,16 @@
 /* eslint-env node */
+/* global $:true */
 
 var CTLEventUtils = {};
+
+function InvalidDateRangeError(message) {
+    this.name = 'InvalidDateRangeError';
+    this.message = message || 'An invalid date range was provided';
+    this.stack = (new Error()).stack;
+}
+
+InvalidDateRangeError.prototype = Object.create(Error.prototype);
+InvalidDateRangeError.prototype.constructor = InvalidDateRangeError;
 
 /**
  * Takes a Date object and returns a string in yyyy-mm-dd format.
@@ -20,12 +30,17 @@ CTLEventUtils.formatShortDate = function(d) {
  * @return = an array of events that match the query
  */
 CTLEventUtils.searchEvents = function(allEvents, index, q) {
-    var results = index.search(q);
+    if (!q) {
+        return allEvents;
+    }
 
+    var results = index.search(q);
     var searchResults = [];
     for (var r in results) {
         var e = allEvents[results[r].ref];
-        searchResults.push(e);
+        if (e) {
+            searchResults.push(e);
+        }
     }
 
     return searchResults;
@@ -36,7 +51,7 @@ CTLEventUtils.searchEvents = function(allEvents, index, q) {
  * events that are in the location.
  */
 CTLEventUtils.filterEventsByLocation = function(allEvents, loc) {
-    if (loc === null || loc === 'null') {
+    if (!loc) {
         return allEvents;
     }
 
@@ -52,7 +67,7 @@ CTLEventUtils.filterEventsByLocation = function(allEvents, loc) {
 };
 
 CTLEventUtils.filterEventsByAudience = function(allEvents, audience) {
-    if (audience === null || audience === 'null') {
+    if (!audience) {
         return allEvents;
     }
 
@@ -72,23 +87,18 @@ CTLEventUtils.filterEventsByAudience = function(allEvents, audience) {
  * @param startDate = a date object representing the start date
  * @param endDate = another date object
  *
- * @return an array of event indicies for the filtered date range.
+ * @return an array of event indices for the filtered date range.
  */
 CTLEventUtils.filterEventsByDateRange = function(allEvents, startDate, endDate) {
     if (!startDate && !endDate) {
         return allEvents;
     }
 
-    // Set the time of the end date to 23:59 to accomodate events that take
+    // Set the time of the end date to 23:59 to accommodate events that take
     // place on that day.
     if (endDate) {
         endDate = new Date(endDate);
         endDate.setHours(23, 59);
-    }
-
-    // validate function stub
-    if (!CTLEventUtils.validateFilterValues(startDate, endDate)) {
-        //console.log('Date range fails to validate.');
     }
 
     var events = [];
@@ -194,8 +204,8 @@ CTLEventUtils.readURLParams = function(queryString) {
     params.forEach(function(el) {
         var splitParam = el.split('=');
         paramsArray.push({
-            key: splitParam[0],
-            value: splitParam[1],
+            key: decodeURI(splitParam[0]),
+            value: decodeURI(splitParam[1]),
         });
     });
 
@@ -217,51 +227,6 @@ CTLEventUtils.getEventByID = function(eventsList, eventID) {
         }
     }
     return [];
-};
-
-/**
- * @param paramsArray = The array of objects that are composed of the URL
- * parameter pairs.
- *
- * @param eventsList = An array of event objects to be filtered.
- *
- * @param index = The Lunr JS index object.
- *
- * @return = An array of filtered event objects.
- */
-CTLEventUtils.filterOnURLParams = function(paramsArray, eventsList, index) {
-    if (eventsList.length === 0) {
-        return [];
-    }
-
-    paramsArray.forEach(function(el) {
-        switch(el.key) {
-            case 'q':
-                eventsList = CTLEventUtils.searchEvents(
-                    eventsList, index, el.value);
-                break;
-            case 'loc':
-                eventsList = CTLEventUtils.filterEventsByLocation(
-                    eventsList, el.value);
-                break;
-            case 'audience':
-                eventsList = CTLEventUtils.filterEventsByAudience(
-                    eventsList, el.value);
-                break;
-            case 'start':
-                eventsList = CTLEventUtils.filterEventsByDateRange(
-                    eventsList, new Date(el.value), null);
-                break;
-            case 'end':
-                eventsList = CTLEventUtils.filterEventsByDateRange(
-                    eventsList, null, new Date(el.value));
-                break;
-            case 'eventID':
-                eventsList = CTLEventUtils.getEventByID(eventsList, el.value);
-                break;
-        }
-    });
-    return eventsList;
 };
 
 /**
@@ -297,7 +262,34 @@ CTLEventUtils.populateURLParams = function(paramsArray) {
 };
 
 /**
- * This function takes in the location string from Bedewords and returns an
+ * This function returns the value from a paramsArray when given a key.
+ * If no value exists it returns null. If the value is a start or end
+ * date, it returns a date object.
+ *
+ * @param paramsArray = An object that contains key value representation
+ *                      of URL params. Call readURLParams to get these values.
+ *
+ * @param param = The key that you wish to fetch from the params array
+ *
+ * @return = The value associated with the key, if it exists
+ */
+CTLEventUtils.getURLParam = function(paramsArray, param) {
+    var value = null;
+    for (var i = 0; i < paramsArray.length; i++) {
+        if (paramsArray[i].key == param) {
+            value = paramsArray[i].value;
+            // if the param is supposed to be a date, instantiate a Date object
+            if (param == 'start' || param == 'end') {
+                value = new Date(value);
+            }
+            return value;
+        }
+    }
+    return value;
+};
+
+/**
+ * This function takes in the location string from Bedeworks and returns an
  * array with the location and room number broken out.
  *
  * @locationString = The location string from Bedeworks
@@ -368,17 +360,17 @@ CTLEventUtils.strToDate = function(dateString) {
 
 /**
  * This function validates the values input into the search filters
- * It does:
- * - checks that the start date is greater than or equal to today's date
- * - checks that the end date is greater than or equal to today's date
- * - checks that the end date is greater than or equal to the start date
+ * It checks:
+ * - that the start date is greater than or equal to today's date
+ * - that the end date is greater than or equal to today's date
+ * - that the end date is greater than or equal to the start date
  *
  * @param startDate A Date object for the start of the date range
  *
  * @param endDate A Date object for the end of the date range
  */
 CTLEventUtils.validateFilterValues = function(startDate, endDate) {
-    // First instantiate copies of startDate and endDate which have thier
+    // First instantiate copies of startDate and endDate which have their
     // time standardized. These objects *should* have these times already
     // set, but this ensures that they do.
     //
@@ -409,19 +401,127 @@ CTLEventUtils.validateFilterValues = function(startDate, endDate) {
 
     // Now check for various conditions, first by making sure that
     // the date objects exist before comparing
-    if (startDate && startDate < todayStartOfDay) {
-        return false;
+    if (startDate && (startDate < todayStartOfDay)) {
+        throw new InvalidDateRangeError('The start date entered is prior to today');
     }
-    if (endDate && endDate <= todayEndOfDay) {
-        return false;
+    if (endDate && (endDate <= todayEndOfDay)) {
+        throw new InvalidDateRangeError('The end date entered is prior to today');
     }
     if (startDate && endDate) {
         if (endDate < startDate) {
-            return false;
+            throw new InvalidDateRangeError('The end date entered is prior to the start date');
         }
     }
 
     return true;
+};
+
+/**
+ * Clear alerts set on page
+ */
+CTLEventUtils.clearAlerts = function() {
+    // If the div exists, clear it
+    var alertDiv = document.getElementById('search-results-alerts');
+    if (alertDiv) {
+        alertDiv.innerHTML = '';
+        $(alertDiv).hide();
+    }
+};
+
+/**
+ * Sets an alert message
+ */
+CTLEventUtils.setAlert = function(alertText) {
+    // If the div exists, append the alert text to it
+    var alertDiv = document.getElementById('search-results-alerts');
+    if (alertDiv) {
+        $(alertDiv).show();
+        // create an alert div and append it to the alert div
+        var alertMessage = document.createElement('div');
+        alertMessage.innerHTML = alertText;
+        alertMessage.className = 'search-alert';
+
+        alertDiv.appendChild(alertMessage);
+    }
+};
+
+/**
+ * This is general function for filtering events. It validates the parameters, handles error
+ * messages, and
+ *
+ * This function takes in all the search params and filters.
+ *
+ * First it considers the params in the URL and assigns those to variables.
+ * Then it considers the variables passed in, which supersede the url params.
+ *
+ * It then validates the values, and sets error messages as needed.
+ *
+ * If it passes validate, it returns an array of event objects to be rendered on the page.
+ *
+ * Note: this function is intended to accommodate filtering by eventID. This was left out of the
+ * signature for now, but will need to be put back to accommodate this in the future.
+ */
+CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, startDate, endDate, eventID) {
+    // Perhaps this function can use keyword arguments in a single object rather than 7 params
+    //
+    // This function orders the filters from general to specific
+    // - Date
+    // - Location
+    // - Audience
+    // - Text search
+
+    // Clear the URL params
+    CTLEventUtils.clearURLParams();
+
+    // Clear alerts and URL params
+    CTLEventUtils.clearAlerts();
+
+    // Assign allEvents first so that if all the params are null, all events are returned.
+    // This is filtering, not querying.
+    var eventsList = allEvents;
+    // then validate inputs and set alerts as needed
+    try {
+        CTLEventUtils.validateFilterValues(startDate, endDate);
+    } catch (e) {
+        // set an alert if the resulting array doesn't pass validation
+        if (e instanceof InvalidDateRangeError) {
+            CTLEventUtils.setAlert(e.message);
+        }
+    }
+
+    // first check that the parameters exist, then call the filters
+    if (startDate || endDate) {
+        eventsList = CTLEventUtils.filterEventsByDateRange(eventsList, startDate, endDate);
+        if (startDate) {
+            CTLEventUtils.updateURL('start', CTLEventUtils.formatShortDate(startDate));
+        }
+        if (endDate) {
+            CTLEventUtils.updateURL('end', CTLEventUtils.formatShortDate(endDate));
+        }
+    }
+    if (loc) {
+        eventsList = CTLEventUtils.filterEventsByLocation(eventsList, loc);
+        CTLEventUtils.updateURL('loc', loc);
+    }
+    if (audience) {
+        eventsList = CTLEventUtils.filterEventsByAudience(eventsList, audience);
+        CTLEventUtils.updateURL('audience', audience);
+    }
+    if (q) {
+        eventsList = CTLEventUtils.searchEvents(eventsList, lunrIndex, q);
+        CTLEventUtils.updateURL('q', q);
+    }
+    if (eventID) {
+        eventsList = CTLEventUtils.getEventByID(eventsList, eventID);
+        CTLEventUtils.updateURL('eventID', eventID);
+    }
+
+    if (eventsList.length == 0) {
+        // then set an alert for no results
+        CTLEventUtils.setAlert('No events match these filters');
+    }
+
+    return eventsList;
 };
 
 if (typeof module !== 'undefined') {

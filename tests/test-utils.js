@@ -125,44 +125,6 @@ describe('readURLParams', function() {
     });
 });
 
-describe('filterOnURLParams', function() {
-    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
-    var events = json.bwEventList.events;
-
-    var index = lunr(function() {
-        this.ref('id');
-        this.field('title', {boost: 10});
-        this.field('description', {boost: 5});
-    });
-
-    var pastDate = new Date(1999, 11, 31, 23, 59);
-    var allEvents = CTLEventsManager.loadEvents(events, pastDate);
-
-    it('returns an array of event objects given params', function() {
-        var paramsArray = CTLEventUtils.readURLParams('q=video');
-        var filteredArray = CTLEventUtils.filterOnURLParams(paramsArray,
-            allEvents, index);
-        var searchedArray = CTLEventUtils.searchEvents(allEvents,
-            index, 'video');
-        assert.deepEqual(filteredArray, searchedArray);
-    });
-
-    it('returns a list of all events when given garbage params', function() {
-        var paramsArray = CTLEventUtils.readURLParams('foo=bar');
-        var filteredArray = CTLEventUtils.filterOnURLParams(paramsArray,
-            allEvents, index);
-        assert.deepEqual(filteredArray, allEvents);
-    });
-
-    it('returns list of all events given an empty params array', function() {
-        var paramsArray = CTLEventUtils.readURLParams('');
-        var filteredArray = CTLEventUtils.filterOnURLParams(paramsArray,
-            allEvents, index);
-        assert.deepEqual(filteredArray, allEvents);
-    });
-
-});
-
 describe('populateURLParams', function() {
     var searchForm = '<div class="search-wrapper">' +
         '<form role="search">' +
@@ -282,6 +244,12 @@ describe('populateURLParams', function() {
         assert.equal(document.getElementsByName('start_date')[0].value, '');
         assert.equal(document.getElementsByName('end_date')[0].value, '');
 
+    });
+});
+
+describe('getURLParam', function() {
+    it('passes', function() {
+        assert(true);
     });
 });
 
@@ -494,7 +462,8 @@ describe('validate filter values', function() {
     tomorrow.setDate(today.getDate() + 1);
 
     it('returns false if the start date is before today', function() {
-        assert(!CTLEventUtils.validateFilterValues(yesterday, today));
+        assert.throws(function() {CTLEventUtils.validateFilterValues(yesterday, today);},
+            'The start date entered is prior to today');
     });
     it('returns true if the start date is today', function() {
         assert(CTLEventUtils.validateFilterValues(today, null));
@@ -503,12 +472,153 @@ describe('validate filter values', function() {
         assert(CTLEventUtils.validateFilterValues(tomorrow, null));
     });
     it('returns false if the start date is after the end date', function() {
-        assert(!CTLEventUtils.validateFilterValues(tomorrow, today));
+        assert.throws(function () {CTLEventUtils.validateFilterValues(tomorrow, today);},
+            'The end date entered is prior to the start date');
     });
     it('returns true if the start date is before the end date', function() {
         assert(CTLEventUtils.validateFilterValues(today, tomorrow));
     });
     it('returns true if only and end date in the future is passed', function() {
         assert(CTLEventUtils.validateFilterValues(null, tomorrow));
+    });
+});
+
+describe('test the filterEvents function', function() {
+    // because this function calls utility functions that are already tested
+    // what needs to be tested for?
+    //
+    // It needs to return an array of events sorted in date order, or an empty array
+
+    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
+    var events = json.bwEventList.events;
+    var pastDate = new Date(1999, 11, 31, 23, 59);
+    var allEvents = CTLEventsManager.loadEvents(events, pastDate);
+
+    document.body.innerHTML = '<div id="search-results-alerts"></div>';
+
+    var lunrIndex = lunr(function() {
+        this.ref('id');
+        this.field('title');
+        this.field('description');
+        var self = this;
+        var i = 0;
+        allEvents.forEach(function(e) {
+            // build lunr index
+            self.add({
+                id: i++,
+                title: e.title,
+                description: e.description
+            });
+        });
+    });
+
+
+    it('returns a sorted array of all events', function() {
+        var q = '';
+        var loc = '';
+        var audience = '';
+        var startDate = new Date(2017, 0, 1, 0, 0);
+        var endDate = new Date(2018, 0, 1, 0, 0);
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+
+        for (var i = 0; i == events.length -1; i++) {
+            assert(events[i] < events[i + 1]);
+        }
+    });
+    it('returns an array of length 0', function() {
+        var q = 'foo';
+        var loc = '';
+        var audience = '';
+        var startDate = new Date(2017, 0, 1, 0, 0);
+        var endDate = new Date(2018, 0, 1, 0, 0);
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 0);
+    });
+
+    it('searching for just "Canvas" returns 11 items', function() {
+        var q = 'Canvas';
+        var loc = null;
+        var audience = null;
+        var startDate = null;
+        var endDate= null;
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 11);
+    });
+
+    it('returns all events when given undefined search parameters', function() {
+        CTLEventUtils.clearURLParams();
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex);
+        assert(events.length == 15);
+    });
+
+    it('returns the correct number of events when given only a start date', function() {
+        // There's only one event in June, on June 27th
+        // Filtering from July one should return 14 events
+        var q = null;
+        var loc = null;
+        var audience = null;
+        var startDate = new Date(2017, 6, 1, 0, 0);
+        var endDate = null;
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 14);
+    });
+
+    it('returns the correct number of events when given only an end date', function() {
+        var q = null;
+        var loc = null;
+        var audience = null;
+        var startDate = null;
+        var endDate = new Date(2017, 6, 1, 0, 0);
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 1);
+    });
+
+    it('returns the correct number of events when given only a location', function() {
+        // try 'Morningside' there are 14 events at MS
+        var q = null;
+        var loc = 'Morningside';
+        var audience = null;
+        var startDate = null;
+        var endDate = null;
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 14);
+    });
+
+    it('returns the correct number of events when given only a audience', function() {
+        // pass in 'Faculty' and you'll get 13 events back
+        var q = null;
+        var loc = null;
+        var audience = 'Faculty';
+        var startDate = null;
+        var endDate = null;
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 13);
+    });
+
+    it('passing in multiple values returns the correct event', function() {
+        var q = 'Canvas';
+        var loc = 'Morningside';
+        var audience = 'Faculty';
+        var startDate = new Date(2017, 5, 26, 0, 0);
+        var endDate = new Date(2017, 6, 1, 0, 0);
+
+        var events = CTLEventUtils.filterEvents(allEvents, lunrIndex, q,
+            loc, audience, startDate, endDate);
+        assert(events.length == 1);
+        assert(events[0].id == 'CAL-00bbdcc7-5cc9b360-015c-cbf3a776-00005b65events%40columbia.edu');
     });
 });

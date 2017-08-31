@@ -7,6 +7,18 @@
 	height: 24px;
 }
 
+#search-results-alerts
+{
+    background-color: #fffeac;
+    padding: 0.75em;
+    margin: 0.5em 0.5em 0.5em 0em;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border: 1px solid #eee;
+    color: #a85605;
+}
+
 .search-wrapper select { height: 24px; }
 
 .event
