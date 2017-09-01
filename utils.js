@@ -490,6 +490,10 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     }
 
     // first check that the parameters exist, then call the filters
+    if (q) {
+        eventsList = CTLEventUtils.searchEvents(eventsList, lunrIndex, q);
+        CTLEventUtils.updateURL('q', q);
+    }
     if (startDate || endDate) {
         eventsList = CTLEventUtils.filterEventsByDateRange(eventsList, startDate, endDate);
         if (startDate) {
@@ -506,10 +510,6 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     if (audience) {
         eventsList = CTLEventUtils.filterEventsByAudience(eventsList, audience);
         CTLEventUtils.updateURL('audience', audience);
-    }
-    if (q) {
-        eventsList = CTLEventUtils.searchEvents(eventsList, lunrIndex, q);
-        CTLEventUtils.updateURL('q', q);
     }
     if (eventID) {
         eventsList = CTLEventUtils.getEventByID(eventsList, eventID);
