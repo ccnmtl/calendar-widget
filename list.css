@@ -97,15 +97,6 @@ body.et-pb-preview #main-content .container ul
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { background-color: #eee!important; }
 
-.ctl-theme .current
-{
-	background-color: #75AADB!important;
-	color: white;
-	border-color: #444;
-	cursor: default;
-	border-radius: 5px;
-}
-
 form, label, input, select
 {
 	display: block;
