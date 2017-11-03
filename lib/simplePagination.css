@@ -56,9 +56,30 @@ span.ellipse.clickable {
     background: #eee;
 }
 
-.ctl-theme .current {
+.ctl-theme li span:hover {
+    text-decoration: underline;
+}
+
+.ctl-theme li.disabled span:hover {
+    text-decoration: none;
+}
+
+.ctl-theme li.active span:hover {
+    text-decoration: none;
+}
+
+.ctl-theme ul li:first-child {
+    display: none;
+}
+
+.ctl-theme ul li:last-child {
+    display: none;
+}
+
+.ctl-theme li.active .current {
     background-color: black;
     color: white;
+    font-weight: bold;
     border-color: #444;
     cursor: default;
 }
