@@ -1,9 +1,13 @@
 /* eslint-env node */
 /* global jQuery */
 
-if (typeof require === 'function') {
-    var CTLEvent = require('./ctlevent.js').CTLEvent;
-}
+let jQuery = require('jquery');
+
+//if (typeof require === 'function') {
+    //var CTLEvent = require('./ctlevent.js').CTLEvent;
+//}
+
+import { CTLEvent } from './ctlevent.js'
 
 var CTLEventsManager = {};
 
@@ -82,6 +86,8 @@ CTLEventsManager.renderAudienceDropdown = function() {
     return $container;
 };
 
-if (typeof module !== 'undefined') {
-    module.exports = { CTLEventsManager: CTLEventsManager };
-}
+//if (typeof module !== 'undefined') {
+    //module.exports = { CTLEventsManager: CTLEventsManager };
+//}
+
+export { CTLEventsManager };
