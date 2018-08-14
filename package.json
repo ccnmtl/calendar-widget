@@ -29,7 +29,9 @@
     "eslint": "eslint *.js tests/*.js",
     "test": "mocha tests/",
     "dev": "webpack-dev-server --open --mode production",
-    "build": "webpack"
+    "build": "webpack",
+    "stage": "webpack --env.stage",
+    "prod": "webpack --env.production"
   },
   "repository": {
     "type": "git",
