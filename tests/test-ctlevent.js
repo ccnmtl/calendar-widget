@@ -2,8 +2,8 @@
 /* eslint-env mocha */
 
 var assert = require('assert');
-var CTLEvent = require('../ctlevent.js').CTLEvent;
-var CTLEventUtils = require('../utils.js').CTLEventUtils;
+var CTLEvent = require('../src/js/ctlevent.js').CTLEvent;
+var CTLEventUtils = require('../src/js/utils.js').CTLEventUtils;
 var fs = require('fs');
 
 describe('CTLEvent', function() {

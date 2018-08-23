@@ -4,8 +4,8 @@ var config = {url: 'http://www.ctl.columbia.edu/events'};
 require('jsdom-global')(undefined, config);
 
 var assert = require('assert');
-var CTLEventUtils = require('../utils.js').CTLEventUtils;
-var CTLEventsManager = require('../events-manager.js').CTLEventsManager;
+var CTLEventUtils = require('../src/js/utils.js').CTLEventUtils;
+var CTLEventsManager = require('../src/js/events-manager.js').CTLEventsManager;
 var fs = require('fs');
 var lunr = require('lunr');
 
