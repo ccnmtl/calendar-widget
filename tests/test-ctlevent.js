@@ -4,10 +4,9 @@
 var assert = require('assert');
 var CTLEvent = require('../src/js/ctlevent.js').CTLEvent;
 var CTLEventUtils = require('../src/js/utils.js').CTLEventUtils;
-var fs = require('fs');
+import json from './data.json';
 
 describe('CTLEvent', function() {
-    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
 
     describe('constructor', function() {
