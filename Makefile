@@ -1,3 +1,4 @@
+# See README for explanation of Make targets
 NODE_MODULES ?= ./node_modules
 JS_SENTINAL ?= $(NODE_MODULES)/sentinal
 

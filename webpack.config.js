@@ -25,9 +25,9 @@ module.exports = function (env) {
                             options: {
                                 disable: true,
                                 publicPath: (() => {
-                                    if (env.production) return 'https://www1.columbia.edu/sec/ccnmtl/remote/edblogs_scripts/ctl-cal-prod/dist/'
+                                    if (typeof env === "undefined") return 'dist/'
+                                    else if (env.production) return 'https://www1.columbia.edu/sec/ccnmtl/remote/edblogs_scripts/ctl-cal-prod/dist/'
                                     else if (env.stage) return 'https://www1.columbia.edu/sec/ccnmtl/remote/edblogs_scripts/ctl-cal-stage/dist/'
-                                    else return 'dist/'
                                 })()
                             }
                         }
