@@ -176,90 +176,53 @@ import '../css/list.css';
 
     $(document).ready(function() {
         var boilerplate =
-
             '<div id=loader-animation-container>' +
-
             '<div class="loader-inner ball-pulse"><div></div><div></div><div></div></div>' +
-
             '</div>' +
-
             '<div id="search-wrapper">' +
-
             '<div class="search-row" id="search-term">' +
-
             '<div class="search-label">Term</div>' +
 
-
             '<form class="search-container" role="search">' +
-
             '<input id="q" type="search" required="" class="search-box" ' +
-
             'placeholder="Search for...">' +
-
             '<button class="close-icon" id="clear-search" type="reset">' +
-
             'Reset</button>' +
-
             '</form>' +
-
             '</div>' +
-
 
 
             '<div class="search-row" id="search-location">' +
-
             '<div class="search-label">Location</div>' +
-
             '<div id="location-dropdown-container"></div>' +
-
             '</div>' +
-
-
 
             '<div class="search-row" id="search-audience">' +
-
             '<div class="search-label">Audience</div>' +
-
             '<div id="audience-dropdown-container"></div>' +
-
             '</div>' +
 
-
-
             '<div class="search-row" id="search-from">' +
-
             '<div class="search-label">From</div>' +
 
             '<label id="from">' +
             '<input name="start_date" placeholder="Start Date"/>' +
             '</label>' +
-
             '</div>' +
 
-
-
             '<div class="search-row" id="search-to">' +
-
-             '<div class="search-label">To</div>' +
+            '<div class="search-label">To</div>' +
 
             '<label id="to"> ' +
             '<input name="end_date" placeholder="End Date" />' +
             '</label>' +
-
             '</div>' +
-
             '</div>' +
 
             '<div style="clear: both;"></div>' +
-
             '<div id="search-results-alerts"></div>' +
-
             '<div id="search-results"></div>' +
-
-
             '<div id="calendarList"></div>' +
-
-
             '<div class="pagination-holder"></div>';
 
         $('#calendar-wrapper').append(boilerplate);

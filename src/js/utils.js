@@ -523,8 +523,4 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     return eventsList;
 };
 
-//if (typeof module !== 'undefined') {
-    //module.exports = { CTLEventUtils: CTLEventUtils };
-//}
-
 export { CTLEventUtils };
