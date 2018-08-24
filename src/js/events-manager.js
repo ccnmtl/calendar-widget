@@ -1,10 +1,7 @@
 /* eslint-env node */
 /* global jQuery */
-
-if (typeof require === 'function') {
-    var CTLEvent = require('./ctlevent.js').CTLEvent;
-}
-
+let jQuery = require('jquery');
+import { CTLEvent } from './ctlevent.js'
 var CTLEventsManager = {};
 
 CTLEventsManager.allEvents = [];
@@ -82,6 +79,4 @@ CTLEventsManager.renderAudienceDropdown = function() {
     return $container;
 };
 
-if (typeof module !== 'undefined') {
-    module.exports = { CTLEventsManager: CTLEventsManager };
-}
+export { CTLEventsManager };

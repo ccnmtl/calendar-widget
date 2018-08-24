@@ -4,13 +4,12 @@ var config = {url: 'http://www.ctl.columbia.edu/events'};
 require('jsdom-global')(undefined, config);
 
 var assert = require('assert');
-var CTLEventUtils = require('../utils.js').CTLEventUtils;
-var CTLEventsManager = require('../events-manager.js').CTLEventsManager;
-var fs = require('fs');
+var CTLEventUtils = require('../src/js/utils.js').CTLEventUtils;
+var CTLEventsManager = require('../src/js/events-manager.js').CTLEventsManager;
 var lunr = require('lunr');
+import json from './data.json';
 
 describe('searchEvents', function() {
-    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
 
     var pastDate = new Date(1999, 11, 31, 23, 59);
@@ -281,7 +280,6 @@ describe('room number string', function() {
 });
 
 describe('get event by ID', function() {
-    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
     var pastDate = new Date(1999, 11, 31, 23, 59);
     var allEvents = CTLEventsManager.loadEvents(events, pastDate);
@@ -310,7 +308,6 @@ describe('get event by ID', function() {
 });
 
 describe('sort events by date and time', function() {
-    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
     var pastDate = new Date(1999, 11, 31, 23, 59);
     var allEvents = CTLEventsManager.loadEvents(events, pastDate);
@@ -345,7 +342,6 @@ describe('take a string and convert it to a date object', function() {
 
 // This test checks CTLEventUtils.filterEventsByLocation
 describe('', function() {
-    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
     var pastDate = new Date(1999, 11, 31, 23, 59);
     var allEvents = CTLEventsManager.loadEvents(events, pastDate);
@@ -371,7 +367,6 @@ describe('', function() {
 
 // This test checks CTLEventUtils.filterEventsByAudience
 describe('filter events by audience works as expected', function() {
-    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
     var pastDate = new Date(1999, 11, 31, 23, 59);
     var allEvents = CTLEventsManager.loadEvents(events, pastDate);
@@ -403,7 +398,6 @@ describe('filter events by audience works as expected', function() {
 // This test is for CTLEventUtils.filterEventsByDateRange
 describe('filter events by date range works as expected', function() {
     // Set up the all events array
-    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
     var pastDate = new Date(1999, 11, 31, 23, 59);
     var allEvents = CTLEventsManager.loadEvents(events, pastDate);
@@ -439,14 +433,12 @@ describe('filter events by date range works as expected', function() {
 // This functionality isn't meant to filter events for the user.
 describe('it filters out events older than a given date', function() {
     it('returns all events when filtered on a date before any in the test set', function() {
-        var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
         var events = json.bwEventList.events;
         var pastDate = new Date(1999, 11, 31, 23, 59);
         var allEvents = CTLEventsManager.loadEvents(events, pastDate);
         assert.equal(allEvents.length, 15);
     });
     it('returns no events when filtered on a date far far in the future', function() {
-        var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
         var events = json.bwEventList.events;
         var futureDate = new Date(2999, 11, 31, 23, 59);
         var allEvents = CTLEventsManager.loadEvents(events, futureDate);
@@ -489,7 +481,6 @@ describe('test the filterEvents function', function() {
     //
     // It needs to return an array of events sorted in date order, or an empty array
 
-    var json = JSON.parse(fs.readFileSync('./tests/data.json', 'utf8'));
     var events = json.bwEventList.events;
     var pastDate = new Date(1999, 11, 31, 23, 59);
     var allEvents = CTLEventsManager.loadEvents(events, pastDate);

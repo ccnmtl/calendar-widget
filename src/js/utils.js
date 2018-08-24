@@ -1,5 +1,4 @@
 /* eslint-env node */
-/* global $:true */
 
 var CTLEventUtils = {};
 
@@ -424,7 +423,7 @@ CTLEventUtils.clearAlerts = function() {
     var alertDiv = document.getElementById('search-results-alerts');
     if (alertDiv) {
         alertDiv.innerHTML = '';
-        $(alertDiv).hide();
+        alertDiv.style.display = 'none';
     }
 };
 
@@ -435,7 +434,7 @@ CTLEventUtils.setAlert = function(alertText) {
     // If the div exists, append the alert text to it
     var alertDiv = document.getElementById('search-results-alerts');
     if (alertDiv) {
-        $(alertDiv).show();
+        alertDiv.style.display = '';
         // create an alert div and append it to the alert div
         var alertMessage = document.createElement('div');
         alertMessage.innerHTML = alertText;
@@ -524,6 +523,4 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     return eventsList;
 };
 
-if (typeof module !== 'undefined') {
-    module.exports = { CTLEventUtils: CTLEventUtils };
-}
+export { CTLEventUtils };

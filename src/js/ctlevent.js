@@ -1,9 +1,7 @@
 /* eslint-env es6 */
 /* eslint-env node */
-
-if (typeof require === 'function') {
-    var CTLEventUtils = require('./utils.js').CTLEventUtils;
-}
+import { CTLEventUtils } from './utils.js';
+import { CTLEventsManager } from './events-manager.js';
 
 var propertiesString = function(properties) {
     var propString = '';
@@ -194,6 +192,4 @@ CTLEvent.prototype.renderHomepageEvent = function() {
     return returnString;
 };
 
-if (typeof module !== 'undefined') {
-    module.exports = { CTLEvent: CTLEvent };
-}
+export { CTLEvent };

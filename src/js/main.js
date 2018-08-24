@@ -2,6 +2,22 @@
 /* global lunr */
 /* global CTLEventUtils, CTLEventsManager */
 
+let jQuery = require('jquery');
+import 'jquery-ui-dist/jquery-ui.min.js';
+import 'jquery-ui-dist/jquery-ui.min.css';
+require('imports-loader?jQuery=jquery!../../lib/jquery.simplePagination.js');
+import '../../lib/simplePagination.css';
+import '../../lib/loaders.min.css';
+
+import * as lunr from 'lunr';
+
+import { CTLEvent } from './ctlevent.js';
+import { CTLEventUtils } from './utils.js';
+import { CTLEventsManager } from './events-manager.js';
+
+import '../css/list.css';
+
+
 (function($) {
 
     var ITEMS_ON_PAGE = 10;
@@ -40,11 +56,11 @@
      * the given page number.
      */
     var renderEvents = function(eArray, pageNum) {
-        var $container = jQuery('<div class="ctl-events" />');
+        var $container = $('<div class="ctl-events" />');
         var start = (pageNum - 1) * ITEMS_ON_PAGE;
         var end = start + ITEMS_ON_PAGE;
         for (var i = start; i < end && i < eArray.length; i++) {
-            $container.append(jQuery(
+            $container.append($(
                 eArray[i].render()
             ));
         }
@@ -58,8 +74,8 @@
         // Sort by date first to ensure the correct order
         eArray = CTLEventUtils.sortEventsByDate(eArray);
         $('.pagination-holder').pagination('updateItems', eArray.length);
-        jQuery('.ctl-events').remove();
-        jQuery('#calendarList').append(renderEvents(eArray, pageNum));
+        $('.ctl-events').remove();
+        $('#calendarList').append(renderEvents(eArray, pageNum));
     };
 
 
@@ -160,95 +176,58 @@
 
     $(document).ready(function() {
         var boilerplate =
-
             '<div id=loader-animation-container>' +
-
             '<div class="loader-inner ball-pulse"><div></div><div></div><div></div></div>' +
-
             '</div>' +
-
             '<div id="search-wrapper">' +
-
             '<div class="search-row" id="search-term">' +
-
             '<div class="search-label">Term</div>' +
 
-
             '<form class="search-container" role="search">' +
-
             '<input id="q" type="search" required="" class="search-box" ' +
-
             'placeholder="Search for...">' +
-
             '<button class="close-icon" id="clear-search" type="reset">' +
-
             'Reset</button>' +
-
             '</form>' +
-
             '</div>' +
-
 
 
             '<div class="search-row" id="search-location">' +
-
             '<div class="search-label">Location</div>' +
-
             '<div id="location-dropdown-container"></div>' +
-
             '</div>' +
-
-
 
             '<div class="search-row" id="search-audience">' +
-
             '<div class="search-label">Audience</div>' +
-
             '<div id="audience-dropdown-container"></div>' +
-
             '</div>' +
 
-
-
             '<div class="search-row" id="search-from">' +
-
             '<div class="search-label">From</div>' +
 
             '<label id="from">' +
             '<input name="start_date" placeholder="Start Date"/>' +
             '</label>' +
-
             '</div>' +
 
-
-
             '<div class="search-row" id="search-to">' +
-
-             '<div class="search-label">To</div>' +
+            '<div class="search-label">To</div>' +
 
             '<label id="to"> ' +
             '<input name="end_date" placeholder="End Date" />' +
             '</label>' +
-
             '</div>' +
-
             '</div>' +
 
             '<div style="clear: both;"></div>' +
-
             '<div id="search-results-alerts"></div>' +
-
             '<div id="search-results"></div>' +
-
-
             '<div id="calendarList"></div>' +
-
-
             '<div class="pagination-holder"></div>';
 
-        jQuery('#calendar-wrapper').append(boilerplate);
+        $('#calendar-wrapper').append(boilerplate);
 
-        jQuery.ajax({
+        $.ajax({
             url: 'https://calendar.ctl.columbia.edu/calendar.json',
             type: 'GET',
             dataType: 'json',
