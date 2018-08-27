@@ -1,5 +1,9 @@
 /* global jQuery */
 /* global CTLEventsManager */
+let jQuery = require('jquery');
+import { CTLEvent } from './ctlevent.js';
+import { CTLEventUtils } from './utils.js';
+import { CTLEventsManager } from './events-manager.js';
 
 (function($) {
 

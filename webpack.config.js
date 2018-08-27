@@ -3,10 +3,13 @@ const path = require('path');
 
 module.exports = function (env) {
     return {
-        entry: './src/js/main.js',
+        entry: {
+            main: './src/js/main.js',
+            homepage: './src/js/homepage.js'
+        },
         output: {
-            filename: 'bundle.js',
-            path: path.resolve(__dirname, 'dist')
+            path: path.resolve(__dirname, 'dist'),
+            filename: '[name].bundle.js',
         },
         module: {
             rules: [
