@@ -455,7 +455,7 @@ describe('validate filter values', function() {
 
     it('returns false if the start date is before today', function() {
         assert.throws(function() {CTLEventUtils.validateFilterValues(yesterday, today);},
-            'The start date entered is prior to today');
+            'date entered is prior to the current date (i.e today)');
     });
     it('returns true if the start date is today', function() {
         assert(CTLEventUtils.validateFilterValues(today, null));
