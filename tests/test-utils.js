@@ -465,7 +465,10 @@ describe('validate filter values', function() {
     });
     it('returns false if the start date is after the end date', function() {
         assert.throws(function () {CTLEventUtils.validateFilterValues(tomorrow, today);},
-            'The end date entered is prior to the start date');
+            'The end date entered is prior to the start');
+    });
+    it('returns true when today is selected as the start and end date', function() {
+        assert(CTLEventUtils.validateFilterValues(today, today));
     });
     it('returns true if the start date is before the end date', function() {
         assert(CTLEventUtils.validateFilterValues(today, tomorrow));
