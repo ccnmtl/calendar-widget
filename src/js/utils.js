@@ -517,7 +517,7 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
 
     if (eventsList.length == 0) {
         // then set an alert for no results
-        CTLEventUtils.setAlert('No events match these filters');
+        CTLEventUtils.setAlert('No upcoming events match these filters. Please check your search terms or check back soon for an updated schedule.');
     }
 
     return eventsList;
