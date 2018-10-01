@@ -403,7 +403,7 @@ CTLEventUtils.validateFilterValues = function(startDate, endDate) {
     if (startDate && (startDate < todayStartOfDay)) {
         throw new InvalidDateRangeError('The start date entered is prior to today');
     }
-    if (endDate && (endDate <= todayEndOfDay)) {
+    if (endDate && (endDate < todayEndOfDay)) {
         throw new InvalidDateRangeError('The end date entered is prior to today');
     }
     if (startDate && endDate) {
