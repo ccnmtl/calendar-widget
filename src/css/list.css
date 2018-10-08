@@ -79,12 +79,6 @@ div.event_registration button {
 
 .ball-pulse > div { background-color: #666; }
 
-button#clear-search
-{
-	background-color: #fff;
-	border-radius: 5px;
-}
-
 .search-wrapper { position: relative; }
 
 #left-area ul, .entry-content ul,
@@ -123,9 +117,6 @@ label input
 	margin-top: 1em;
 	padding-top: .5em;
 }
-
-button#clear-search { display: none; }
-
 
 @media (min-width: 981px)
 {

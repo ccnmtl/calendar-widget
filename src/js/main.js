@@ -49,6 +49,8 @@ import '../css/list.css';
         $('#calendarList').hide();
         // remove query string from url
         CTLEventUtils.clearURLParams();
+        clearFields();
+        filterEventHandler();
     };
 
     /**
@@ -138,6 +140,14 @@ import '../css/list.css';
         CTLEventUtils.populateURLParams(urlParams);
 
         refreshEvents(filteredEvents, 1);
+    };
+
+    var clearFields = function() {
+        $('#q').val('');
+        $('#search-wrapper').find('select#location-dropdown')[0].value = '';
+        $('#search-wrapper').find('select#audience-dropdown')[0].value = '';
+        $('input[name="start_date"]').datepicker('setDate', null);
+        $('input[name="end_date"]').datepicker('setDate', null);
     };
 
     var filterEventHandler = function() {
