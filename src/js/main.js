@@ -116,7 +116,7 @@ import '../css/list.css';
 
         // Setup event handler
         var $searchWrapper = $('#search-wrapper');
-        $searchWrapper.on('change keyup', filterEventHandler);
+        $searchWrapper.on('submit', filterEventHandler);
 
         // Get all the url params and save them somewhere
         var queryString = window.location.search.replace(/^\?/, '');
@@ -188,6 +188,8 @@ import '../css/list.css';
             'placeholder="Search for...">' +
             '<button class="close-icon" id="clear-search" type="reset">' +
             'Reset</button>' +
+            '<button class="close-icon" id="submit-search" type="submit">' +
+            'Submit</button>' +
             '</form>' +
             '</div>' +
 
@@ -216,6 +218,8 @@ import '../css/list.css';
             '<label id="to"> ' +
             '<input name="end_date" placeholder="End Date" />' +
             '</label>' +
+            '<label for="clear-search">Clear</label>' +
+            '<label for="submit-search">Submit</label>' +
             '</div>' +
             '</div>' +
 
