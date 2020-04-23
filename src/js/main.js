@@ -196,13 +196,10 @@ import '../css/list.css';
             '<form class="search-container" role="search">' +
             '<input id="q" type="search" required="" class="search-box" ' +
             'placeholder="Search for...">' +
-            '<button class="close-icon" id="clear-search" type="reset">' +
-            'Clear</button>' +
             '<button class="close-icon" id="submit-search" type="submit">' +
             'Search</button>' +
             '</form>' +
             '</div>' +
-
 
             '<div class="search-row" id="search-location">' +
             '<div class="search-label">Location</div>' +
@@ -228,6 +225,8 @@ import '../css/list.css';
             '<label id="to"> ' +
             '<input name="end_date" autocomplete="off" placeholder="End Date" />' +
             '</label>' +
+            '<button class="close-icon" id="clear-search" type="reset">' +
+            'Clear</button>' +
             '</div>' +
             '</div>' +
 

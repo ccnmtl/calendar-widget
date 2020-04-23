@@ -83,6 +83,7 @@ button#clear-search
 {
 	background-color: #fff;
 	border-radius: 5px;
+	font-size: 14px!important;
 }
 
 button#submit-search
