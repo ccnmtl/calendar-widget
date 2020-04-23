@@ -199,7 +199,7 @@ import '../css/list.css';
             '<button class="close-icon" id="clear-search" type="reset">' +
             'Clear</button>' +
             '<button class="close-icon" id="submit-search" type="submit">' +
-            'Submit</button>' +
+            'Search</button>' +
             '</form>' +
             '</div>' +
 
