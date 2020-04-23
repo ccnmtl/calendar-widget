@@ -116,9 +116,18 @@ import '../css/list.css';
         var $endInput = $('input[name="end_date"]');
         $endInput.datepicker();
 
-        // Setup event handler
+        // Setup event handlers
+        var $locationDropdown = $('#location-dropdown');
+        var $audienceDropdown = $('#audience-dropdown');
+        var $startDateInput = $('input[name="start_date"]');
+        var $endDateInput = $('input[name="end_date"]');
         var $searchWrapper = $('#search-wrapper');
-        $searchWrapper.on('submit', filterEventHandler);
+
+        $locationDropdown.on('change', filterEventHandler);
+        $audienceDropdown.on('change', filterEventHandler);
+        $startDateInput.on('change', filterEventHandler);
+        $endDateInput .on('change', filterEventHandler);
+        $searchWrapper.on('submit', filterEventHandler)
 
         // Get all the url params and save them somewhere
         var queryString = window.location.search.replace(/^\?/, '');
