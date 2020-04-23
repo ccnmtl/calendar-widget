@@ -85,6 +85,14 @@ button#clear-search
 	border-radius: 5px;
 }
 
+button#submit-search
+{
+	background-color: #fff;
+	border-radius: 5px;
+}
+
+button#clear-search { display: none; }
+
 .search-wrapper { position: relative; }
 
 #left-area ul, .entry-content ul,
@@ -116,16 +124,6 @@ label input
 .sharedaddy { display: none; }
 .q-no-item { color: red; }
 .pagination-holder:last-child { margin-top: 3em; }
-
-.search-row
-{
-	border-top: 1px solid #eee;
-	margin-top: 1em;
-	padding-top: .5em;
-}
-
-button#clear-search { display: none; }
-button#submit-search { display: none; }
 
 
 @media (min-width: 981px)

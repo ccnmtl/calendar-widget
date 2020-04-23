@@ -208,7 +208,7 @@ import '../css/list.css';
             '<div class="search-label">From</div>' +
 
             '<label id="from">' +
-            '<input name="start_date" placeholder="Start Date"/>' +
+            '<input name="start_date" autocomplete="off" placeholder="Start Date"/>' +
             '</label>' +
             '</div>' +
 
@@ -216,10 +216,8 @@ import '../css/list.css';
             '<div class="search-label">To</div>' +
 
             '<label id="to"> ' +
-            '<input name="end_date" placeholder="End Date" />' +
+            '<input name="end_date" autocomplete="off" placeholder="End Date" />' +
             '</label>' +
-            '<label for="clear-search">Clear</label>' +
-            '<label for="submit-search">Submit</label>' +
             '</div>' +
             '</div>' +
 
