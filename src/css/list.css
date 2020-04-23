@@ -91,8 +91,6 @@ button#submit-search
 	border-radius: 5px;
 }
 
-button#clear-search { display: none; }
-
 .search-wrapper { position: relative; }
 
 #left-area ul, .entry-content ul,

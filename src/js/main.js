@@ -49,6 +49,8 @@ import '../css/list.css';
         $('#calendarList').hide();
         // remove query string from url
         CTLEventUtils.clearURLParams();
+        clearFields();
+        filterEventHandler();
     };
 
     /**
@@ -140,6 +142,14 @@ import '../css/list.css';
         refreshEvents(filteredEvents, 1);
     };
 
+    var clearFields = function() {
+      $('#q').val('');
+      $('#search-wrapper').find('select#location-dropdown')[0].value = '';
+      $('#search-wrapper').find('select#audience-dropdown')[0].value = '';
+      $('input[name="start_date"]').datepicker('setDate', null);
+      $('input[name="end_date"]').datepicker('setDate', null);
+    };
+
     var filterEventHandler = function() {
         // Clear the events
         $('#calendarList').empty();
@@ -187,7 +197,7 @@ import '../css/list.css';
             '<input id="q" type="search" required="" class="search-box" ' +
             'placeholder="Search for...">' +
             '<button class="close-icon" id="clear-search" type="reset">' +
-            'Reset</button>' +
+            'Clear</button>' +
             '<button class="close-icon" id="submit-search" type="submit">' +
             'Submit</button>' +
             '</form>' +
