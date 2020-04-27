@@ -153,8 +153,8 @@ import '../css/list.css';
 
     var clearFields = function() {
       $('#q').val('');
-      $('#search-wrapper').find('select#location-dropdown')[0].value = '';
-      $('#search-wrapper').find('select#audience-dropdown')[0].value = '';
+      $('#location-dropdown')[0].value = '';
+      $('#audience-dropdown')[0].value = '';
       $('input[name="start_date"]').datepicker('setDate', null);
       $('input[name="end_date"]').datepicker('setDate', null);
     };
