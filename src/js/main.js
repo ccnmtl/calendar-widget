@@ -199,15 +199,12 @@ import '../css/list.css';
             '<div class="loader-inner ball-pulse"><div></div><div></div><div></div></div>' +
             '</div>' +
             '<div id="search-wrapper">' +
+            '<form class="search-container" role="search">' +
             '<div class="search-row" id="search-term">' +
             '<div class="search-label">Term</div>' +
 
-            '<form class="search-container" role="search">' +
             '<input id="q" type="search" required="" class="search-box" ' +
             'placeholder="Search for...">' +
-            '<button class="close-icon" id="submit-search" type="submit">' +
-            'Search</button>' +
-            '</form>' +
             '</div>' +
 
             '<div class="search-row" id="search-location">' +
@@ -234,10 +231,13 @@ import '../css/list.css';
             '<label id="to"> ' +
             '<input name="end_date" autocomplete="off" placeholder="End Date" />' +
             '</label>' +
-            '<button class="close-icon" id="clear-search" type="reset">' +
-            'Clear</button>' +
             '</div>' +
+
+            '<div class="search-row" id="search-buttons">' +
+            '<button id="clear-search" type="reset">Reset</button>' +
+            '<button id="submit-search" type="submit">Submit</button>' +
             '</div>' +
+            '</form>' +
 
             '<div style="clear: both;"></div>' +
             '<div id="search-results-alerts"></div>' +
