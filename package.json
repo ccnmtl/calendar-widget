@@ -9,7 +9,7 @@
   "dependencies": {
     "jquery": "3.5.1",
     "jquery-ui-dist": "1.12.1",
-    "lunr": "~2.3.5",
+    "lunr": "~2.3.8",
     "npm": "^6.0.0"
   },
   "devDependencies": {
