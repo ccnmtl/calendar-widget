@@ -2,14 +2,7 @@ language: node_js
 node_js:
 - '12'
 - '13'
-before_install:
-- npm install -g greenkeeper-lockfile@2
 install: npm install
-before_script: greenkeeper-lockfile-update
 script:
 - npm run eslint
 - npm test
-after_script: greenkeeper-lockfile-upload
-env:
-  global:
-    secure: dyxrfB99Ee5KXxpbE4mOeN8ZnTt53IRAFtpSuDs1gHZN2yy2dE4TlGgaf/kxyJmElWXCDtEh04YDLEFkfrL5r/5cVLOV6oqvEqHDs4p33dHXeXVNVJswpYeFBQU2La/QV8ZopF3KbW+72zl9Da4uL6bkqS4P4PSM7khKCw/y97yFUpsuvfPSVV3ooEExB5rHg4jMeVymQgvzuGb7ntWt/x/LT+1T5k8nMv5FIsB7Mmzi6Z4p0MyMMesXt8jLlOwR1aZbMQn6VaeMbMGQ4Jy1hmF+lgy4GeHA9GhqGujKqo+xhrGg23+ECZ7F+8gaWCBMAqgF73RyENdPjIqHGnpv4ryyFFsZDLZ6g/uqjZBxVqcoy1L33FZqiWA49EMTShm1Zei8OKysZ/lwdQhKJ3fpD/mWZITM1hcYxRSGXgHBEodMrgCrgZ3w/48VUuYcg8RRq3MO2p4z/hZ4fwkQlStm33VhsMJpTn3JPw1+sXbVaYMnAFeCTA1UkxbiyvWCFNbu+40pUwH8gd9rRNJp7w41rRDlfzVv92gg3VZ5RQq1fI24QjhT19mDqjf0LYwB6370MKfJUUVIZc/vpE95YLzcOLscjoLae0LFGx0DdyYbg7/Qi0u0FPUjG7zHeW7WLsQqciiWiXd2rmB3JhslfmI7EERB1D1PTGIL8WUn9hOKTGg=
