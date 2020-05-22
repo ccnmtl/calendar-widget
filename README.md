@@ -1,4 +1,4 @@
-# calendar-widget [![Build Status](https://travis-ci.org/ccnmtl/calendar-widget.svg?branch=master)](https://travis-ci.org/ccnmtl/calendar-widget) [![Greenkeeper badge](https://badges.greenkeeper.io/ccnmtl/calendar-widget.svg)](https://greenkeeper.io/)
+# calendar-widget [![Build Status](https://travis-ci.org/ccnmtl/calendar-widget.svg?branch=master)](https://travis-ci.org/ccnmtl/calendar-widget)
 
 ## Make targets
 * `make build`: Runs webpack to compile to the local directory
@@ -7,4 +7,4 @@
 * `make prod`: Runs webpack, uses the production url for resource links
 * `make eslint`: Runs eslint
 * `make test`: Runs eslint and mocha tests
-* `make clean`: rm's node_modules 
+* `make clean`: rm's node_modules
