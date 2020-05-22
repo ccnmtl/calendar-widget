@@ -234,8 +234,8 @@ import '../css/list.css';
             '</div>' +
 
             '<div class="search-row" id="search-buttons">' +
+            '<button id="submit-search" type="submit">Search</button>' +
             '<button id="clear-search" type="reset">Reset</button>' +
-            '<button id="submit-search" type="submit">Submit</button>' +
             '</div>' +
             '</form>' +
 
