@@ -83,11 +83,9 @@ button#clear-search
 {
 	color: #2c6bab;
 	font: proxima-nova, arial, sans-serif;
-	font-family: "ETmodules" !important;
 	padding: 0.3em 1em;
 	border: 2px solid;
 	border-width: 1px!important;
-	background-color: transparent;
 	border-radius: 10px;
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
