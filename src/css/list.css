@@ -146,6 +146,7 @@ label input
 	color: #4e4e4e;
 	background-color: #fff;
 	height: 33px;
+	padding-left: 7px;
 }
 
 input
@@ -154,6 +155,7 @@ input
 	border: 1px solid #bbb;
 	color: #4e4e4e;
 	height: 33px;
+	padding-left: 7px;
 }
 
 select
