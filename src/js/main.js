@@ -49,6 +49,8 @@ import '../css/list.css';
         $('#calendarList').hide();
         // remove query string from url
         CTLEventUtils.clearURLParams();
+        clearFields();
+        filterEventHandler();
     };
 
     /**
@@ -114,9 +116,18 @@ import '../css/list.css';
         var $endInput = $('input[name="end_date"]');
         $endInput.datepicker();
 
-        // Setup event handler
+        // Setup event handlers
+        var $locationDropdown = $('#location-dropdown');
+        var $audienceDropdown = $('#audience-dropdown');
+        var $startDateInput = $('input[name="start_date"]');
+        var $endDateInput = $('input[name="end_date"]');
         var $searchWrapper = $('#search-wrapper');
-        $searchWrapper.on('change keyup', filterEventHandler);
+
+        $locationDropdown.on('change', filterEventHandler);
+        $audienceDropdown.on('change', filterEventHandler);
+        $startDateInput.on('change', filterEventHandler);
+        $endDateInput .on('change', filterEventHandler);
+        $searchWrapper.on('submit', filterEventHandler)
 
         // Get all the url params and save them somewhere
         var queryString = window.location.search.replace(/^\?/, '');
@@ -138,6 +149,14 @@ import '../css/list.css';
         CTLEventUtils.populateURLParams(urlParams);
 
         refreshEvents(filteredEvents, 1);
+    };
+
+    var clearFields = function() {
+      $('#q').val('');
+      $('#location-dropdown')[0].value = '';
+      $('#audience-dropdown')[0].value = '';
+      $('input[name="start_date"]').datepicker('setDate', null);
+      $('input[name="end_date"]').datepicker('setDate', null);
     };
 
     var filterEventHandler = function() {
@@ -180,17 +199,13 @@ import '../css/list.css';
             '<div class="loader-inner ball-pulse"><div></div><div></div><div></div></div>' +
             '</div>' +
             '<div id="search-wrapper">' +
+            '<form class="search-container" role="search">' +
             '<div class="search-row" id="search-term">' +
             '<div class="search-label">Term</div>' +
 
-            '<form class="search-container" role="search">' +
             '<input id="q" type="search" required="" class="search-box" ' +
             'placeholder="Search for...">' +
-            '<button class="close-icon" id="clear-search" type="reset">' +
-            'Reset</button>' +
-            '</form>' +
             '</div>' +
-
 
             '<div class="search-row" id="search-location">' +
             '<div class="search-label">Location</div>' +
@@ -206,7 +221,7 @@ import '../css/list.css';
             '<div class="search-label">From</div>' +
 
             '<label id="from">' +
-            '<input name="start_date" placeholder="Start Date"/>' +
+            '<input name="start_date" autocomplete="off" placeholder="Start Date"/>' +
             '</label>' +
             '</div>' +
 
@@ -214,10 +229,15 @@ import '../css/list.css';
             '<div class="search-label">To</div>' +
 
             '<label id="to"> ' +
-            '<input name="end_date" placeholder="End Date" />' +
+            '<input name="end_date" autocomplete="off" placeholder="End Date" />' +
             '</label>' +
             '</div>' +
+
+            '<div class="search-row" id="search-buttons">' +
+            '<button id="submit-search" type="submit">Search</button>' +
+            '<button id="clear-search" type="reset">Reset</button>' +
             '</div>' +
+            '</form>' +
 
             '<div style="clear: both;"></div>' +
             '<div id="search-results-alerts"></div>' +

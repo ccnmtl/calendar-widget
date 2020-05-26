@@ -81,8 +81,43 @@ div.event_registration button {
 
 button#clear-search
 {
-	background-color: #fff;
-	border-radius: 5px;
+	color: #2c6bab;
+	font: proxima-nova, arial, sans-serif;
+	padding: 0.3em 1em;
+	border: 2px solid;
+	border-width: 1px!important;
+	border-radius: 10px;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	height: 33px;
+}
+
+button#submit-search
+{
+	color: #2c6bab;
+	font: proxima-nova, arial, sans-serif;
+	padding: 0.3em 1em;
+	border: 2px solid;
+	border-width: 1px!important;
+	border-radius: 10px;
+	margin-right: 0.5em;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	height: 33px;
+}
+
+button#submit-search:hover
+{
+	color: #ffffff;
+  background-color: #75aadb;
+	cursor: pointer;
+}
+
+button#clear-search:hover
+{
+	color: #ffffff;
+  background-color: #75aadb;
+	cursor: pointer;
 }
 
 .search-wrapper { position: relative; }
@@ -110,21 +145,27 @@ label input
 	border: 1px solid #bbb;
 	color: #4e4e4e;
 	background-color: #fff;
-	height: 24px;
+	height: 33px;
+	padding-left: 7px;
+}
+
+input
+{
+	padding: 2px;
+	border: 1px solid #bbb;
+	color: #4e4e4e;
+	height: 33px;
+	padding-left: 7px;
+}
+
+select
+{
+	height: 33px;
 }
 
 .sharedaddy { display: none; }
 .q-no-item { color: red; }
 .pagination-holder:last-child { margin-top: 3em; }
-
-.search-row
-{
-	border-top: 1px solid #eee;
-	margin-top: 1em;
-	padding-top: .5em;
-}
-
-button#clear-search { display: none; }
 
 
 @media (min-width: 981px)
