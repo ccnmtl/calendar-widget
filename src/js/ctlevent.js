@@ -26,23 +26,13 @@ var CTLEvent = function(event) {
     this.id = event.guid;
     this.title = event.summary;
 
-    // check for specific properties in event object before assigning values
-    this.startDate = '';
-    if ('start' in event) {
-        this.startDate = CTLEventUtils.strToDate(event.start.datetime);
-    }
-    this.endDate = '';
-    if ('end' in event) {
-        this.endDate = CTLEventUtils.strToDate(event.end.datetime);
-    }
-    this.locationAndRoom = '';
-    this.location = '';
-    this.roomNumber = '';
-    if ('location' in event) {
-        this.locationAndRoom = CTLEventUtils.getRoomNumber(event.location.address);
-        this.location = this.locationAndRoom[0];
-        this.roomNumber = this.locationAndRoom[1];
-    }
+    this.startDate = 'start' in event ? CTLEventUtils.strToDate(event.start.datetime) : '';
+    this.endDate = 'end' in event ? CTLEventUtils.strToDate(event.end.datetime) : '';
+    this.multiDay = this.startDate && this.endDate ? this.endDate.getDate() > this.startDate.getDate() : false;
+
+    this.locationAndRoom = 'location' in event ? CTLEventUtils.getRoomNumber(event.location.address) : '';
+    this.location = 'location' in event ? this.locationAndRoom[0] : '';
+    this.roomNumber = 'location' in event ? this.locationAndRoom[1] : '';
 
     this.url = event.eventlink;
     this.status = event.status;
@@ -51,10 +41,7 @@ var CTLEvent = function(event) {
 
     this.propertyArray = [];
 
-    var xprop = event.xproperties;
-    if (!xprop) {
-        xprop = [];
-    }
+    var xprop = event.xproperties || [];
     for (var i = 0; i < xprop.length; i++) {
         var aliasString;
         var propList;
@@ -123,7 +110,7 @@ CTLEvent.prototype.render = function() {
     var lede = '';
     var more = '';
     var options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
-    var timeOptions = {hour: '2-digit', minute: '2-digit'};
+    var timeOptions = {hour: 'numeric', minute: '2-digit'};
 
     if (lnBreak > 0) {
         lede = desc.slice(0, lnBreak);
@@ -131,18 +118,27 @@ CTLEvent.prototype.render = function() {
     }
 
     var returnString = '<div class="event">' +
-        '<div class="event_specifics"><h3>';
+        '<div class="event_specifics"><h3 class="ctl-event-title">';
     // check the event status
     if (this.status == 'CANCELLED') {
         returnString += '<span class="cancelled">' + this.status + ': ';
     }
-    returnString += '<a href="' + this.url +'">' + this.title + '</a>';
+    returnString += '<a target="_blank" href="' + this.url +'">' + this.title + '</a>';
     if (this.status == 'CANCELLED') {returnString += '</span>';}
 
-    returnString += '</h3><h4>' + this.startDate.toLocaleString('en-US', options) + '<br/>' +
-        this.startDate.toLocaleTimeString('en-US', timeOptions) + '&ndash;' +
-        this.endDate.toLocaleTimeString('en-US', timeOptions) +
-        '</h4>' +
+    returnString += '</h3><h4>';
+
+    if (this.multiDay) {
+        returnString += this.startDate.toLocaleString('en-US', options) + ' ' +
+            this.startDate.toLocaleTimeString('en-US', timeOptions) + '<br/>' +
+            'to ' + this.endDate.toLocaleString('en-US', options) + ' ' +
+            this.endDate.toLocaleTimeString('en-US', timeOptions);
+    } else {
+        returnString += this.startDate.toLocaleString('en-US', options) + '<br/>' +
+            this.startDate.toLocaleTimeString('en-US', timeOptions) + '&ndash;' +
+            this.endDate.toLocaleTimeString('en-US', timeOptions);
+    }
+    returnString += '</h4>' +
         '</div>' +
         '<div class="event_description"><p>' + lede;
     if (more.length > 0) {
@@ -158,11 +154,9 @@ CTLEvent.prototype.render = function() {
     }
     returnString += this.location + '</div>';
 
-    if (this.registration && this.status == 'CONFIRMED') {
-        returnString += '<div class="event_registration">' +
-                        '<a target="_blank"  href="' + this.url + '">' +
-                        '<button>Register on CU Events</button></a></div>';
-    }
+    returnString += '<div class="event_registration">' +
+                    '<a target="_blank"  href="' + this.url + '">' +
+                    '<button>Details</button></a></div>';
 
     returnString += '<div class="event_properties">' +
         propertiesString(this.propertyArray) + '</div>';
@@ -173,7 +167,7 @@ CTLEvent.prototype.render = function() {
 
 CTLEvent.prototype.renderHomepageEvent = function() {
     var options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
-    var timeOptions = {hour: '2-digit', minute: '2-digit'};
+    var timeOptions = {hour: 'numeric', minute: '2-digit'};
 
     var returnString = '<div class="event">' +
         '<div class="event_specifics"><h4>';
@@ -181,13 +175,22 @@ CTLEvent.prototype.renderHomepageEvent = function() {
     if (this.status == 'CANCELLED') {
         returnString += '<span class="cancelled">' + this.status + ': ';
     }
-    returnString += '<a href="' + this.url +'">' + this.title + '</a>';
+    returnString += '<a target="_blank" href="' + this.url +'">' + this.title + '</a>';
     if (this.status == 'CANCELLED') {returnString += '</span>';}
 
-    returnString += '</h4><h5>' + this.startDate.toLocaleString('en-US', options) + '<br/>' +
-        this.startDate.toLocaleTimeString('en-US', timeOptions) + '&ndash;' +
-        this.endDate.toLocaleTimeString('en-US', timeOptions) +
-        '</h5></div>';
+    returnString += '</h4><h5>';
+
+    if (this.multiDay) {
+        returnString += this.startDate.toLocaleString('en-US', options) + ' ' +
+            this.startDate.toLocaleTimeString('en-US', timeOptions) + '<br/>' +
+            'to ' + this.endDate.toLocaleString('en-US', options) + ' ' +
+            this.endDate.toLocaleTimeString('en-US', timeOptions);
+    } else {
+        returnString += this.startDate.toLocaleString('en-US', options) + '<br/>' +
+            this.startDate.toLocaleTimeString('en-US', timeOptions) + '&ndash;' +
+            this.endDate.toLocaleTimeString('en-US', timeOptions);
+    }
+    returnString += '</h5></div>';
 
     return returnString;
 };
