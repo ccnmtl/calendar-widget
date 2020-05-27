@@ -36,7 +36,10 @@ input { border-radius: 5px; }
 	border-top: 1px solid #eee;
 }
 
-.event .event_specifics h3 a { font-size: 1.25em!important; }
+.event .event_specifics h3 a {
+    font-size: 1.25em!important;
+    text-decoration: underline;
+}
 .event .event_specifics a:hover { cursor: pointer; }
 .event .location, .event_properties, .more_info, .event_registration { margin-top: 1em; }
 .event_properties { }
