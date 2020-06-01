@@ -198,6 +198,7 @@ import '../css/list.css';
             '<div id=loader-animation-container>' +
             '<div class="loader-inner ball-pulse"><div></div><div></div><div></div></div>' +
             '</div>' +
+            '<h2 id="eventHeader">CTL Events</h2>' +
             '<div id="search-wrapper">' +
             '<form class="search-container" role="search">' +
             '<div class="search-row" id="search-term">' +

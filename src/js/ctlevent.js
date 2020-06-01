@@ -128,15 +128,19 @@ CTLEvent.prototype.render = function() {
 
     returnString += '</h3><h4>';
 
+    var endDateTimeString = this.endDate.toLocaleTimeString('en-US', timeOptions);
+    var startDateTimeString = this.startDate.toLocaleTimeString('en-US', timeOptions);
+    var endDateString = this.endDate.toLocaleString('en-US', options);
+    var startDateString = this.startDate.toLocaleString('en-US', options);
+
     if (this.multiDay) {
-        returnString += this.startDate.toLocaleString('en-US', options) + ' ' +
-            this.startDate.toLocaleTimeString('en-US', timeOptions) + '<br/>' +
-            'to ' + this.endDate.toLocaleString('en-US', options) + ' ' +
-            this.endDate.toLocaleTimeString('en-US', timeOptions);
+        returnString += startDateString + ' ' + startDateTimeString + '<br/>' +
+            'to ' + endDateString + ' ' + endDateTimeString;
+    } else if (startDateTimeString === endDateTimeString) {
+        returnString += startDateString + '<br/>' + startDateTimeString
     } else {
-        returnString += this.startDate.toLocaleString('en-US', options) + '<br/>' +
-            this.startDate.toLocaleTimeString('en-US', timeOptions) + '&ndash;' +
-            this.endDate.toLocaleTimeString('en-US', timeOptions);
+        returnString += startDateString + '<br/>' + startDateTimeString
+            + '&ndash;' + endDateTimeString;
     }
     returnString += '</h4>' +
         '</div>' +
