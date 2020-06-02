@@ -186,8 +186,30 @@ import '../css/list.css';
 
         // if there are results and there exists a text query, display the
         // searched text
+        var resultsFor = '<h2>Results for:</h2>';
+
+        if (CTLEventsManager.filteredEvents.length > 0) {
+            $el.append($(resultsFor));
+        }
+
         if (CTLEventsManager.filteredEvents.length > 0 && q.length > 0) {
-            $el.append($('<h2>Results for: "' + q + '"</h2>'));
+          $el.append($('<h4>Search term: ' + q + '</h4>'));
+        }
+
+        if (CTLEventsManager.filteredEvents.length > 0 && loc.length > 0) {
+          $el.append($('<h4> Location: ' + loc + '</h4>'));
+        }
+
+        if (CTLEventsManager.filteredEvents.length > 0 && audience.length > 0) {
+          $el.append($('<h4> Audience: ' + audience + '</h4>'));
+        }
+
+        if (CTLEventsManager.filteredEvents.length > 0 && startDate) {
+          $el.append($('<h4>Start Date: ' + startDate + '</h4>'));
+        }
+
+        if (CTLEventsManager.filteredEvents.length > 0 && endDate) {
+          $el.append($('<h4>End Date: ' + endDate + '</h4>'));
         }
 
         refreshEvents(CTLEventsManager.filteredEvents, 1);

@@ -22,7 +22,7 @@
 .search-wrapper select { height: 24px; }
 
 .ctl-events .event {
-    margin-top: 3em!important;
+    margin-top: 2em!important;
 }
 
 .event
@@ -44,12 +44,14 @@ h2
 {
 	margin-top: 10px;
 	padding-bottom: 0px;
+	margin-bottom: 5px;
 }
 
 #eventHeader {
     margin-bottom: 1em;
     font-weight: bold;
     color: #2c6bab;
+		margin-top: 0px;
 }
 .event .event_specifics h3 a {
     font-size: 1.25em!important;
@@ -88,11 +90,6 @@ h2
 }
 
 .ball-pulse > div { background-color: #666; }
-
-/* .location
-{
-	margin-top: 1px !im;
-} */
 
 button#clear-search, button#submit-search, div.event_registration button
 {
