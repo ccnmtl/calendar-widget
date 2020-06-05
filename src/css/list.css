@@ -22,7 +22,7 @@
 .search-wrapper select { height: 24px; }
 
 .ctl-events .event {
-    margin-top: 2em!important;
+    margin-top: 0.5em !important;
 }
 
 .event
@@ -32,7 +32,7 @@
 }
 
 .event *, form *, select, input { font-size: 14px!important; }
-input { border-radius: 5px; }
+input, #location-dropdown, #audience-dropdown { border-radius: 5px; }
 
 .event .event_specifics
 {
@@ -47,10 +47,14 @@ h2
 	margin-bottom: 5px;
 }
 
+h4
+{
+	font-weight: normal !important;
+}
+
 #eventHeader {
     margin-bottom: 1em;
     font-weight: bold;
-    color: #2c6bab;
 		margin-top: 0px;
 }
 .event .event_specifics h3 a {
@@ -97,7 +101,7 @@ button#clear-search, button#submit-search, div.event_registration button
 	font: proxima-nova, arial, sans-serif;
 	padding: 0.3em 1em;
 	border: 2px solid;
-	border-width: 1px!important;
+	border-width: 1px !important;
 	border-radius: 10px;
 	margin-top: 0.7em;
 	margin-bottom: 0.5em;
@@ -165,11 +169,6 @@ select
 .sharedaddy { display: none; }
 .q-no-item { color: red; }
 .pagination-holder:last-child { margin-top: 3em; }
-
-.datepicker.dropdown-menu {
-    z-index: 9999 !important;
-}
-
 
 .search-label
 {
