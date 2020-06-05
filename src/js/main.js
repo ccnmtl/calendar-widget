@@ -184,10 +184,33 @@ import '../css/list.css';
                 CTLEventsManager.allEvents, index, q, loc, audience,
                 startDate, endDate);
 
-        // if there are results and there exists a text query, display the
-        // searched text
-        if (CTLEventsManager.filteredEvents.length > 0 && q.length > 0) {
-            $el.append($('<h2>Results for: "' + q + '"</h2>'));
+        // if there are results and there exists a query, display the
+        // searched query
+        var resultsFor = '<h2 id="resultsFor">Results for:</h2>';
+        var filteredEventsLength = CTLEventsManager.filteredEvents.length;
+
+        if((filteredEventsLength > 0) && (q.length > 0 || loc.length > 0 || audience.length > 0 || startDate || endDate)) {
+          $el.append($(resultsFor));
+        }
+
+        if (filteredEventsLength > 0 && q.length > 0) {
+          $el.append($('<h4>Search term: ' + q + '</h4>'));
+        }
+
+        if (filteredEventsLength > 0 && loc.length > 0) {
+          $el.append($('<h4> Location: ' + loc + '</h4>'));
+        }
+
+        if (filteredEventsLength > 0 && audience.length > 0) {
+          $el.append($('<h4> Audience: ' + audience + '</h4>'));
+        }
+
+        if (filteredEventsLength > 0 && startDate) {
+          $el.append($('<h4>Start Date: ' + startDate.toLocaleDateString() + '</h4>'));
+        }
+
+        if (filteredEventsLength > 0 && endDate) {
+          $el.append($('<h4>End Date: ' + endDate.toLocaleDateString() + '</h4>'));
         }
 
         refreshEvents(CTLEventsManager.filteredEvents, 1);
@@ -198,6 +221,7 @@ import '../css/list.css';
             '<div id=loader-animation-container>' +
             '<div class="loader-inner ball-pulse"><div></div><div></div><div></div></div>' +
             '</div>' +
+            '<h1 id="eventHeader">CTL Events</h1>' +
             '<div id="search-wrapper">' +
             '<form class="search-container" role="search">' +
             '<div class="search-row" id="search-term">' +

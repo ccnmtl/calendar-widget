@@ -21,6 +21,10 @@
 
 .search-wrapper select { height: 24px; }
 
+.ctl-events .event {
+    margin-top: 0.5em !important;
+}
+
 .event
 {
 	width: 100%;
@@ -28,7 +32,7 @@
 }
 
 .event *, form *, select, input { font-size: 14px!important; }
-input { border-radius: 5px; }
+input, #location-dropdown, #audience-dropdown { border-radius: 5px; }
 
 .event .event_specifics
 {
@@ -36,12 +40,29 @@ input { border-radius: 5px; }
 	border-top: 1px solid #eee;
 }
 
+h2
+{
+	margin-top: 10px;
+	padding-bottom: 0px;
+	margin-bottom: 5px;
+}
+
+h4
+{
+	font-weight: normal !important;
+}
+
+#eventHeader {
+    margin-bottom: 1em;
+    font-weight: bold;
+		margin-top: 0px;
+}
 .event .event_specifics h3 a {
     font-size: 1.25em!important;
     text-decoration: underline;
 }
 .event .event_specifics a:hover { cursor: pointer; }
-.event .location, .event_properties, .more_info, .event_registration { margin-top: 1em; }
+.event .location, .event_properties, .more_info, .event_registration { margin-top: 0.5em !important; }
 .event_properties { }
 .ctl-property-name { font-weight: bold; }
 
@@ -61,14 +82,6 @@ input { border-radius: 5px; }
     white-space: pre-wrap;
 }
 
-div.event_registration button {
-	background-color: #75AADB;
-    border: 1px solid #75AADB;
-    border-radius: 3px;
-    padding: 6px;
-    cursor: pointer;
-}
-
 #loader-animation-container
 {
 	position: absolute;
@@ -82,45 +95,32 @@ div.event_registration button {
 
 .ball-pulse > div { background-color: #666; }
 
-button#clear-search
+button#clear-search, button#submit-search, div.event_registration button
 {
 	color: #2c6bab;
 	font: proxima-nova, arial, sans-serif;
 	padding: 0.3em 1em;
 	border: 2px solid;
-	border-width: 1px!important;
+	border-width: 1px !important;
 	border-radius: 10px;
-	margin-top: 0.5em;
+	margin-top: 0.7em;
 	margin-bottom: 0.5em;
+	margin-right: 0.7em;
 	height: 33px;
+	background-color: white;
 }
 
-button#submit-search
-{
-	color: #2c6bab;
-	font: proxima-nova, arial, sans-serif;
-	padding: 0.3em 1em;
-	border: 2px solid;
-	border-width: 1px!important;
-	border-radius: 10px;
-	margin-right: 0.5em;
-	margin-top: 0.5em;
-	margin-bottom: 0.5em;
-	height: 33px;
-}
-
-button#submit-search:hover
+button#submit-search:hover, #clear-search:hover,
+div.event_registration button:hover
 {
 	color: #ffffff;
   background-color: #75aadb;
 	cursor: pointer;
 }
 
-button#clear-search:hover
+div.event_registration button
 {
-	color: #ffffff;
-  background-color: #75aadb;
-	cursor: pointer;
+	margin-top: 0.3em;
 }
 
 .search-wrapper { position: relative; }
@@ -170,6 +170,10 @@ select
 .q-no-item { color: red; }
 .pagination-holder:last-child { margin-top: 3em; }
 
+.search-label
+{
+	font-size: 16px !important;
+}
 
 @media (min-width: 981px)
 {
