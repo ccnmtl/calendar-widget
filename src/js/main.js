@@ -127,7 +127,7 @@ import '../css/list.css';
         $audienceDropdown.on('change', filterEventHandler);
         $startDateInput.on('change', filterEventHandler);
         $endDateInput .on('change', filterEventHandler);
-        $searchWrapper.on('submit', filterEventHandler)
+        $searchWrapper.on('submit', filterEventHandler);
 
         // Get all the url params and save them somewhere
         var queryString = window.location.search.replace(/^\?/, '');
@@ -152,11 +152,11 @@ import '../css/list.css';
     };
 
     var clearFields = function() {
-      $('#q').val('');
-      $('#location-dropdown')[0].value = '';
-      $('#audience-dropdown')[0].value = '';
-      $('input[name="start_date"]').datepicker('setDate', null);
-      $('input[name="end_date"]').datepicker('setDate', null);
+        $('#q').val('');
+        $('#location-dropdown')[0].value = '';
+        $('#audience-dropdown')[0].value = '';
+        $('input[name="start_date"]').datepicker('setDate', null);
+        $('input[name="end_date"]').datepicker('setDate', null);
     };
 
     var filterEventHandler = function() {
@@ -190,27 +190,27 @@ import '../css/list.css';
         var filteredEventsLength = CTLEventsManager.filteredEvents.length;
 
         if((filteredEventsLength > 0) && (q.length > 0 || loc.length > 0 || audience.length > 0 || startDate || endDate)) {
-          $el.append($(resultsFor));
+            $el.append($(resultsFor));
         }
 
         if (filteredEventsLength > 0 && q.length > 0) {
-          $el.append($('<h4>Search term: ' + q + '</h4>'));
+            $el.append($('<h4>Search term: ' + q + '</h4>'));
         }
 
         if (filteredEventsLength > 0 && loc.length > 0) {
-          $el.append($('<h4> Location: ' + loc + '</h4>'));
+            $el.append($('<h4> Location: ' + loc + '</h4>'));
         }
 
         if (filteredEventsLength > 0 && audience.length > 0) {
-          $el.append($('<h4> Audience: ' + audience + '</h4>'));
+            $el.append($('<h4> Audience: ' + audience + '</h4>'));
         }
 
         if (filteredEventsLength > 0 && startDate) {
-          $el.append($('<h4>Start Date: ' + startDate.toLocaleDateString() + '</h4>'));
+            $el.append($('<h4>Start Date: ' + startDate.toLocaleDateString() + '</h4>'));
         }
 
         if (filteredEventsLength > 0 && endDate) {
-          $el.append($('<h4>End Date: ' + endDate.toLocaleDateString() + '</h4>'));
+            $el.append($('<h4>End Date: ' + endDate.toLocaleDateString() + '</h4>'));
         }
 
         refreshEvents(CTLEventsManager.filteredEvents, 1);
