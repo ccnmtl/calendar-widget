@@ -22,13 +22,23 @@ var propertiesString = function(properties) {
     return propString;
 };
 
+let compareDates = (start, end) => {
+    let startStr = new Date(start.toLocaleDateString());
+    let endStr = new Date (end.toLocaleDateString());
+
+    return endStr > startStr;
+};
+
 var CTLEvent = function(event) {
     this.id = event.guid;
     this.title = event.summary;
 
     this.startDate = 'start' in event ? CTLEventUtils.strToDate(event.start.datetime) : '';
     this.endDate = 'end' in event ? CTLEventUtils.strToDate(event.end.datetime) : '';
-    this.multiDay = this.startDate && this.endDate ? this.endDate.getDate() > this.startDate.getDate() : false;
+
+    if(this.startDate && this.endDate ) {
+        this.multiDay = compareDates(this.startDate, this.endDate);
+    }
 
     this.locationAndRoom = 'location' in event ? CTLEventUtils.getRoomNumber(event.location.address) : '';
     this.location = 'location' in event ? this.locationAndRoom[0] : '';
@@ -137,13 +147,13 @@ CTLEvent.prototype.render = function() {
         returnString += startDateString + ' ' + startDateTimeString + '<br/>' +
             'to ' + endDateString + ' ' + endDateTimeString;
     } else if (startDateTimeString === endDateTimeString) {
-        returnString += startDateString + '<br/>' + startDateTimeString
+        returnString += startDateString + '<br/>' + startDateTimeString;
     } else {
         returnString += startDateString + '<br/>' + startDateTimeString
             + '&ndash;' + endDateTimeString;
     }
     returnString += '</h4>' + '</div>' + '<div class="event_description"><p>' + lede;
-    
+
     if (more.length > 0) {
         returnString += '<span class="more_info_trigger"> More&hellip;</span>';
     }
