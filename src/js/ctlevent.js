@@ -26,11 +26,7 @@ let compareDates = (start, end) => {
     let startStr = new Date(start.toLocaleDateString());
     let endStr = new Date (end.toLocaleDateString());
 
-    if(endStr > startStr){
-        return true;
-    } else {
-        return false;
-    }
+    return endStr > startStr;
 };
 
 var CTLEvent = function(event) {
