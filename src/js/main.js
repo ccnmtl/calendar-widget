@@ -5,7 +5,7 @@
 let jQuery = require('jquery');
 import 'jquery-ui-dist/jquery-ui.min.js';
 import 'jquery-ui-dist/jquery-ui.min.css';
-require('imports-loader?jQuery=jquery!../../lib/jquery.simplePagination.js');
+require('imports-loader?imports=jQuery|jquery!../../lib/jquery.simplePagination.js');
 import '../../lib/simplePagination.css';
 import '../../lib/loaders.min.css';
 
