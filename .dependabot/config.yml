@@ -4,6 +4,9 @@ update_configs:
     directory: "/"
     update_schedule: "live"
     version_requirement_updates: "increase_versions_if_necessary"
+    ignored_updates:
+      - match:
+          dependency_name: "imports-loader"
     automerged_updates:
       - match:
           dependency_type: "development"
