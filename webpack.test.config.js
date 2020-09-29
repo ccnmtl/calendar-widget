@@ -1,10 +1,15 @@
 /* eslint-disable */
-var nodeExternals = require('webpack-node-externals');
+const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
-    mode: 'none',
-    entry: './tests/main.js',
+    entry: ['./tests/test-utils.js', './tests/test-ctlevent.js'],
+    output: {
+        filename: 'test.bundle.js',
+        path: path.resolve(__dirname, 'tests'),
+    },
     target: 'node',
+    mode: 'development',
     externals: [nodeExternals()],
     module: {
         rules: [

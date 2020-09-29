@@ -1,7 +1,8 @@
 /* eslint-env node */
 /* eslint-env mocha */
 var config = {url: 'http://www.ctl.columbia.edu/events'};
-require('jsdom-global')(undefined, config);
+require('jsdom-global')('', config);
+
 
 var assert = require('assert');
 var CTLEventUtils = require('../src/js/utils.js').CTLEventUtils;
