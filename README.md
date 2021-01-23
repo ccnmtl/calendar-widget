@@ -1,4 +1,4 @@
-# calendar-widget [![Build Status](https://travis-ci.org/ccnmtl/calendar-widget.svg?branch=master)](https://travis-ci.org/ccnmtl/calendar-widget)
+# calendar-widget [![Actions Status](https://github.com/ccnmtl/calendar-widget/workflows/build-and-test/badge.svg)](https://github.com/ccnmtl/calendar-widget/actions)
 
 ## Make targets
 * `make build`: Runs webpack to compile to the local directory
