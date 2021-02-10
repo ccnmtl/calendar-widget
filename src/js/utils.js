@@ -531,4 +531,8 @@ CTLEventUtils.filterEvents = function(allEvents, lunrIndex, q, loc, audience, st
     return eventsList;
 };
 
+CTLEventUtils.parseHtml = function(string) {
+    return new DOMParser().parseFromString(string, 'text/html').documentElement.textContent;
+};
+
 export { CTLEventUtils };
