@@ -5,6 +5,8 @@ var assert = require('assert');
 var CTLEvent = require('../src/js/ctlevent.js').CTLEvent;
 var CTLEventUtils = require('../src/js/utils.js').CTLEventUtils;
 import json from './data.json';
+global.DOMParser = window.DOMParser;
+global.Range = window.Range;
 
 describe('CTLEvent', function() {
     var events = json.bwEventList.events;

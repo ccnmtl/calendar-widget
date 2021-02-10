@@ -117,12 +117,14 @@ CTLEvent.prototype.getAudience = function() {
 CTLEvent.prototype.render = function() {
     var parsedString = CTLEventUtils.parseHtml(this.description);
     var desc = new Range().createContextualFragment(parsedString);
-    var lede = desc.firstElementChild.innerHTML;
+    var lede = desc.firstElementChild ? desc.firstElementChild.innerHTML : '';
     var more = '';
     if (desc.childElementCount > 1) {
         desc.removeChild(desc.firstElementChild);
         more = [...desc.children].reduce(function(acc, val){
-            acc += val.innerHTML;
+            if (val && val.innerHTML) {
+                acc += val.innerHTML;
+            }
             return acc;
         }, '');
     }
