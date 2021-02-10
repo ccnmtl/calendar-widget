@@ -115,17 +115,22 @@ CTLEvent.prototype.getAudience = function() {
 };
 
 CTLEvent.prototype.render = function() {
-    var desc = this.description.trim();
-    var lnBreak = desc.indexOf('.') + 1;
-    var lede = '';
+    var parsedString = CTLEventUtils.parseHtml(this.description);
+    var desc = new Range().createContextualFragment(parsedString);
+    var lede = desc.firstElementChild ? desc.firstElementChild.innerHTML : '';
     var more = '';
+    if (desc.childElementCount > 1) {
+        desc.removeChild(desc.firstElementChild);
+        more = [...desc.children].reduce(function(acc, val){
+            if (val && val.innerHTML) {
+                acc += val.innerHTML;
+            }
+            return acc;
+        }, '');
+    }
     var options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
     var timeOptions = {hour: 'numeric', minute: '2-digit'};
 
-    if (lnBreak > 0) {
-        lede = desc.slice(0, lnBreak);
-        more = desc.slice(lnBreak).trim();
-    }
 
     var returnString = '<div class="event">' +
         '<div class="event_specifics"><h3 class="ctl-event-title">';
