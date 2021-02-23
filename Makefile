@@ -13,12 +13,6 @@ build: $(JS_SENTINAL)
 dev: $(JS_SENTINAL)
 	npm run dev 
 
-stage: $(JS_SENTINAL)
-	npm run stage 
-
-prod: $(JS_SENTINAL)
-	npm run prod 
-
 eslint: $(JS_SENTINAL)
 	npm run eslint
 
