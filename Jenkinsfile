@@ -11,7 +11,7 @@ pipeline {
         stage('staging') {
             steps {
                 sh 'make clean'
-                sh 'make stage'
+                sh 'make build'
                 sh 'rsync -rz ./dist $REMOTE_HOST:$REMOTE_STAGE_DIR'
                 sh 'curl --silent --output /dev/null --show-error --fail $REMOTE_STAGE_URL'
             }
@@ -19,7 +19,7 @@ pipeline {
         stage('prod') {
             steps {
                 sh 'make clean'
-                sh 'make prod'
+                sh 'make build'
                 sh 'rsync -rz ./dist $REMOTE_HOST:$REMOTE_PROD_DIR'
                 sh 'curl --silent --output /dev/null --show-error --fail $REMOTE_PROD_URL'
             }
