@@ -10,7 +10,7 @@
     "jquery": "3.7.0",
     "jquery-ui-dist": "1.13.0",
     "lunr": "~2.3.8",
-    "npm": "^9.0.0"
+    "npm": "^11.1.0"
   },
   "devDependencies": {
     "css-loader": "^6.2.0",
