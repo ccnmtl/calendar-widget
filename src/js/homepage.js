@@ -40,7 +40,14 @@ import { CTLEventsManager } from './events-manager.js';
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                initializeEventsHomepage(data.bwEventList.events);
+                let events = data.bwEventList.events;
+                if (location.hostname.includes('ai.ctl.columbia.edu') ||
+                    location.pathname.includes('ctlai'))
+                {
+                    events = events.filter(events => events.categories.includes('AI') ||
+                        events.categories.includes('Artificial Intelligence'));
+                }
+                initializeEventsHomepage(events);
             }
         });
     });

@@ -277,7 +277,14 @@ import '../css/list.css';
             dataType: 'json',
             success: function(data) {
                 $('#loader-animation-container').fadeOut('slow');
-                initializeEventsPage(data.bwEventList.events);
+                let events = data.bwEventList.events;
+                if (location.hostname.includes('ai.ctl.columbia.edu') ||
+                    location.pathname.includes('ctlai'))
+                {
+                    events = events.filter(events => events.categories.includes('AI') ||
+                        events.categories.includes('Artificial Intelligence'));
+                }
+                initializeEventsPage(events);
             }
         });
 
