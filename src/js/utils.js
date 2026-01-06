@@ -535,4 +535,19 @@ CTLEventUtils.parseHtml = function(string) {
     return new DOMParser().parseFromString(string, 'text/html').documentElement.textContent;
 };
 
-export { CTLEventUtils };
+const isAISite = () => location.hostname.includes('ai.ctl.columbia.edu') ||
+    location.pathname.includes('ctlai');
+
+const filterAI = (event) => {
+    const target = /^Events open to\//;
+    const audiences = event.topicalArea.filter(x => x.match(target))
+        .map(audience => audience.replace(target, ''));
+    if (event.categories.includes('AI') ||
+        event.categories.includes('Artificial Intelligence')
+    ) {
+        return !(audiences.length === 1 && audiences.includes('Student'));
+    }
+    return false;
+};
+
+export { CTLEventUtils, isAISite, filterAI };
