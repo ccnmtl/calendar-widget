@@ -2,6 +2,7 @@
 /* global jQuery */
 let jQuery = require('jquery');
 import { CTLEvent } from './ctlevent.js'
+import { isAISite } from './utils.js';
 var CTLEventsManager = {};
 
 CTLEventsManager.allEvents = [];
@@ -70,7 +71,9 @@ CTLEventsManager.renderAudienceDropdown = function() {
             }
         });
     });
-
+    if (isAISite()){
+        allAudiences = allAudiences.filter(audience => audience !== 'Student');
+    }
     allAudiences.forEach(function(e) {
         $container.append(
             '<option value="' + e + '">' + e + '</option>');

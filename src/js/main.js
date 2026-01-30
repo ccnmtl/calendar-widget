@@ -11,8 +11,7 @@ import '../../lib/loaders.min.css';
 
 import * as lunr from 'lunr';
 
-import { CTLEvent } from './ctlevent.js';
-import { CTLEventUtils } from './utils.js';
+import { CTLEventUtils, filterAI, isAISite } from './utils.js';
 import { CTLEventsManager } from './events-manager.js';
 
 import '../css/list.css';
@@ -96,6 +95,7 @@ import '../css/list.css';
             cssStyle: 'ctl-theme',
             onPageClick: function(pageNumber) {
                 if (CTLEventsManager.filteredEvents.length > 0 || $('#q').val().length > 0) {
+
                     refreshEvents(CTLEventsManager.filteredEvents, pageNumber);
                 } else {
                     refreshEvents(CTLEventsManager.allEvents, pageNumber);
@@ -278,11 +278,8 @@ import '../css/list.css';
             success: function(data) {
                 $('#loader-animation-container').fadeOut('slow');
                 let events = data.bwEventList.events;
-                if (location.hostname.includes('ai.ctl.columbia.edu') ||
-                    location.pathname.includes('ctlai'))
-                {
-                    events = events.filter(events => events.categories.includes('AI') ||
-                        events.categories.includes('Artificial Intelligence'));
+                if (isAISite()) {
+                    events = events.filter(filterAI);
                 }
                 initializeEventsPage(events);
             }
