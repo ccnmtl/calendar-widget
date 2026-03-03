@@ -13,6 +13,8 @@
     "npm": "^11.1.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.4",
+    "@eslint/js": "^10.0.1",
     "css-loader": "^7.1.2",
     "eslint": "^10.0.2",
     "imports-loader": "0.8.0",
@@ -23,8 +25,8 @@
     "webpack": "^5.10.3",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.0",
-    "webpack-node-externals": "^3.0.0",
-    "webpack-merge": "^6.0.1"
+    "webpack-merge": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
   },
   "scripts": {
     "eslint": "eslint *.js tests/*.js",
