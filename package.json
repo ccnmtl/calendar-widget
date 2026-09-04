@@ -20,7 +20,7 @@
     "imports-loader": "0.8.0",
     "jsdom": "30.0.0",
     "jsdom-global": "3.0.2",
-    "mocha": "^11.1.0",
+    "mocha": "^12.0.0",
     "style-loader": "^4.0.0",
     "webpack": "^5.10.3",
     "webpack-cli": "^7.0.0",
